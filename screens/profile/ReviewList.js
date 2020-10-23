@@ -12,7 +12,7 @@ const Text = styled.Text`
   font-weight:600;
 `;
 
-
-export default () => {
-  return <View><Text>this is Search</Text></View>
-}
+const ReviewList =() => {
+  return <View><Text>this is ReviewList</Text></View>
+}; 
+export default ReviewList; 

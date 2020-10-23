@@ -12,7 +12,7 @@ const Text = styled.Text`
   font-weight:600;
 `;
 
-
-export default () => {
-  return <View><Text>this is Search</Text></View>
-}
+const Upload = () => {
+  return <View><Text>this is Upload</Text></View>
+};
+export default Upload; 

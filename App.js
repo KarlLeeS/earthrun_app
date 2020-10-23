@@ -1,13 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from 'react';
 import * as Font from "expo-font"
-import React, { useState } from 'react';
+
+import {Asset} from "expo-asset";
+import { Ionicons } from "@expo/vector-icons";
 import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { persistCache } from "apollo-cache-persist";
-import { ApolloClient } from 'apollo-boost';
-import Navcontroller from './components/Navcontroller';
+import { InMemoryCache } from "apollo-cache-inmemory"; 
+import ApolloClient from 'apollo-boost';
 
 import {ApolloProvider} from "@apollo/client";
+import apolloClientOptions from './apolloClientOption';
+import {ThemeProvider} from "styled-components/native";
+import { AuthProvider } from './AuthContext';
+
+import Navcontroller from './components/Navcontroller';
+import { AppLoading } from 'expo';
+import styles from './styles';
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null);
@@ -15,43 +24,66 @@ export default function App() {
   const preLoad = async () => {
     try {
 
-      // await Font.loadAsync({
-      //   ...Ionicons.font
-      // });
+      // pre-upload font 
+      await Font.loadAsync({
+        ...Ionicons.font
+      });
 
-      // await assertType.loadAsync([require("./assets/logo.png")]);
+      // pre-upload images
+      await Asset.loadAsync([
+        require("./assets/logo.png"), 
+      
+      ]);
 
-      // const cache = new InMemoryCache();
-      // await persistCache({
-      //   cache,
-      //   storage: AsyncStorage
-      // });
+      // device의 storage의 정보를 cache에 올림
+      const cache = new InMemoryCache();
+      await persistCache({
+        cache,
+        storage: AsyncStorage
+      });
+      
+      // bridge between front and back by using graph ql. 
+      const client = new ApolloClient({
+        cache,
+        request: async operation => {
+          const token = await AsyncStorage.getItem("jwt");
+          return operation.setContext({
+            headers:{Authorization:`Bearer ${token}`}
+          });
+        },
+        uri: "http://fd1a8ca166fe.ngrok.io"
+        // ...apolloClientOptions
+      });
 
-      // const client = new ApolloClient({
-      //   cache,
-      //   request: async operation => {
-      //     const token = await AsyncStorage.getItem("jwt");
-      //   }
-      // })
+      const isLoggedIn = await AsyncStorage.getItem("isLoggedIn"); 
+      if(!isLoggedIn|| isLoggedIn==="false"){
+        setIsLoggedIn(false);
+      }else{
+        setIsLoggedIn(true); 
+      }
 
-
+      setLoaded(true);
+      setClient(client);
     } catch (error) {
       console.log(error);
     }
   }
 
+  // Like componentDidMount
+  useEffect(()=>{
+    preLoad();
+  },[]);
 
-  return (
-    <Navcontroller />
+
+  return loaded && client && isLoggedIn !== null ? (
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={styles}>
+        <AuthProvider isLoggedIn={isLoggedIn}>
+          <Navcontroller />
+        </AuthProvider>
+      </ThemeProvider>
+    </ApolloProvider>
+  ):(
+    <AppLoading />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-;

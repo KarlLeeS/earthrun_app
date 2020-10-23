@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
+import { StatusBar } from "react-native";
 
 import HomeNavigation from "./homenavigation/HomeNavigation";
 import DetailNavigation from "./detailnavigation/DetailNavigation";
@@ -12,19 +13,35 @@ const Stack = createStackNavigator();
 
 const MainNavigation = () => {
   return (
+    <>
     <NavigationContainer>
       <Stack.Navigator
-        headerMode="none"
+        screenOptions={{
+          headerBackImage:{},
+          headerStyle:{
+            backgroundColor: "white"
+          },
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+        // headerMode="none"
         mode="modal"
-        initialRouteName="HomeNavigation"
+        initialRouteName="NormalList"
       >
-        <Stack.Screen name="HomeNavigation" component={HomeNavigation} />
+        <Stack.Screen options={{ headerShown: false }} name="HomeNavigation" component={HomeNavigation} />
         <Stack.Screen name="DetailNavigation" component={DetailNavigation} />
         <Stack.Screen name="ProfileNavigation" component={ProfileNavigation} />
-        <Stack.Screen name="NormalList" component={NormalList} />
+        <Stack.Screen 
+        options={{
+        
+        }}
+        
+        name="NormalList" component={NormalList} />
         <Stack.Screen name="Search" component={Search} />
       </Stack.Navigator>
     </NavigationContainer>
+    {/* <StatusBar barStyle="light-content"  /> */}
+    </>
   )
 }
 

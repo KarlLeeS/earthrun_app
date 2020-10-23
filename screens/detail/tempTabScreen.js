@@ -14,5 +14,5 @@ const Text = styled.Text`
 
 
 export default () => {
-  return <View><Text>this is Search</Text></View>
+  return <View><Text>this is tempTabScreen</Text></View>
 }

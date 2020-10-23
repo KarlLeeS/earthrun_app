@@ -12,7 +12,8 @@ const Text = styled.Text`
   font-weight:600;
 `;
 
+const BadgeList =() => {
+  return <View><Text>this is BadgeList</Text></View>
+};
 
-export default () => {
-  return <View><Text>this is Search</Text></View>
-}
+export default BadgeList; 
