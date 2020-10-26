@@ -1,18 +1,38 @@
 
 import React from "react";
 import styled from "styled-components";
-
-const View = styled.View`
-  justify-content:center;
-  align-items:center;
-  flex:1; 
-`;
-
-const Text = styled.Text`
-  font-weight:600;
-`;
-
+import {View,Text, Image} from "react-native";
+import Swiper from "react-native-swiper";
+import constants from "../../constants";
 
 export default () => {
-  return <View><Text>this is slider</Text></View>
+  return (
+      <Swiper
+        showsPagination={true}
+        style={{ height: constants.height / 2.5 }}
+        index={0}
+      >
+      <Image style={{
+                  width: constants.width,
+                  // height: constants.height/4.6,
+              }}
+              source={require('../../assets/post.png')}
+          />
+          
+        <Image style={{
+                    width: constants.width,
+                    // height: constants.height/4.6,
+                }}
+                source={require('../../assets/post.png')}
+            />
+            
+        <Image style={{
+                    width: constants.width,
+                    // height: constants.height/4.6,
+                }}
+                source={require('../../assets/post.png')}
+            />
+            
+      </Swiper>
+  )
 }

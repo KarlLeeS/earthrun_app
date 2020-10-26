@@ -53,6 +53,7 @@ const MainScreen = ({item})=>{
   // const [] = useState("");
 
   return (
+    <>
     <Container>
       <FilteringTools>
         <LeftFilter>
@@ -68,6 +69,8 @@ const MainScreen = ({item})=>{
         <Post />
       </Posts>
     </Container>
+    {/* <RightFilter /> */}
+    </>
   );
 // 이곳에서 왼쪽과 오른쪽 필터링 값에 대한 useState가 있어야함.
 // 그리고 그 필터에 대한 컴포넌트는 각각 만들어서 prop으로 set이랑 value를 전달해주면될듯

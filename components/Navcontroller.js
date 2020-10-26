@@ -16,8 +16,8 @@ const Text = styled.Text`
 
 
 export default () => {
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
-  return isLoggedIn ? <MainNavigation /> : <View><Text>회원가입 화면 !! </Text></View>; 
+  return isLoggedIn ? <MainNavigation /> : <AuthNavigation />; 
 
 }

@@ -15,7 +15,6 @@ const SubTabFood = ({subTabs}) =>{
         <Tab.Navigator 
             tabBarOptions={{
             tabBarIcon:({focused})=>{
-                console.log(1);
             },
             scrollEnabled :true,
             indicatorStyle:{

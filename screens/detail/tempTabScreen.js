@@ -1,18 +1,19 @@
 
 import React from "react";
 import styled from "styled-components";
+import {View,Text} from "react-native";
 
-const View = styled.View`
-  justify-content:center;
-  align-items:center;
-  flex:1; 
-`;
-
-const Text = styled.Text`
-  font-weight:600;
+const Container = styled.View`
+  border-top-color:#dbdbdb;
+  border-top-width:1;
+  background-color:#fff;
 `;
 
 
 export default () => {
-  return <View><Text>this is tempTabScreen</Text></View>
+  return(
+    <Container>
+      <View></View>
+    </Container>
+  ) 
 }

@@ -16,6 +16,8 @@ import { AuthProvider } from './AuthContext';
 import Navcontroller from './components/Navcontroller';
 import { AppLoading } from 'expo';
 import styles from './styles';
+import LeftFilter from './components/LeftFilter';
+import RightFilter from './components/RightFilter';
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);

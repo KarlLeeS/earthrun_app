@@ -42,7 +42,7 @@ export default () =>{
         }
       }}
     >
-        <Tab.Screen name="추천" component={RecommendNavigation} />
+        {/* <Tab.Screen name="추천" component={RecommendNavigation} /> */}
         <Tab.Screen name="식품"  component={SubTabFood} />
         <Tab.Screen name="건강/미용"  component={SubTabHealthBeauty} />
         <Tab.Screen name="생활용품"  component={SubTabLife} />
@@ -57,48 +57,3 @@ export default () =>{
 // )
 
 
-
-/* 
-      
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View>
-<View><Text>1</Text></View> */

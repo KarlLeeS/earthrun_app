@@ -1,2 +1,4 @@
 # earthRun app part 
-React native 
+React native, Expo 
+
+# Navigation 

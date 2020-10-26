@@ -17,13 +17,12 @@ const Stack = createStackNavigator();
 
 export default ()=>(
     <Stack.Navigator>
-        <Stack.Screen name="MainProfile" component={MainProfile}/>
+        <Stack.Screen options={{ headerShown: false }} name="MainProfile" component={MainProfile}/>
         <Stack.Screen name="BadgeList" component={BadgeList}/>
         <Stack.Screen name="FriendsList" component={FriendsList}/>
         <Stack.Screen name="LikesList" component={LikesList}/>
         <Stack.Screen name="ReviewList" component={ReviewList}/>
         <Stack.Screen name="RecentlyViewedPostList" component={RecentlyViewedPostList}/>
         <Stack.Screen name="UploadedPostList" component={UploadedPostList}/>
-        <Stack.Screen name="Upload" component={Upload}/>
     </Stack.Navigator>
 )

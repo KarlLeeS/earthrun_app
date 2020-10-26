@@ -2,7 +2,7 @@ import React from "react";
 import TabNavigation from "./TabNavigation"
 import TempMainScreen from "../../screens/home/MainScreen"
 import styled from "styled-components/native";
-import {ScrollView,RefreshControl, View, Text, Dimensions} from "react-native";
+import {ScrollView,RefreshControl, View, Text, Dimensions, StatusBar} from "react-native";
 import Post from "../../components/Post";
 
 import UserProfile from "../../components/UserProfile"
@@ -64,7 +64,6 @@ export default ({navigation}) => {
         <TabNavigation />
       </ScrollView>  
     </Container>
-    
   )
 }
 
