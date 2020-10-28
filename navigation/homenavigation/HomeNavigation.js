@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TabNavigation from "./TabNavigation"
 import TempMainScreen from "../../screens/home/MainScreen"
 import styled from "styled-components/native";
 import {ScrollView,RefreshControl, View, Text, Dimensions, StatusBar} from "react-native";
+
 import Post from "../../components/Post";
 
 import UserProfile from "../../components/UserProfile"
@@ -10,6 +11,8 @@ import Notification from "../../components/Notification"
 import SearchBar from "../../components/SearchBar"
 
 import constants from "../../constants";
+import { USER_FRAGMENT } from "../../fragments";
+import Loader from "../../components/Loader";
 
 // TO DO 
 // 아무리 생각해봐도 이것은 스크린이 맞는 듯하다
@@ -20,6 +23,7 @@ import constants from "../../constants";
 // `;
 const Container = styled.View`
   background-color: white;
+  height: ${constants.height};
 `;
 
 const BoxList = styled.View`
@@ -41,30 +45,36 @@ const Search = styled.View`
   margin-top:20px;
 `;
 
-export default ({navigation}) => {
+
+const HomeNavigation=({navigation,route})=>{
   navigation.setOptions({
     navigationOptions :{
       header:null
     }
   });
+  const [loadingProfile,setLoadingProfile] = useState(true);
+
 
 
   return (
-    <Container>
-      <ScrollView>
-        <Header>
-          <UserProfile />
-          <Notification />
-        </Header>
+        <Container>
+          <ScrollView>
+            <Header>
+              <UserProfile loadingProfile={loadingProfile} setLoadingProfile={setLoadingProfile} />
+              <Notification />
+            </Header>
+            <Search>
+              <SearchBar />
+            </Search>
 
-        <Search>
-          <SearchBar />
-        </Search>
-
-        <TabNavigation />
-      </ScrollView>  
-    </Container>
-  )
+            <TabNavigation />
+          </ScrollView>  
+        </Container>
+      )
+  
 }
+
+export default HomeNavigation;
+
 
 

@@ -9,7 +9,7 @@ import { ScrollView } from "react-native-swiper";
 const Tab = createMaterialTopTabNavigator();
 
 const SubTabFashionOthers = ({subTabs}) =>{
-    console.log(subTabs);
+    console.log("SubTabFashionOthers");
     return (      
         <Tab.Navigator tabBarOptions={{
                 scrollEnabled :true,

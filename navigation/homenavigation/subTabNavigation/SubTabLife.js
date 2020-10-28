@@ -9,7 +9,8 @@ import { ScrollView } from "react-native-swiper";
 const Tab = createMaterialTopTabNavigator();
 
 const SubTabLife = ({subTabs}) =>{
-    console.log(subTabs);
+    
+    console.log("SubTabHealthBeauty");
     return (      
         <Tab.Navigator tabBarOptions={{
                 scrollEnabled :true,

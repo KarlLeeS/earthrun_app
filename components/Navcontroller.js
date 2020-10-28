@@ -2,6 +2,8 @@ import React from "react";
 import MainNavigation from "../navigation/MainNavigation";
 import styled from "styled-components";
 import Loader from "./Loader";
+import AuthNavigation from "../navigation/AuthNavigation";
+import { useIsLoggedIn } from "../AuthContext";
 
 const View = styled.View`
   justify-content:center;
@@ -16,8 +18,10 @@ const Text = styled.Text`
 
 
 export default () => {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
+  // const isLoggedIn = useIsLoggedIn();
 
-  return isLoggedIn ? <MainNavigation /> : <AuthNavigation />; 
+  // return isLoggedIn ? <MainNavigation /> : <AuthNavigation />; 
+  return <MainNavigation /> 
 
 }

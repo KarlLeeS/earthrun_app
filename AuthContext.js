@@ -1,5 +1,5 @@
 import React , {createContext, useContext, useState} from "react";
-import {AsyncStorage} from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export const AuthContext = createContext(); 
 
@@ -24,7 +24,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         }
     };
     return (
-        <AuthContext.Provider value={{isLoggedIn}}>
+        <AuthContext.Provider value={{isLoggedIn,logUserIn,logUserOut}}>
             {children}
         </AuthContext.Provider>
     );

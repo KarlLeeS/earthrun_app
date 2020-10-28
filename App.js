@@ -50,11 +50,11 @@ export default function App() {
         request: async operation => {
           const token = await AsyncStorage.getItem("jwt");
           return operation.setContext({
-            headers:{Authorization:`Bearer ${token}`}
+            headers:{Authorization:`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNrZ2hiOWZveGMyN3cwOTk5dTg2dmF3dWoiLCJpYXQiOjE2MDM4NTkxMTN9.jzKvAJ0OpwYcu5Ndx36ImQ-QIMiNjAp8MYwVg917iKw`}
+            // headers:{Authorization:`Bearer ${token}`}
           });
         },
-        uri: "http://fd1a8ca166fe.ngrok.io"
-        // ...apolloClientOptions
+        ...apolloClientOptions
       });
 
       const isLoggedIn = await AsyncStorage.getItem("isLoggedIn"); 

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {Button, TouchableOpacity} from "react-native";
 import styled from "styled-components"; 
 import constants from "../../../constants";
+import { makeToggleArr } from "../../../utils";
 
 const Wrapper=  styled.View`
     max-width:${constants.width/2}; 
@@ -23,15 +24,18 @@ const Text = styled.Text`
 `; 
 
 
-const RightFilterButton=(props)=>{
-    const [state,setState] = useState(false);
+const RightFilterButton=({text,setting,toggle,index})=>{
     return (
-        <Wrapper state={state}>
+        <Wrapper state={toggle}>
         <TouchableOpacity onPress={()=>{
-            if(state===true){setState(false)}
-            else{setState(true)}
+            if(toggle===1){
+                setting(makeToggleArr(false,index,5));
+            }
+            else{
+                setting(makeToggleArr(true,index,5));
+            }
         }}>
-                <Text state={state}>{props.text}</Text>
+                <Text state={toggle}>{text}</Text>
         </TouchableOpacity>
             </Wrapper>
     );

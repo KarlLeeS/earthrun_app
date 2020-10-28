@@ -1,18 +1,31 @@
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {TouchableOpacity} from "react-native"; 
 import styled from "styled-components";
 import Post from "../../components/Post";
 import constants from "../../constants";
 import NavIcon from "../../components/NavIcon";
-
+import { ScrollView } from "react-native-gesture-handler";
+import {  useQuery } from "@apollo/client";
+import {gql} from "apollo-boost";
+import {POST_FRAGMENT} from "../../fragments";
+import LeftFilter from "../../components/LeftFilter";
+import RightFilter from "../../components/RightFilter";
 const View = styled.View`
   margin : 20px;
   text-align:center;
 `;
 
 const Container = styled.View`
-  backgroundColor : #fff;
+  background-color : #fff;
+  position:relative;
+  height:${constants.height};
+`;
+
+const RightFilterWrapper = styled.View`
+  position:absolute;
+  left:0;
+  z-index:10;
 `;
 
 const Text = styled.Text`
@@ -31,64 +44,119 @@ const FilteringTools = styled.View`
   margin: 15px 20px 10px 20px;
 `;
 
-const LeftFilter = styled.TouchableOpacity`
+const LeftFilterIcon = styled.TouchableOpacity`
   flex-direction:row; 
   align-items:center;
-
+  position:relative;
 `;
 
-const RightFilter = styled.TouchableOpacity`
+const LeftFilterWrapper =styled.View`
+  position:absolute;
+  top:5;
+  left:25;
+  z-index:10;
+`;
+
+const RightFilterIcon = styled.TouchableOpacity`
 
 `;
 
 const LeftFilterText = styled.Text`
-  font-size:12px;
   margin-left:10px;
   font-size:14px;
 `;
 
-const MainScreen = ({item})=>{
-  // const [] = useState("");
-  // const [] = useState("");
-  // const [] = useState("");
+
+
+export const MainTopTab = gql`
+  {
+    MainTopTab{
+      ...PostParts
+    }
+  }
+  ${POST_FRAGMENT}
+`; 
+
+// BYLOWPRICE
+// BYHIGHPRICE
+// BYRATING
+// BYCLICK
+// BYREVIEWCOUNT
+// BYLATEST
+
+const OrderMapper= {
+  "BYRATING":"별점 순",
+  "BYCLICK":"조회 순",
+  "BYREVIEWCOUNT":"리뷰 순",
+  "BYLOWPRICE":"낮은 가격순",
+  "BYHIGHPRICE":"높은 가격순",
+  "BYLATEST":"최근출시 순",
+}
+
+const MainScreen = ({category})=>{
+  const [LeftToggle,setLeftToggle] = useState(false); 
+  const [RightToggle,setRightToggle] = useState(false); 
+
+
+  const [certification,setCertification] = useState([]); 
+  const [preferences,setPreferences] = useState([]); 
+  const [orderingoption,setOrderingoption] = useState("BYRATING");
+
+  const {loading, data, refetch}= useQuery(MainTopTab,{
+        certification:certification,
+        preferences:preferences,
+        orderingoption:orderingoption,
+        categories:[category]
+  });
+
+  const OnSubmit =(preferenceList,certificationList,type=undefined)=>{
+    console.log({preferenceList});
+    console.log({certificationList});
+    console.log({type});
+  }
 
   return (
     <>
-    <Container>
-      <FilteringTools>
-        <LeftFilter>
-          <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-          <LeftFilterText>인기상품순</LeftFilterText>
-        </LeftFilter>
-        <RightFilter>
-          <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-        </RightFilter>
-      </FilteringTools>
-      <Posts>
-        <Post />
-        <Post />
-      </Posts>
-    </Container>
-    {/* <RightFilter /> */}
+        <ScrollView>
+          <Container>
+            <FilteringTools>
+              <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
+                <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+                <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
+              </LeftFilterIcon>
+              {
+                LeftToggle?(
+                  <LeftFilterWrapper  >
+                    <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+                  </LeftFilterWrapper>):(<></>)
+              }
+              
+              <RightFilterIcon onPress={()=>setRightToggle(true)}>
+                <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+              </RightFilterIcon>
+            </FilteringTools>
+            <Posts>
+              <Post />
+              <Post />
+            </Posts>
+          </Container>
+          {RightToggle?(
+            <RightFilterWrapper>
+                <RightFilter
+                  onSubmit={OnSubmit}
+                  certification={certification}
+                  preferences={preferences}
+                  setPreferences={setPreferences}
+                  setCertification={setCertification}
+                  setRightToggle={setRightToggle}
+                />
+            </RightFilterWrapper>
+            ):(<></>)
+          }
+          
+        </ScrollView>
     </>
   );
-// 이곳에서 왼쪽과 오른쪽 필터링 값에 대한 useState가 있어야함.
-// 그리고 그 필터에 대한 컴포넌트는 각각 만들어서 prop으로 set이랑 value를 전달해주면될듯
-        // BYLOWPRICE
-        // BYHIGHPRICE
-        // BYRATING
-        // BYCLICK
-        // BYREVIEWCOUNT
-        // BYLATEST
-    const [LFilter,SetLeftFilter] = useState("BYRATING");
-    const [RFilter_Preference,SetRFilter_Preference] = useState([]);
-    const [RFilter_Certification,SetRFilter_Certification] = useState([]);
-
-    const OnChange =()=>{
-      
-    }
-
-
 }
 
 export default MainScreen;

@@ -10,7 +10,7 @@ import constants from "../../../constants";
 const Tab = createMaterialTopTabNavigator();
 
 const SubTabFood = ({subTabs}) =>{
-    console.log(subTabs);
+    console.log(`this is SubTabFood`);
     return (      
         <Tab.Navigator 
             tabBarOptions={{
@@ -37,7 +37,7 @@ const SubTabFood = ({subTabs}) =>{
             }
             }}
         >
-            <Tab.Screen name={"대체육"} component={MainScreen}/>
+            <Tab.Screen name={"대체육"} children={()=><MainScreen category={"대체육"} />} />
             <Tab.Screen name={"빵"} component={MainScreen}/>
             <Tab.Screen name={"간편식·면류·통조림"} component={MainScreen}/>
             <Tab.Screen name={"음료"} component={MainScreen}/>
