@@ -53,7 +53,7 @@ const HomeNavigation=({navigation,route})=>{
     }
   });
   const [loadingProfile,setLoadingProfile] = useState(true);
-
+  // console.log("HomeNavigation");
 
 
   return (

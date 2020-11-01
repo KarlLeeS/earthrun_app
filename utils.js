@@ -61,3 +61,22 @@ export const makeToggleArr=(b,i,l)=>{
     arr[i]=1; 
     return arr; 
 }
+
+
+export const CalculateDays=(date)=>{
+
+    const start =date.split('T')[0]; 
+    var today = new Date();
+    var end = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const startItems = start.split("-"); 
+    const endItems = end.split("-"); 
+    const diffInMs   = new Date(Number(endItems[0]),Number(endItems[1]),Number(endItems[2])) - new Date(Number(startItems[0]),Number(startItems[1]),Number(startItems[2]));
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    return Math.floor(diffInDays);
+}
+
+export const ConvertToKorean=(date)=>{
+    const segment = date.split('T')[0];
+    const pip = segment.split('-'); 
+    return `${pip[0]}년 ${pip[1]}월 ${pip[2]}일` 
+}

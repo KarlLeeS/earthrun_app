@@ -12,15 +12,20 @@ import ReviewList from "../../screens/profile/ReviewList";
 import RecentlyViewedPostList from "../../screens/profile/RecentlyViewedPostList";
 import UploadedPostList from "../../screens/profile/UploadedPostList";
 import Upload from "../../screens/profile/Upload";
+import EditProfile from "../../screens/profile/EditProfile";
+import NOTYET from "../../screens/NOTYET";
 
 const Stack = createStackNavigator(); 
 
 export default ()=>(
-    <Stack.Navigator>
+    <Stack.Navigator
+    
+    >
+        <Stack.Screen options={{ headerShown: false }} name="EditProfile" component={EditProfile}/>
         <Stack.Screen options={{ headerShown: false }} name="MainProfile" component={MainProfile}/>
         <Stack.Screen name="BadgeList" component={BadgeList}/>
         <Stack.Screen name="FriendsList" component={FriendsList}/>
-        <Stack.Screen name="LikesList" component={LikesList}/>
+        <Stack.Screen name="NOTYET" component={NOTYET}/>
         <Stack.Screen name="ReviewList" component={ReviewList}/>
         <Stack.Screen name="RecentlyViewedPostList" component={RecentlyViewedPostList}/>
         <Stack.Screen name="UploadedPostList" component={UploadedPostList}/>

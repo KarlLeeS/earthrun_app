@@ -17,9 +17,10 @@ import constants from "../../constants";
 const Tab = createMaterialTopTabNavigator();
 
 export default () =>{
-
+  console.log("TabNavigation");
   return (
     <Tab.Navigator
+      lazy="false"
       tabBarOptions={{
         scrollEnabled :true,
         indicatorStyle:{

@@ -7,9 +7,11 @@ const Tab = createMaterialTopTabNavigator();
 const SubTabHealthBeauty = ({subTabs}) =>{
     console.log(`this is SubTabHealthBeauty`);
 
-    console.log(subTabs);
+    // console.log(subTabs);
     return (    
-            <Tab.Navigator tabBarOptions={{
+            <Tab.Navigator 
+            lazy="false"
+            tabBarOptions={{
                     scrollEnabled :true,
                     // activeTintColor: 'tomato',
                     // inactiveTintColor: 'gray',

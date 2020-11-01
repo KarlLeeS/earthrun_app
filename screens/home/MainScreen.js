@@ -1,16 +1,19 @@
 
-import React, { useRef, useState } from "react";
-import {TouchableOpacity} from "react-native"; 
+import React, { useState } from "react";
 import styled from "styled-components";
-import Post from "../../components/Post";
 import constants from "../../constants";
-import NavIcon from "../../components/NavIcon";
-import { ScrollView } from "react-native-gesture-handler";
-import {  useQuery } from "@apollo/client";
+import { ScrollView } from "react-native";
 import {gql} from "apollo-boost";
 import {POST_FRAGMENT} from "../../fragments";
+import { useUser } from "../../AuthContext";
+import Loader from "../../components/Loader";
+import Post from "../../components/Post";
+import NavIcon from "../../components/NavIcon";
+import {  useQuery } from "@apollo/client";
 import LeftFilter from "../../components/LeftFilter";
 import RightFilter from "../../components/RightFilter";
+
+
 const View = styled.View`
   margin : 20px;
   text-align:center;
@@ -58,7 +61,6 @@ const LeftFilterWrapper =styled.View`
 `;
 
 const RightFilterIcon = styled.TouchableOpacity`
-
 `;
 
 const LeftFilterText = styled.Text`
@@ -66,15 +68,24 @@ const LeftFilterText = styled.Text`
   font-size:14px;
 `;
 
-
-
-export const MainTopTab = gql`
-  {
-    MainTopTab{
-      ...PostParts
+export const GET_POSTS = gql`
+    query MainTopTab(
+      $certification:[String],
+      $preferences:[String],
+      $orderingoption:String,
+      $categories:String!
+      ){
+        MainTopTab(
+          certification:$certification,
+          preferences:$preferences,
+          orderingoption:$orderingoption,
+          categories:$categories
+        ){
+           ...PostParts
+        }
     }
-  }
-  ${POST_FRAGMENT}
+     ${POST_FRAGMENT}
+
 `; 
 
 // BYLOWPRICE
@@ -94,69 +105,87 @@ const OrderMapper= {
 }
 
 const MainScreen = ({category})=>{
+  const [post,setPosts] = useState([]);
   const [LeftToggle,setLeftToggle] = useState(false); 
   const [RightToggle,setRightToggle] = useState(false); 
-
-
+  const user = useUser();
   const [certification,setCertification] = useState([]); 
-  const [preferences,setPreferences] = useState([]); 
+  const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
 
-  const {loading, data, refetch}= useQuery(MainTopTab,{
-        certification:certification,
-        preferences:preferences,
-        orderingoption:orderingoption,
-        categories:[category]
+  console.log("category",category);
+  // console.log("preferences :" , preferences);
+  // console.log("certification" , certification);
+
+  const {loading,data,refetch,updateQuery}= useQuery(GET_POSTS,{ 
+    variables:{
+      certification:certification,
+      preferences:preferences,
+      orderingoption:"BYRATING",
+      categories:category
+    },
+    fetchPolicy:"network-only"
   });
+  // const
+ 
 
   const OnSubmit =(preferenceList,certificationList,type=undefined)=>{
-    console.log({preferenceList});
-    console.log({certificationList});
-    console.log({type});
+    let preferenceResult, certificationResult,TypeResult ;
+    if( preferenceList === undefined||preferenceList.length===0) preferenceResult=[];
+    if(certificationList===undefined || certificationList.length===0) certificationResult=[];
+    if(type==="") TypeResult=orderingoption;
+    
+    // console.log({preferenceList});
+    // console.log({certificationList});
+    // console.log({type});
   }
 
-  return (
-    <>
-        <ScrollView>
-          <Container>
-            <FilteringTools>
-              <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
-                <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-                <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
-              </LeftFilterIcon>
-              {
-                LeftToggle?(
-                  <LeftFilterWrapper  >
-                    <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
-                  </LeftFilterWrapper>):(<></>)
-              }
-              
-              <RightFilterIcon onPress={()=>setRightToggle(true)}>
-                <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-              </RightFilterIcon>
-            </FilteringTools>
-            <Posts>
-              <Post />
-              <Post />
-            </Posts>
-          </Container>
-          {RightToggle?(
-            <RightFilterWrapper>
-                <RightFilter
-                  onSubmit={OnSubmit}
-                  certification={certification}
-                  preferences={preferences}
-                  setPreferences={setPreferences}
-                  setCertification={setCertification}
-                  setRightToggle={setRightToggle}
-                />
-            </RightFilterWrapper>
-            ):(<></>)
+  return (loading?(
+      <Loader />
+    ):(
+    <ScrollView>
+      <Container>
+        <FilteringTools>
+          <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
+            <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+            <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
+          </LeftFilterIcon>
+          {
+            LeftToggle?(
+              <LeftFilterWrapper  >
+                <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+              </LeftFilterWrapper>):(<></>)
           }
           
-        </ScrollView>
-    </>
-  );
+          <RightFilterIcon onPress={()=>setRightToggle(true)}>
+            <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+          </RightFilterIcon>
+        </FilteringTools>
+        <Posts>
+          {
+            data!==undefined?data.MainTopTab&&data.MainTopTab.map((e,i)=>(
+              <Post key={e.id}  {...e} />
+            )) : <></>
+          }
+        </Posts>
+      </Container>
+      {RightToggle?(
+        <RightFilterWrapper>
+            <RightFilter
+              onSubmit={OnSubmit}
+              certification={certification}
+              preferences={preferences}
+              setPreferences={setPreferences}
+              setCertification={setCertification}
+              setRightToggle={setRightToggle}
+            />
+        </RightFilterWrapper>
+        ):(<></>)
+      }
+    </ScrollView>
+    )
+  )
 }
 
 export default MainScreen;
+

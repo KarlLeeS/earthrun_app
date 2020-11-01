@@ -24,18 +24,18 @@ const Text = styled.Text`
 `; 
 
 
-const RightFilterButton=({text,setting,toggle,index})=>{
+const RightFilterButton=({text,value,setValue})=>{
     return (
-        <Wrapper state={toggle}>
+        <Wrapper state={value}>
         <TouchableOpacity onPress={()=>{
-            if(toggle===1){
-                setting(makeToggleArr(false,index,5));
+            if(value===1){
+                setValue(0);
             }
             else{
-                setting(makeToggleArr(true,index,5));
+                setValue(1);
             }
         }}>
-                <Text state={toggle}>{text}</Text>
+                <Text state={value}>{text}</Text>
         </TouchableOpacity>
             </Wrapper>
     );

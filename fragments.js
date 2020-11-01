@@ -20,6 +20,63 @@ export const POST_FRAGMENT = gql`
   }
 `;
 
+
+
+
+export const REVIEW_FRAGMENT= gql`
+  fragment ReviewParts on Review{
+    id
+    user{
+      id
+      avatar
+      username
+    }
+    rating
+    text
+    updatedAt
+  }
+`;
+
+// export const USER_FRAGMENT = gql`
+//   fragment UserParts on User {
+//     id
+//     avatar
+//     username
+//     email
+//     preference{
+//         id
+//         name
+//     }
+//     bio
+//     likes{
+//         post{
+//           id
+//           name
+//         }
+//     }
+//     isFollowing
+//     isSelf
+//     followingCount
+//     followersCount
+//     reviews{
+//       ...ReviewParts
+//     }
+//     recentlyPost{
+//       ...PostParts
+//     }
+//     uploadedPost{
+//       ...PostParts
+//     }
+//     badges{
+//         id
+//         name
+//     }
+//   }
+//   ${POST_FRAGMENT}
+//   ${REVIEW_FRAGMENT}
+// `;
+
+
 export const USER_FRAGMENT = gql`
   fragment UserParts on User {
     id
@@ -31,21 +88,28 @@ export const USER_FRAGMENT = gql`
         name
     }
     bio
-    likes{
-        id
+    reviews{
+      id
     }
     isFollowing
     isSelf
     followingCount
+    typeStart
     followersCount
-    reviews{
-        id
-    }
     recentlyPost{
-        id
+      id
+      files{
+        url
+      }
+      brand
+      name
+      weight
+      price
+      rating
+      reviewCount
     }
     uploadedPost{
-        id
+      id
     }
     badges{
         id

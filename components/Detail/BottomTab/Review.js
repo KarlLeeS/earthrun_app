@@ -1,13 +1,20 @@
-import React from "react";
+import { useMutation } from "@apollo/client";
+import React, { useState } from "react";
 import { Image,TouchableOpacity } from "react-native";
 import styled from "styled-components"; 
 import constants from "../../../constants";
+import { ConvertToKorean } from "../../../utils";
 import Star from "./Star";
+import {gql} from "apollo-boost";
 
+    // /* padding:${props=>props.fromNormal?"":} */
 
 const Container = styled.View`
+    position:${props=>props.fastClose?"absolute":"relative"};
+    top:${props=>props.fastClose?-9999:0};
     height:${constants.height/5.5};
-    /* width:${constants.width}; */
+    width:${props=>props.fromNormal?constants.width:""};
+    padding: 0px 15px;
     margin-top:20px;
     justify-content:flex-start;
     border-bottom-color:#ececec;
@@ -17,7 +24,7 @@ const Container = styled.View`
 const User = styled.View`
     flex-direction:row;
     justify-content: space-between;
-    align-items:center;
+    align-items:flex-end;
 `; 
 
 const Profile = styled.View`
@@ -35,7 +42,10 @@ const NameStar = styled.View`
 const Name = styled.Text`
 `; 
 
-const Date = styled.Text``; 
+
+const Date = styled.Text`
+    letter-spacing:-1px;
+`; 
 
 const Description = styled.Text`
     margin-top:20px;
@@ -43,10 +53,84 @@ const Description = styled.Text`
 `;
 
 
-const Review = ()=>{
-    return(
 
-        <Container>
+
+const RightWrapper= styled.View`
+    justify-content:center;
+    align-items:flex-end;
+`;
+
+const DeleteBox= styled.TouchableOpacity`
+    margin-top:10px;
+    width:${constants.width/10};
+    height:${constants.height/20};
+    justify-content:center;
+    align-items:center;
+    background-color:#00fc85;
+    margin-bottom:10px;
+    border-radius:10px;
+`;
+const DeleteText = styled.Text`
+    color:#fff;
+    font-weight:bold;
+`;
+
+// removeReview(id:String!):Boolean
+export const DELETE_REVIEW = gql`
+mutation removeReview($id: String!,$user: String!){
+    removeReview(id: $id, user: $user)
+}
+`; 
+
+
+
+const Review = ({
+    id, 
+    rating,
+    text, 
+    updatedAt,
+    user:{avatar,id:userId, username},
+    fromNormal,
+    editting,
+    setList
+    })=>{
+    console.log(id, rating,text, updatedAt,avatar,userId,username);
+    const [fastClose,setfastClose] =useState(false);
+
+
+    const [deleteReviewMutation] = useMutation(DELETE_REVIEW,{
+        variables:{
+            id,
+            user:userId
+        }
+    }); 
+
+    const deleteReview = async ()=>{
+        try{
+
+            setList(e=>(
+                {
+                    ...e,
+                    seeReviews :  e.seeReviews.filter(i=>i.id!==id)
+                }
+            )) ;
+            setUser(user=>(
+                {
+                    ...user,
+                    reviews: (user.reviews.filter(e=>e.id!==id)),
+                    reviewCount: user.reviewCount-1
+                }
+            ));
+            await deleteReviewMutation();
+        }catch(e){
+            // todo re trial or something?? 
+        }
+
+    }
+
+
+    return(
+        <Container fastClose={fastClose} fromNormal={fromNormal}>
         <User>
             <Profile>
                 <Touchable>
@@ -60,15 +144,27 @@ const Review = ()=>{
                         />
                 </Touchable>
                 <NameStar>
-                    <Name>킬리만자로의 독수리</Name>
-                    <Star rating={3.6} size={20}></Star>
+                    <Name>{username}</Name>
+                    <Star rating={rating} size={20}></Star>
                 </NameStar>
             </Profile>
-            <Date>2020.09.08</Date>
+            <RightWrapper>
+                {editting&&
+                    <DeleteBox 
+                    onPress={()=>deleteReview()}
+                    >
+                        <DeleteText>삭제</DeleteText>
+                    </DeleteBox>
+                }
+                <Date>{ConvertToKorean(updatedAt)}</Date>
+            </RightWrapper>
         </User>
-        <Description numberOfLines={2} ellipsizeMode='tail'>이 집 독수리 카레는 참 맛있군요. 훌륭합니다. 하지만 킬리만자로 스파이시 카레에 비한다면 형편없군요. 여러분 먹어보고 비교하세요.</Description>
+        <Description numberOfLines={2} ellipsizeMode='tail'>{text}</Description>
     </Container>    
     )
 }
 
 export default Review; 
+
+
+

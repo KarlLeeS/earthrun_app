@@ -6,6 +6,8 @@ import styled from "styled-components";
 import constants from "../constants";
 import { USER_FRAGMENT } from "../fragments";
 import Loader from "./Loader";
+import { useSetUser, useUser } from "../AuthContext";
+import { CalculateDays } from "../utils";
 const Touchable = styled.TouchableOpacity`
     flex-direction:row;
     align-items:center; 
@@ -36,24 +38,19 @@ export const ME = gql`
 
 
 const UserProfile = ()=>{
-    const {data,loading}= useQuery(ME); 
-    console.log(data.me); 
-
+    const user =  useUser()
     return (
-        loading?(
-            <Loader />
-        ):(
             <Touchable>
             <Image 
+                resizeMode={"contain"}
                 style={{width:constants.width/8, height:constants.height/16, borderRadius: 100 }}
-                source={require('../assets/post.png')}
+                source={{uri:user?.avatar}}
             />
             <MetaInto>
-                <TextBold>{data?.me.username}</TextBold>
-                <TextLight>{data?.me.preference.name} 27년 째</TextLight>
+                <TextBold>{user?.username}</TextBold>
+                <TextLight>{user?.preference.name} {`${CalculateDays(user.typeStart)}`}일 째</TextLight>
             </MetaInto>
         </Touchable>
-        )
         )
         
 }

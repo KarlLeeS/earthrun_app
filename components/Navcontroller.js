@@ -3,8 +3,11 @@ import MainNavigation from "../navigation/MainNavigation";
 import styled from "styled-components";
 import Loader from "./Loader";
 import AuthNavigation from "../navigation/AuthNavigation";
-import { useIsLoggedIn } from "../AuthContext";
-
+import { useIsLoggedIn} from "../AuthContext";
+import { USER_FRAGMENT } from "../fragments";
+import { useQuery } from "@apollo/client";
+import {gql} from "apollo-boost"
+import { cos } from "react-native-reanimated";
 const View = styled.View`
   justify-content:center;
   align-items:center;
@@ -18,10 +21,11 @@ const Text = styled.Text`
 
 
 export default () => {
-  const isLoggedIn = true;
-  // const isLoggedIn = useIsLoggedIn();
 
-  // return isLoggedIn ? <MainNavigation /> : <AuthNavigation />; 
-  return <MainNavigation /> 
+  const isLoggedIn = useIsLoggedIn();
 
+  return isLoggedIn ? <MainNavigation /> : <AuthNavigation />; 
+  // return  <MainNavigation />; 
+  
+  
 }
