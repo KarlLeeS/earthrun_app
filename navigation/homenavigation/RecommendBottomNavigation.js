@@ -9,6 +9,7 @@ const Tab = createMaterialTopTabNavigator(
 export default () => {
   return (
     <Tab.Navigator
+
       tabBarOptions={{
         indicatorStyle: {
           height: '100%',
@@ -32,10 +33,10 @@ export default () => {
       //   borderWidth:10,
       // }}
     >
-        <Tab.Screen name="식품 TOP5" component={RecommendBottom} />
-        <Tab.Screen name="건강미용 TOP5" component={RecommendBottom} />
-        <Tab.Screen name="생활용품 TOP5" component={RecommendBottom} />
-        <Tab.Screen name="패션/잡화 TOP5" component={RecommendBottom} />
+        <Tab.Screen name="식품 TOP5" children={()=><RecommendBottom type={"식품"}/>}/>
+        <Tab.Screen name="건강미용 TOP5" children={()=><RecommendBottom type={"건강미용"}/>} />
+        <Tab.Screen name="생활용품 TOP5" children={()=><RecommendBottom type={"생활용품"}/>} />
+        <Tab.Screen name="패션/잡화 TOP5" children={()=><RecommendBottom type={"패션/잡화"}/>} />
     </Tab.Navigator>
   )
 }

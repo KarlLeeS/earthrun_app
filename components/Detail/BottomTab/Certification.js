@@ -6,7 +6,7 @@ const Touchable = styled.TouchableOpacity`
 
 `; 
 
-const Certification = ()=>{
+const Certification = ({url})=>{
 
     
     return (

@@ -6,15 +6,17 @@ import constants from "../../../constants";
 import { ConvertToKorean } from "../../../utils";
 import Star from "./Star";
 import {gql} from "apollo-boost";
+import { withNavigation } from "@react-navigation/compat";
+import { useCurrentPost } from "../../../AuthContext";
 
     // /* padding:${props=>props.fromNormal?"":} */
 
 const Container = styled.View`
     position:${props=>props.fastClose?"absolute":"relative"};
     top:${props=>props.fastClose?-9999:0};
-    height:${constants.height/5.5};
-    width:${props=>props.fromNormal?constants.width:""};
-    padding: 0px 15px;
+    min-height:${constants.height/6};
+    width:${props=>props.fromNormal?constants.width:"auto"};
+    padding:${props=>props.fromNormal?"0px 15px":"0px"};
     margin-top:20px;
     justify-content:flex-start;
     border-bottom-color:#ececec;
@@ -55,12 +57,15 @@ const Description = styled.Text`
 
 
 
-const RightWrapper= styled.View`
-    justify-content:center;
+const RightWrapper= styled.View`    
+    /* flex-direction:row; */
+    justify-content:flex-end;
     align-items:flex-end;
 `;
 
-const DeleteBox= styled.TouchableOpacity`
+
+
+const EditBox= styled.TouchableOpacity`
     margin-top:10px;
     width:${constants.width/10};
     height:${constants.height/20};
@@ -69,11 +74,16 @@ const DeleteBox= styled.TouchableOpacity`
     background-color:#00fc85;
     margin-bottom:10px;
     border-radius:10px;
+    margin-left:10px;
 `;
-const DeleteText = styled.Text`
+const EditText = styled.Text`
     color:#fff;
     font-weight:bold;
 `;
+
+const EditWrapper = styled.View`
+    flex-direction:row;
+`; 
 
 // removeReview(id:String!):Boolean
 export const DELETE_REVIEW = gql`
@@ -85,18 +95,28 @@ mutation removeReview($id: String!,$user: String!){
 
 
 const Review = ({
-    id, 
+    id,
+    user:{
+        avatar,
+        id:userId,
+        username
+    },
+    post:{
+        id:postId,
+        reviewCount,
+        rating:AvgRating
+    },
     rating,
-    text, 
+    text,
     updatedAt,
-    user:{avatar,id:userId, username},
     fromNormal,
     editting,
-    setList
+    setList,
+    navigation
     })=>{
-    console.log(id, rating,text, updatedAt,avatar,userId,username);
+    // console.log(id, rating,text, updatedAt,avatar,userId,username);
     const [fastClose,setfastClose] =useState(false);
-
+    const post = useCurrentPost();
 
     const [deleteReviewMutation] = useMutation(DELETE_REVIEW,{
         variables:{
@@ -131,40 +151,55 @@ const Review = ({
 
     return(
         <Container fastClose={fastClose} fromNormal={fromNormal}>
-        <User>
-            <Profile>
-                <Touchable>
-                    <Image
-                        style={{
-                            width:constants.width/7,
-                            height:constants.height/14,
-                            borderRadius:100 
-                        }}
-                        source={require('./../../../assets/post.png')}
-                        />
-                </Touchable>
-                <NameStar>
-                    <Name>{username}</Name>
-                    <Star rating={rating} size={20}></Star>
-                </NameStar>
-            </Profile>
-            <RightWrapper>
-                {editting&&
-                    <DeleteBox 
-                    onPress={()=>deleteReview()}
-                    >
-                        <DeleteText>삭제</DeleteText>
-                    </DeleteBox>
-                }
-                <Date>{ConvertToKorean(updatedAt)}</Date>
-            </RightWrapper>
-        </User>
-        <Description numberOfLines={2} ellipsizeMode='tail'>{text}</Description>
-    </Container>    
+            <User>
+                <Profile>
+                    <Touchable>
+                        <Image
+                            style={{
+                                width:constants.width/7,
+                                height:constants.height/14,
+                                borderRadius:100 
+                            }}
+                            source={{uri:avatar}}
+                            />
+                    </Touchable>
+                    <NameStar>
+                        <Name>{username}</Name>
+                        <Star rating={rating} size={20}></Star>
+                    </NameStar>
+                </Profile>
+                <RightWrapper>
+                    {editting&&
+                            <EditWrapper>
+                            <EditBox 
+                            onPress={()=>navigation.navigate("UploadReview",{
+                                reviewId:id,
+                                postId:postId,
+                                type:"리뷰 수정",
+                                AvgRating,
+                                rating,
+                                text,
+                                reviewCount
+                            })}
+                            >
+                                <EditText>수정</EditText>
+                            </EditBox>
+                            <EditBox 
+                            onPress={()=>deleteReview()}
+                            >
+                                <EditText>삭제</EditText>
+                            </EditBox>
+                            </EditWrapper>
+                    }
+                    <Date>{ConvertToKorean(updatedAt)}</Date>
+                </RightWrapper>
+            </User>
+            <Description numberOfLines={2} ellipsizeMode='tail'>{text}</Description>
+        </Container>    
     )
 }
 
-export default Review; 
+export default withNavigation(Review); 
 
 
 

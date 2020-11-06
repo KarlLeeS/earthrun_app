@@ -22,13 +22,15 @@ const View = styled.View`
 const Container = styled.View`
   background-color : #fff;
   position:relative;
-  height:${constants.height};
+  min-height:${constants.height};
 `;
 
 const RightFilterWrapper = styled.View`
   position:absolute;
+  top:0;
   left:0;
   z-index:10;
+  bottom:0;
 `;
 
 const Text = styled.Text`
@@ -37,7 +39,7 @@ const Text = styled.Text`
 
 const Posts = styled.View`
   flex-direction:row; 
-  justify-content:space-evenly;
+  justify-content:flex-start;
   flex-wrap:wrap;
 `;
 
@@ -68,26 +70,6 @@ const LeftFilterText = styled.Text`
   font-size:14px;
 `;
 
-export const GET_POSTS = gql`
-    query MainTopTab(
-      $certification:[String],
-      $preferences:[String],
-      $orderingoption:String,
-      $categories:String!
-      ){
-        MainTopTab(
-          certification:$certification,
-          preferences:$preferences,
-          orderingoption:$orderingoption,
-          categories:$categories
-        ){
-           ...PostParts
-        }
-    }
-     ${POST_FRAGMENT}
-
-`; 
-
 // BYLOWPRICE
 // BYHIGHPRICE
 // BYRATING
@@ -104,8 +86,26 @@ const OrderMapper= {
   "BYLATEST":"최근출시 순",
 }
 
-const MainScreen = ({category})=>{
-  const [post,setPosts] = useState([]);
+export const GET_MAIN_TOP_TAB= gql`
+  query MainTopTab(
+      $certification:[String]
+      $preferences:[String]
+      $orderingoption:String
+      $categories:String!
+  ){
+    MainTopTab(
+      certification:$certification
+      preferences:$preferences
+      orderingoption:$orderingoption
+      categories:$categories
+    ){
+      ...PostParts
+    }
+  }
+  ${POST_FRAGMENT}
+`;
+
+const MainScreen = ({category,searchKeyword,searchRefetch})=>{
   const [LeftToggle,setLeftToggle] = useState(false); 
   const [RightToggle,setRightToggle] = useState(false); 
   const user = useUser();
@@ -113,11 +113,7 @@ const MainScreen = ({category})=>{
   const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
 
-  console.log("category",category);
-  // console.log("preferences :" , preferences);
-  // console.log("certification" , certification);
-
-  const {loading,data,refetch,updateQuery}= useQuery(GET_POSTS,{ 
+  const {loading,data,refetch,updateQuery}= useQuery(GET_MAIN_TOP_TAB,{ 
     variables:{
       certification:certification,
       preferences:preferences,
@@ -126,47 +122,74 @@ const MainScreen = ({category})=>{
     },
     fetchPolicy:"network-only"
   });
-  // const
- 
 
-  const OnSubmit =(preferenceList,certificationList,type=undefined)=>{
-    let preferenceResult, certificationResult,TypeResult ;
-    if( preferenceList === undefined||preferenceList.length===0) preferenceResult=[];
-    if(certificationList===undefined || certificationList.length===0) certificationResult=[];
-    if(type==="") TypeResult=orderingoption;
+  const OnSubmit = async (preferenceList=[],certificationList=[],order=undefined)=>{
+    let preferenceResult, certificationResult,orderResult ;
+    if(preferenceList===undefined || preferenceList.length===0){
+      preferenceResult = preferences;
+    }else{
+      preferenceResult=preferenceList
+    }
+
+    if(certificationList===undefined || certificationList.length===0){
+      certificationResult = certification;
+    }else{
+      certificationResult = certificationList;
+    }
     
-    // console.log({preferenceList});
-    // console.log({certificationList});
-    // console.log({type});
+    if(order===undefined){
+      orderResult = orderingoption;
+    }else{
+      orderResult = order;
+    }
+
+    await refetch({
+      certification:certificationResult,
+      preferences:preferenceResult,
+      orderingoption:orderResult,
+      categories:category
+    });
+    // console.log({preferenceResult});
+    // console.log({certificationResult});
+    // console.log({orderResult});
+
   }
 
-  return (loading?(
-      <Loader />
-    ):(
+  return (
     <ScrollView>
-      <Container>
+      <Container RightToggle={RightToggle}>
         <FilteringTools>
           <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
             <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
             <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
           </LeftFilterIcon>
           {
-            LeftToggle?(
-              <LeftFilterWrapper  >
-                <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
-              </LeftFilterWrapper>):(<></>)
+            LeftToggle
+              ?
+                (
+                  <LeftFilterWrapper  >
+                    <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+                  </LeftFilterWrapper>
+                )
+              :
+                (
+                  <></>
+                )
           }
-          
           <RightFilterIcon onPress={()=>setRightToggle(true)}>
             <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
           </RightFilterIcon>
         </FilteringTools>
         <Posts>
-          {
-            data!==undefined?data.MainTopTab&&data.MainTopTab.map((e,i)=>(
-              <Post key={e.id}  {...e} />
-            )) : <></>
-          }
+          {loading?(
+             <Loader />
+          ):
+          (
+            data&&data?.MainTopTab&&data?.MainTopTab.map((e,i)=>(
+              <Post key={e.id} fromMainScreenNormalList={true} {...e} />
+              ))
+          )
+            }
         </Posts>
       </Container>
       {RightToggle?(
@@ -183,9 +206,7 @@ const MainScreen = ({category})=>{
         ):(<></>)
       }
     </ScrollView>
-    )
   )
 }
 
 export default MainScreen;
-

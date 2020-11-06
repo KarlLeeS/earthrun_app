@@ -8,6 +8,8 @@ import { USER_FRAGMENT } from "../fragments";
 import Loader from "./Loader";
 import { useSetUser, useUser } from "../AuthContext";
 import { CalculateDays } from "../utils";
+import { withNavigation } from "@react-navigation/compat";
+
 const Touchable = styled.TouchableOpacity`
     flex-direction:row;
     align-items:center; 
@@ -37,12 +39,13 @@ export const ME = gql`
 `
 
 
-const UserProfile = ()=>{
-    const user =  useUser()
+const UserProfile = ({navigation})=>{
+    const user =  useUser();
+    // console.log(user.avatar);
     return (
-            <Touchable>
+            <Touchable onPress={()=>{navigation.navigate("ProfileNavigation",{})}}>
             <Image 
-                resizeMode={"contain"}
+                resizeMode={"cover"}
                 style={{width:constants.width/8, height:constants.height/16, borderRadius: 100 }}
                 source={{uri:user?.avatar}}
             />
@@ -54,5 +57,5 @@ const UserProfile = ()=>{
         )
         
 }
-
-export default UserProfile; 
+export default withNavigation(UserProfile); 
+// export default withNavigation(React.memo(UserProfile)); 

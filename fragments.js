@@ -7,6 +7,7 @@ export const POST_FRAGMENT = gql`
     name
     weight
     price
+    isLiked
     preferences{
         name
     }
@@ -21,8 +22,6 @@ export const POST_FRAGMENT = gql`
 `;
 
 
-
-
 export const REVIEW_FRAGMENT= gql`
   fragment ReviewParts on Review{
     id
@@ -31,11 +30,110 @@ export const REVIEW_FRAGMENT= gql`
       avatar
       username
     }
+    post{
+      id
+      rating
+      reviewCount
+    }
     rating
     text
     updatedAt
   }
 `;
+
+export const FULL_POST = gql`
+  fragment PostParts on Post{
+    id
+    brand
+    name
+    weight
+    description
+    price
+    isLiked
+    preferences{
+        name
+    }
+    reviewCount
+    files{
+        url
+    }
+    rating
+    weeklyHits
+    createdAt
+    preferences{
+      id
+      name
+    }
+    certification{
+      id
+      name
+    }
+    categories{
+      id 
+      name
+    }
+    rawMaterialURL
+    rawMaterials{
+      id 
+      name
+      text
+    }
+    reviews{
+      ...ReviewParts     
+    }
+    offline
+    online
+  }
+  ${REVIEW_FRAGMENT}
+`;
+
+export const FULL_POST_TEST = gql`
+  fragment PostPartsTEST on Post{
+    id
+    brand
+    isLiked
+    name
+    weight
+    description
+    price
+    preferences{
+        name
+    }
+    reviewCount
+    files{
+        url
+    }
+    rating
+    weeklyHits
+    createdAt
+    preferences{
+      id
+      name
+    }
+    certification{
+      id
+      name
+    }
+    categories{
+      id 
+      name
+    }
+    rawMaterialURL
+    rawMaterials{
+      id 
+      name
+      text
+    }
+    reviews{
+      ...ReviewParts     
+    }
+    offline
+    online
+  }
+  ${REVIEW_FRAGMENT}
+`;
+
+
 
 // export const USER_FRAGMENT = gql`
 //   fragment UserParts on User {

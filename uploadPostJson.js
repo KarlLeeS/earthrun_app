@@ -1,0 +1,62 @@
+export default {
+    "preferences":[
+        "비건",
+        "락토",
+        "오보",
+        "락토오보",
+        "페스코",
+        "폴로"
+    ],
+    "certification":[
+        "한국 비건인증원",
+        "영국 비건 협회",
+        "우수 재활용",
+        "리핑 버니",
+        "저탄소"
+    ],
+    "categories":[
+        {
+            "main":"식품",
+            "sub":[
+                "대체육",
+                "빵",
+                "간편식면류통조림",
+                "음료",
+                "간식",
+                "건강식"
+            ]      
+        },
+        {
+            "main":"MainFake1",
+            "sub":[
+                "SubFake1",
+                "SubFake2",
+                "SubFake3",
+                "SubFake4",
+                "SubFake5",
+                "SubFake6"
+            ]      
+        },
+        {
+            "main":"MainFake2",
+            "sub":[
+                "SubFake1",
+                "SubFake2",
+                "SubFake3",
+                "SubFake4",
+                "SubFake5",
+                "SubFake6"
+            ]      
+        }
+    ]
+    ,
+    "rawMaterials":[
+        "정제수",
+        "양파",
+        "카레",
+        "마늘",
+        "새싹",
+        "밀",
+        "토마토"
+    ]
+}

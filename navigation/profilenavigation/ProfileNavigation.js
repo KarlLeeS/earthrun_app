@@ -1,17 +1,8 @@
 import React from "react";
-import {NavigationContainer} from "@react-navigation/native"; 
 import {createStackNavigator} from "@react-navigation/stack";
-
-import { deleteAlbumsAsync } from "expo-media-library";
-
 import MainProfile from "../../screens/profile/MainProfile";
 import BadgeList from "../../screens/profile/BadgeList";
 import FriendsList from "../../screens/profile/FriendsList";
-import LikesList from "../../screens/profile/LikesList";
-import ReviewList from "../../screens/profile/ReviewList";
-import RecentlyViewedPostList from "../../screens/profile/RecentlyViewedPostList";
-import UploadedPostList from "../../screens/profile/UploadedPostList";
-import Upload from "../../screens/profile/Upload";
 import EditProfile from "../../screens/profile/EditProfile";
 import NOTYET from "../../screens/NOTYET";
 
@@ -19,15 +10,12 @@ const Stack = createStackNavigator();
 
 export default ()=>(
     <Stack.Navigator
-    
+        initialRouteName="MainProfile"
     >
         <Stack.Screen options={{ headerShown: false }} name="EditProfile" component={EditProfile}/>
         <Stack.Screen options={{ headerShown: false }} name="MainProfile" component={MainProfile}/>
         <Stack.Screen name="BadgeList" component={BadgeList}/>
         <Stack.Screen name="FriendsList" component={FriendsList}/>
         <Stack.Screen name="NOTYET" component={NOTYET}/>
-        <Stack.Screen name="ReviewList" component={ReviewList}/>
-        <Stack.Screen name="RecentlyViewedPostList" component={RecentlyViewedPostList}/>
-        <Stack.Screen name="UploadedPostList" component={UploadedPostList}/>
     </Stack.Navigator>
 )

@@ -47,27 +47,32 @@ const OnLineList = styled.View`
 `; 
 
 
-const Lines = ()=>{
+const Lines = ({
+    offline,
+    online
+})=>{
     return(
         <Container>
             <OffLine>
-                <Title>오프라인 (5)</Title>
+                <Title>오프라인 ({offline?offline.length:0})</Title>
                 <Description>지점별 재고 상활에 따라 다를 수 있습니다.</Description>
                 <OffLineList>
-                    <OffLineBox />
-                    <OffLineBox />
-                    <OffLineBox />
-                    <OffLineBox />
+                    {
+                        offline&&offline.map((e,i)=>(
+                            <OffLineBox key={Math.floor(Math.random()*100)+i} />
+                        ))
+                    }
                 </OffLineList>
             </OffLine>
             <OnLine>
-                <Title>온라인 (10)</Title>
+                <Title>온라인 ({online?online.length:0})</Title>
                 <Description>탭하면 구매 페이지로 이동합니다.</Description>
                 <OnLineList>
-                    <OnLineBox />
-                    <OnLineBox />
-                    <OnLineBox />
-                    <OnLineBox />
+                    {
+                        online&&online.map((e,i)=>(
+                            <OnLineBox key={Math.floor(Math.random()*100)+i}  />
+                        ))
+                    }
                 </OnLineList>
             </OnLine>
         </Container>

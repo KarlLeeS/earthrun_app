@@ -21,7 +21,7 @@ export const ME = gql`
 export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     const [isLoggedIn,setIsLoggedIn] = useState(isLoggedInProp); 
     const [user,setUser]= useState({});
-    
+    const [currentPost,setCurrentPost] =useState([]); 
     const SettingUser=(user)=>{
         setUser(user);
     }
@@ -45,12 +45,22 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         }
     };
     return (
-    <AuthContext.Provider value={{user,SettingUser,isLoggedIn,logUserIn,logUserOut}}>
+    <AuthContext.Provider value={{
+        currentPost,setCurrentPost,user,SettingUser,isLoggedIn,logUserIn,logUserOut}}>
             {children}
     </AuthContext.Provider>
     )
 };
 
+export const useCurrentPost=()=>{
+    const {currentPost} = useContext(AuthContext);
+    return currentPost;
+}
+
+export const useSetCurrentPost=()=>{
+    const {setCurrentPost} = useContext(AuthContext); 
+    return setCurrentPost;
+}
 export const useUser=()=>{
     const {user} = useContext(AuthContext);
     return user;

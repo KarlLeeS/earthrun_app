@@ -47,32 +47,34 @@ const RawMaterialImageWrap = styled.View`
 `; 
 
 
-const ProductInfo=()=>{
+const ProductInfo=({
+    description,
+    certification,
+    rawMaterials,
+    rawMaterialURL
+})=>{
     return(
         <Container>
             <DescriptionWrap>
                 <Title>상품 설명</Title>
-                <DescriptionSubText>남아프리카의 서식하는 독수리와 같은 강렬한 카레의 맛. 강추.</DescriptionSubText>
+                <DescriptionSubText>{description}</DescriptionSubText>
             </DescriptionWrap>
             <CertificationWrap>
                 <Title>인증 마크</Title>
                 <CertificationImages>
-                    <Certification />
-                    <Certification />
-                    <Certification />
-                    <Certification />
+                    {certification.map(e=>(
+                        <Certification key={e.id} url={e.url}/>
+                    ))}
                 </CertificationImages>
             </CertificationWrap>
             <RawMaterialWrap>
                 <Title>원재료</Title>
                 <RawMaterialList>
-                    <Rawmaterial label={"더러운 깃털"}/>
-                    <Rawmaterial label={"영롱한 눈"} special />
-                    <Rawmaterial label={"더러운 균"}/>
-                    <Rawmaterial label={"탐스러운 부리"} special/>
-                    <Rawmaterial label={"시체썩은 냄새"}/>
-                    <Rawmaterial label={"멋있는 갈기"} special/>
-                    <Rawmaterial label={"멋있는 갈기"} special/>
+                    {
+                        rawMaterials.map(e=>(
+                            <Rawmaterial key={e.id} label={e.name}/>
+                        ))
+                    }
                 </RawMaterialList>
             </RawMaterialWrap>
             <RawMaterialImageWrap>
@@ -84,7 +86,7 @@ const ProductInfo=()=>{
                     height: constants.height/2,
                     borderRadius: 5
                 }}
-                source={require('./../../../assets/post.png')}/>
+                source={{uri:rawMaterialURL}}/>
             </RawMaterialImageWrap>
         </Container>
     )

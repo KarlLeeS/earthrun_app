@@ -5,10 +5,12 @@ import NavIcon from "../../NavIcon";
 
 
 const StarS =styled.View`
-
+    position:relative;
     flex-direction:row-reverse;
     justify-content:flex-end;
     align-items:center;
+    /* border:1px solid blue; */
+    
 `;
 
 const renderStar=(rating,size=24)=>{

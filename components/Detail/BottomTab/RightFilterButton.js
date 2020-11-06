@@ -23,16 +23,42 @@ const Text = styled.Text`
     /* font-weight:bold; */
 `; 
 
-
-const RightFilterButton=({text,value,setValue})=>{
+const RightFilterButton=({text,value,setValue,index,type})=>{
+    console.log({index});
     return (
         <Wrapper state={value}>
-        <TouchableOpacity onPress={()=>{
-            if(value===1){
-                setValue(0);
-            }
-            else{
-                setValue(1);
+        <TouchableOpacity onPress={ ()=>{
+            // FIND 헐 극혐. 0은 undefined야. 이게 js가 이상한 부분이지
+            // 그러나 typescript에서는 해결되는 문제지
+            if(index||index===0){
+                if(type==="multi"){
+                    if(value===1){
+                        setValue( e=>{
+                            let result = [...e]; 
+                            result[index]=0; 
+                            return result
+                        })
+                    }else{
+                        setValue( e=>{
+                            let result = [...e]; 
+                            result[index]=1; 
+                            return result
+                        })
+                    }
+                }else if(type==="radio"){
+                    setValue( e=>{
+                        let result = new Array(e.length).fill(0); 
+                        result[index]=1; 
+                        return result
+                    })
+                }
+            }else{
+                if(value===1){
+                    setValue(0);
+                }
+                else{
+                    setValue(1);
+                }
             }
         }}>
                 <Text state={value}>{text}</Text>

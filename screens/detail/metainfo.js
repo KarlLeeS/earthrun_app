@@ -21,6 +21,12 @@ const WeightPrice = styled.Text`
   color: #a0a0a0;
   font-size:16px;
 `;
+
+const PreferenceList = styled.View`
+  flex-direction:row;
+
+`; 
+
 const Preference = styled.Text`
   margin-top:10px;
   color: #000;
@@ -29,13 +35,22 @@ const Preference = styled.Text`
 
 
 
-export default () => {
-  return(
-    <Container>
-      <Brand>순수람</Brand>
-      <Name>독수리 카레</Name>
-      <WeightPrice>3000g / 28억원</WeightPrice>
-      <Preference>플렉시테리언</Preference>
+export default ({
+  brand,
+  name,
+  weight,
+  price,
+  preferences
+}) => {
+  return(<Container>
+      <Brand>{brand}</Brand>
+      <Name>{name}</Name>
+      <WeightPrice>{weight}g / {price}원</WeightPrice>
+      <PreferenceList>
+        {preferences.map(e=>(
+          <Preference key={e.id}>{e.name}</Preference>
+        ))}
+      </PreferenceList>
     </Container>
   ) 
 }

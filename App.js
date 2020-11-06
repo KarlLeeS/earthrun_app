@@ -18,6 +18,8 @@ import { AuthProvider } from './AuthContext';
 import Navcontroller from './components/Navcontroller';
 import { AppLoading } from 'expo';
 import styles from './styles';
+import Selection from './components/Selection';
+import UploadPost from './screens/profile/UploadPost';
 
 
 export default function App() {
@@ -83,7 +85,6 @@ export default function App() {
     preLoad();
   },[]);
 
-  
   return loaded && client && isLoggedIn !== null ? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={styles}>
@@ -95,4 +96,8 @@ export default function App() {
   ):(
     <AppLoading />
   );
+
 }
+
+// return <UploadPost />  
+

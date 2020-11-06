@@ -20,7 +20,7 @@ export default () =>{
   console.log("TabNavigation");
   return (
     <Tab.Navigator
-      lazy="false"
+      lazy="true"
       tabBarOptions={{
         scrollEnabled :true,
         indicatorStyle:{
@@ -43,11 +43,11 @@ export default () =>{
         }
       }}
     >
-        {/* <Tab.Screen name="추천" component={RecommendNavigation} /> */}
+        <Tab.Screen name="추천" component={RecommendNavigation} />
         <Tab.Screen name="식품" component={SubTabFood} />
-        <Tab.Screen name="건강/미용"  component={SubTabHealthBeauty} />
+        {/* <Tab.Screen name="건강/미용"  component={SubTabHealthBeauty} />
         <Tab.Screen name="생활용품"  component={SubTabLife} />
-        <Tab.Screen name="패션/잡화"  component={SubTabFashionOthers} />
+        <Tab.Screen name="패션/잡화"  component={SubTabFashionOthers} /> */}
       </Tab.Navigator>
   );
 }

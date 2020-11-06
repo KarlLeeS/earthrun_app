@@ -1,12 +1,18 @@
+import { useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
 import {TouchableOpacity} from "react-native";
 import styled from "styled-components";
 import Post from "../../components/Post";
-
+import constants from "../../constants";
+import {gql} from "apollo-boost"; 
+import { POST_FRAGMENT } from "../../fragments";
+import { useUser } from "../../AuthContext";
+import Loader from "../../components/Loader";
 
 const Container = styled.View`
     background-color:white;
     flex-direction:column; 
+    /* height:${constants.height}; */
 `;
 
 const Item = styled.TouchableOpacity`
@@ -24,27 +30,47 @@ const ItemNumber = styled.Text`
 
 `;
 
-const RecommendBottom = ({navigation})=>{
-    
+export const GET_BOTTOM_POSTS=gql`
+    query RecommendBottomTabBar(
+        $userPrefer:String!,
+        $category:String!
+    ){
+        RecommendBottomTabBar(
+            userPrefer:$userPrefer
+            category:$category
+        ){
+            ...PostParts
+        }
+    }
+    ${POST_FRAGMENT}
+`;
+
+const RecommendBottom = ({navigation,type})=>{
+    //     식품
+    // 건강미용
+    // 생활용품
+    // 패션/잡화
+    const user = useUser();
+    const {loading, data} = useQuery(GET_BOTTOM_POSTS,{
+        variables:{
+            userPrefer:user.preference.name,
+            category:type
+        }
+    });
+
     return (
         <Container>
-            <Item>
-                <ItemNumber>1</ItemNumber>
-                <Post fromRecommend={true}/>
-            </Item>
-            
-            <Item>
-                <ItemNumber>2</ItemNumber>
-                <Post fromRecommend={true}/>
-            </Item>
-            <Item>
-                <ItemNumber>3</ItemNumber>
-                <Post fromRecommend={true}/>
-            </Item>
-            <Item>
-                <ItemNumber>4</ItemNumber>
-                <Post fromRecommend={true}/>
-            </Item>
+            {loading
+            ?
+                <Loader />
+            :
+                data&&data.RecommendBottomTabBar&&data.RecommendBottomTabBar.map((e,i)=>(
+                    <Item key={e.id}>
+                        <ItemNumber>{i+1}</ItemNumber>
+                        <Post fromRecommendBottom={true} {...e}/>
+                    </Item>
+                ))
+                }
         </Container>
     );
 }

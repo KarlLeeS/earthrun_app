@@ -23,7 +23,7 @@ import Loader from "../../components/Loader";
 // `;
 const Container = styled.View`
   background-color: white;
-  height: ${constants.height};
+  /* height: ${constants.height}; */
 `;
 
 const BoxList = styled.View`
@@ -52,19 +52,16 @@ const HomeNavigation=({navigation,route})=>{
       header:null
     }
   });
-  const [loadingProfile,setLoadingProfile] = useState(true);
-  // console.log("HomeNavigation");
-
 
   return (
         <Container>
           <ScrollView>
             <Header>
-              <UserProfile loadingProfile={loadingProfile} setLoadingProfile={setLoadingProfile} />
+              <UserProfile />
               <Notification />
             </Header>
             <Search>
-              <SearchBar />
+              <SearchBar fake />
             </Search>
 
             <TabNavigation />

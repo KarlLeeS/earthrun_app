@@ -2,10 +2,13 @@ import { symbol } from "prop-types";
 import React from "react";
 import {Text, TouchableOpacity} from "react-native";
 import styled from "styled-components";
+import { useCurrentPost } from "../../../AuthContext";
 import constants from "../../../constants";
 import NavIcon from "../../NavIcon";
 import Review from "./Review";
 import Star from "./Star";
+import { withNavigation } from "@react-navigation/compat";
+
 const Container = styled.View`
     background-color:#fff;
     /* padding:0 10px */
@@ -93,14 +96,22 @@ const Right = styled.TouchableOpacity``;
 
 const ReviewList = styled.View`
     /* padding-top:30px; */
+    /* height:${constants.height}; */
 `; 
 
-const ReviewRating =()=>{
-    
+const ReviewRating =({
+    navigation,
+    reviewCount=0,
+    rating=0,
+    reviews=[]
+})=>{
+    const post = useCurrentPost();
     return (
         <Container>
             <UploadReview>
-                <TouchableOpacity >
+                <TouchableOpacity onPress={()=>{navigation.navigate("UploadReview",{
+                        type:"리뷰 올리기"
+                    })}} >
                     <UploadButton>
                         리뷰 쓰기
                     </UploadButton>
@@ -110,9 +121,9 @@ const ReviewRating =()=>{
                 <ReviewTopInfo>
                     <Left>
                         <LeftTop>
-                            <Title>총 리뷰 311개</Title>
-                            <Star rating={4.3} />
-                            <Rating>(4.7)</Rating>
+                            <Title>총 리뷰 {reviewCount===null?0:reviewCount}개</Title>
+                            <Star rating={rating===null?0:rating} />
+                            <Rating>({rating===null?0: (rating).toFixed(1)})</Rating>
                         </LeftTop>
                         <LeftBottom>
                             {/* todo nstate를 통해서 바뀐 값 onPress를 통해 입력받고 리렌더링하기. */}
@@ -126,14 +137,17 @@ const ReviewRating =()=>{
                     </Right>
                 </ReviewTopInfo>
                 <ReviewList>
-                    <Review />
-                    <Review />
-                    <Review />
-                    <Review />
+                    {
+                        reviews&&reviews[0]&&reviews.map(e=>(
+                            <Review key={e.id}
+                                {...e}
+                            />
+                        ))
+                    }
                 </ReviewList>
             </TotalReview>
         </Container>
     )
 }
 
-export default ReviewRating;
+export default withNavigation(ReviewRating);

@@ -79,7 +79,7 @@ const Grid =styled.View`
 const PostWrapper= styled.View`
   justify-content:center;
   align-items:center; 
-  margin-top:10px;
+  /* margin-top:10px; */
 `; 
 
 
@@ -143,30 +143,31 @@ const makeGQL =(type)=>{
 
 
 export default ({navigation,route}) =>{
+  const [list,setList] = useState([]);
   
   const [editting,SetEditting] = useState(false);
   // const setUser = useSetUser();
   // const user = useUser()
   const {data,loading} = useQuery(makeGQL(route.params.type),{
-    fetchPolicy:"network-only",
+    fetchPolicy:"cache-first",
     onCompleted:()=>{
       setList(data);
     }}); 
 
-    // {list&&list.getLikes&&list.getLikes.map((e,i)=>(
-    //   <Post setList={setList} editting={editting} {...e.post} index={i} fromNormal={true} key={e.id} />
-    // ))}
-    // {list&&list.RecentlyViewedPost&&list.RecentlyViewedPost.map((e,i)=>(
-    //   <Post setList={setList} editting={editting}  {...e} index={i} fromNormal={true} key={e.id} />
-    // ))}
+    {list&&list.getLikes&&list.getLikes.map((e,i)=>(
+      <Post key={e.id} setList={setList} editting={editting} {...e.post} index={i} fromNormal={true} key={e.id} />
+    ))}
+    {list&&list.RecentlyViewedPost&&list.RecentlyViewedPost.map((e,i)=>(
+      <Post key={e.id} setList={setList} editting={editting}  {...e} index={i} fromNormal={true} key={e.id} />
+    ))}
 
-    // {list&&list.MyUploadedPosts&&list.MyUploadedPosts.map((e,i)=>(
-    //   <Post setList={setList} editting={editting} {...e} index={i} fromNormal={true} key={e.id} />
-    // ))}
+    {list&&list.MyUploadedPosts&&list.MyUploadedPosts.map((e,i)=>(
+      <Post key={e.id} setList={setList} editting={editting} {...e} index={i} fromNormal={true} key={e.id} />
+    ))}
     
-    // {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
-    //   <Review setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />
-    // ))}
+    {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
+      <Review key={e.id} setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />
+    ))}
     
 
   useLayoutEffect(()=>{
@@ -178,50 +179,46 @@ export default ({navigation,route}) =>{
     })
   },[]);
 
-  const [list,setList] = useState([]);
 
   
   return loading?(
     <Loader />
   ):(
-<Container>
-      <Header>
-        <Title>{`${route.params.type}`}</Title>
-        <Touchable onPress={()=>navigation.goBack()}>
-              <NavIcon name={"md-arrow-back"} size={24} color={"#000"}/>
-        </Touchable>
-        <Touchable onPress={()=>SetEditting(i=>!i)}>
-            <RightText>
-              편집
-            </RightText>
-        </Touchable>
-      </Header>
-      <Filter>
-        <FilterWrapper>
-              <NavIcon name={"md-color-filter"} size={24} color={"#000"}/>
-              <FilterText>최신순</FilterText>
-        </FilterWrapper>
-      </Filter>
-
+    <Container>
       <ScrollView>
-        
-      <Grid>
-          {list&&list.getLikes&&list.getLikes.map((e,i)=>(
-            <Post setList={setList} editting={editting} {...e.post} index={i} fromNormal={true} key={e.id} />
-          ))}
-          {list&&list.RecentlyViewedPost&&list.RecentlyViewedPost.map((e,i)=>(
-            <Post setList={setList} editting={editting}  {...e} index={i} fromNormal={true} key={e.id} />
-          ))}
+        <Header>
+          <Title>{`${route.params.type}`}</Title>
+          <Touchable onPress={()=>navigation.goBack()}>
+                <NavIcon name={"md-arrow-back"} size={24} color={"#000"}/>
+          </Touchable>
+          <Touchable onPress={()=>SetEditting(i=>!i)}>
+              <RightText>
+                편집
+              </RightText>
+          </Touchable>
+        </Header>
+        <Filter>
+          <FilterWrapper>
+                <NavIcon name={"md-color-filter"} size={24} color={"#000"}/>
+                <FilterText>최신순</FilterText>
+          </FilterWrapper>
+        </Filter>
 
-          {list&&list.MyUploadedPosts&&list.MyUploadedPosts.map((e,i)=>(
-            <Post setList={setList} editting={editting} {...e} index={i} fromNormal={true} key={e.id} />
-          ))}
-          
-          {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
-            <Review setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />
-          ))}
-          
-        </Grid>
+          <Grid>
+            {list&&list.getLikes&&list.getLikes.map((e,i)=>(
+              <Post fromMainScreenNormalList={true}  setList={setList} editting={editting} {...e.post} index={i} fromNormal={true} key={e.id} />
+            ))}
+            {list&&list.RecentlyViewedPost&&list.RecentlyViewedPost.map((e,i)=>(
+              <Post fromMainScreenNormalList={true} fromRecentlyViewed={true} setList={setList} editting={editting}  {...e} index={i} fromNormal={true} key={e.id} />
+            ))}
+
+            {list&&list.MyUploadedPosts&&list.MyUploadedPosts.map((e,i)=>(
+                <Post fromMainScreenNormalList={true} fromMyUploaded={true} setList={setList} editting={editting} {...e} index={i} fromNormal={true} key={e.id} />
+            ))}
+            {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
+              <Review setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />
+            ))}
+          </Grid>
       </ScrollView>
     </Container>
   )

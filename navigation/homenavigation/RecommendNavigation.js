@@ -1,34 +1,21 @@
+import { useQuery } from "@apollo/client";
+import {gql} from "apollo-boost";
 import React, { useState } from "react";
 import { ScrollView,TouchableOpacity } from "react-native";
 import styled from "styled-components";
+import { useUser } from "../../AuthContext";
+import Loader from "../../components/Loader";
 import NavIcon from "../../components/NavIcon";
 import Post from "../../components/Post";
+import { POST_FRAGMENT } from "../../fragments";
 import TempTabScreen from "../../screens/detail/tempTabScreen";
 import TempMainScreen from "../../screens/home/MainScreen";
 import RecommendBottomNavigation from "./RecommendBottomNavigation";
 
-// // 나를 위한 추천 
-
-// certification:[String!]!
-// preferences:[String!]!
-// orderingoption:ORDERINGOPTION
-// userPrefer:String
-
-// // 친구 추천 
-
-// x 
-
-// // 가장 핫한 
-
-// certification:[String!]!
-// preferences:[String!]!
-// orderingoption:ORDERINGOPTION
-
-// // 가장 신상
-
-// certification:[String!]!
-// preferences:[String!]!
-// orderingoption:ORDERINGOPTION
+const Container = styled.View`
+  background-color:white;
+  /* justify-content:center; */
+`;
 
 const RecommendContainer = styled.View`
   background-color:white;
@@ -63,27 +50,97 @@ const BottomTitle = styled.Text`
 
 `;
 
+export const GET_ME = gql`
+  query RecommendForMe(
+    $userPrefer: String!
+  ){
+    RecommendForMe(
+      userPrefer:$userPrefer
+    ){
+      ...PostParts
+    }
+  }
+  ${POST_FRAGMENT}
+`; 
+
+export const GET_HOTEST = gql`
+  query RecommendHotest(
+      $userPrefer: String!
+    ){
+      RecommendHotest(
+        userPrefer:$userPrefer
+      ){
+        ...PostParts
+      }
+    }
+    ${POST_FRAGMENT}
+`; 
+
+export const GET_NEW = gql`
+  query RecommendNewest(
+        $userPrefer: String!
+      ){
+        RecommendNewest(
+          userPrefer:$userPrefer
+        ){
+          ...PostParts
+        }
+      }
+      ${POST_FRAGMENT}
+`; 
+
+export const GET_FRIENDS = gql`
+  query RecommendFriendsLike{
+    RecommendFriendsLike{
+        ...PostParts
+      }
+    }
+    ${POST_FRAGMENT}
+`; 
 
 const RecommendNavigation = ()=>{
-  const [hotest,setHotest] = useState([null]);
-  const [friends,setFriends] = useState(null);
-  const [newest,setNewest] = useState(null);
-  const [forMe,setForme] = useState(null);
+  const user = useUser(); 
+  const {loading:loadingME, data:dataME} = useQuery(GET_ME,{
+    variables:{
+      userPrefer:user.preference.name
+    }
+  }); 
+  
+  const {loading:loadingHOT, data:dataHOT} = useQuery(GET_HOTEST,{
+    variables:{
+      userPrefer:user.preference.name
+    }
+  }); 
+  
+  const {loading:loadingNEW, data:dataNEW} = useQuery(GET_NEW,{
+    variables:{
+      userPrefer:user.preference.name
+    }
+  }); 
+  
+  const {loading:loadingFRIENDS, data:dataFRIENDS} = useQuery(GET_FRIENDS); 
+
 
   return (
-    <>
+    <Container>
       <RecommendContainer>
         <TopBar>
-          <TopBarText>이제니님을 위한 추첨 상품</TopBarText>
+          <TopBarText>{user.username}님을 위한 추첨 상품</TopBarText>
           <TopBarLink onPress={()=>{console.log(1)}}>
             <NavIcon name={"md-arrow-forward"} />
           </TopBarLink>
         </TopBar>
         <ScrollView horizontal>
           <Grid>
-            <Post marginRight={15} />
-            <Post marginRight={15} />
-            <Post marginRight={15} />
+            {
+              loadingME
+              ?
+                <Loader />
+              :
+                dataME&&dataME.RecommendForMe&&dataME.RecommendForMe.map(e=>(
+                  <Post key={e.id} fromRecommendMyprofile={true} {...e} />
+                ))
+            }
           </Grid>
         </ScrollView>
       </RecommendContainer>
@@ -97,9 +154,15 @@ const RecommendNavigation = ()=>{
         </TopBar>
         <ScrollView horizontal>
           <Grid>
-            <Post marginRight={15} />
-            <Post marginRight={15} />
-            <Post marginRight={15} />
+            {
+              loadingHOT
+              ?
+                <Loader />
+              :
+                dataHOT&&dataHOT.RecommendHotest&&dataHOT.RecommendHotest.map(e=>(
+                  <Post key={e.id} fromRecommendMyprofile={true} {...e} />
+                ))
+            }
           </Grid>
         </ScrollView>
       </RecommendContainer>
@@ -113,9 +176,15 @@ const RecommendNavigation = ()=>{
         </TopBar>
         <ScrollView horizontal>
           <Grid>
-            <Post marginRight={15} />
-            <Post marginRight={15} />
-            <Post marginRight={15} />
+            {
+              loadingFRIENDS 
+              ?
+                <Loader />
+              :
+                dataFRIENDS&&dataFRIENDS.RecommendFriendsLike&&dataFRIENDS.RecommendFriendsLike.map(e=>(
+                  <Post key={e.id} fromRecommendMyprofile={true} {...e} />
+                ))
+            }
           </Grid>
         </ScrollView>
       </RecommendContainer>
@@ -129,9 +198,15 @@ const RecommendNavigation = ()=>{
         </TopBar>
         <ScrollView horizontal>
           <Grid>
-            <Post marginRight={15} />
-            <Post marginRight={15} />
-            <Post marginRight={15} />
+            {
+              loadingNEW
+              ?
+                <Loader />
+              :
+                dataNEW&&dataNEW.RecommendNewest&&dataNEW.RecommendNewest.map(e=>(
+                  <Post key={e.id} fromRecommendMyprofile={true} {...e} />
+                ))
+            }
           </Grid>
         </ScrollView>
       </RecommendContainer>
@@ -139,7 +214,7 @@ const RecommendNavigation = ()=>{
         이번주 클릭 TOP 5
       </BottomTitle>
       <RecommendBottomNavigation />
-    </>
+    </Container>
   ) 
 }
 

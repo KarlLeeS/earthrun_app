@@ -129,7 +129,7 @@ const MainProfile = ({navigation}) => {
     <ScrollView>
       <Container>
         <Header>
-          <Touchable onPress={()=>navigation.navigate("HomeNavigation")}>
+          <Touchable onPress={()=>navigation.goBack()}>
             <NavIcon name={"md-arrow-back"} size={24} color={"#000"}/>
           </Touchable>
           <Touchable onPress={()=>navigation.navigate("EditProfile")}>
@@ -210,7 +210,7 @@ const MainProfile = ({navigation}) => {
                 <HorizontalGrid>
                 {
                     user?.recentlyPost?.map((e,i)=>(
-                      <Post key={e.id}  {...e} />
+                      <Post fromRecommendMyprofile={true} key={e.id}  {...e} />
                     ))
                   }
                 </HorizontalGrid>

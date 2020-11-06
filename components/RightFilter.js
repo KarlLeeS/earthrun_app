@@ -1,6 +1,7 @@
 import React, { useState } from "react"; 
 import {Button, TouchableOpacity} from "react-native";
 import styled from "styled-components";
+import { useUser } from "../AuthContext";
 import constants from "../constants";
 import { ConvertCertification, ConvertPreference } from "../utils";
 import RightFilterButton from "./Detail/BottomTab/RightFilterButton";
@@ -9,8 +10,6 @@ import NavIcon from "./NavIcon";
 const Container = styled.View`
     background-color:white;
     border-radius:5;
-    border-top-color:red;
-    border-top-width:10px;
 `; 
 
 const Header = styled.View`
@@ -138,7 +137,8 @@ const RightFilter = ({
     preferences,
     setRightToggle,
     onSubmit
-})=>{
+})=>{   
+    const user = useUser();
     
     // console.log(`안녕 rightFilter`, certification,preferences)
     const initPreferecnes = initPreferS(preferences);
@@ -166,11 +166,31 @@ const RightFilter = ({
         const preferenceResult=ConvertPreference([prefer0,prefer1,prefer2,prefer3,prefer4,prefer5]);
         const certificationResult=ConvertCertification([certi0,certi1,certi2,certi3,certi4,certi5]);
         // console.log({preferenceResult});
-        // console.log({certificationResult});
+        console.log({certificationResult});
         setPreferences(preferenceResult);
         setCertification(certificationResult);
-        onSubmit(preferenceResult,certificationResult);
+        onSubmit("",preferenceResult,certificationResult);
         setRightToggle(false);
+    }
+
+    const setInit=()=>{
+        setPreferences([`${user.preference.name}`]);
+        setCertification([]);
+        const initPrefer = initPreferS([`${user.preference.name}`]);
+        const initCerti = initCertiS([]);
+        setprefer0(initPreferecnes[0]);
+        setprefer1(initPreferecnes[1]);
+        setprefer2(initPreferecnes[2]);
+        setprefer3(initPreferecnes[3]);
+        setprefer4(initPreferecnes[4]);
+        setprefer5(initPreferecnes[5]);
+
+        setcerti0(initCertification[0]);
+        setcerti1(initCertification[1]);
+        setcerti2(initCertification[2]);
+        setcerti3(initCertification[3]);
+        setcerti4(initCertification[4]);
+        setcerti5(initCertification[5]);
     }
 
     return (

@@ -27,9 +27,6 @@ const SubTabFood = ({subTabs}) =>{
                 fontWeight:"bold",
                 textAlign:"center",
             },
-            tabStyle:{
-                // width:90,
-            },
             style:{
                 elevation:0,
                 borderBottomWidth:1,
@@ -47,5 +44,3 @@ const SubTabFood = ({subTabs}) =>{
 }
 
 export default SubTabFood;
-
-// 글로벌 스타일로 백그라운드 화이트만들기 todo
