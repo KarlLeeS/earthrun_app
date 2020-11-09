@@ -140,7 +140,7 @@ const Search=({routes,navigation})=>{
     onCompleted:()=>{
       console.log(11);
     },
-    fetchPolicy:"network-only"
+    fetchPolicy:"cache-first"
   });
 
   

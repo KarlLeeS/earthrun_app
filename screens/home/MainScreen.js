@@ -143,15 +143,15 @@ const MainScreen = ({category,searchKeyword,searchRefetch})=>{
       orderResult = order;
     }
 
+    console.log({preferenceResult});
+    console.log({certificationResult});
+    console.log({orderResult});
     await refetch({
       certification:certificationResult,
       preferences:preferenceResult,
       orderingoption:orderResult,
       categories:category
     });
-    // console.log({preferenceResult});
-    // console.log({certificationResult});
-    // console.log({orderResult});
 
   }
 

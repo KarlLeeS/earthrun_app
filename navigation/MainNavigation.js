@@ -17,6 +17,7 @@ import { useQuery } from "@apollo/client";
 import {gql} from "apollo-boost";
 import UploadReview from "../screens/UploadReview";
 import UploadPost from "../screens/profile/UploadPost";
+import SelectPhoto from "../screens/SelectPhoto";
 
 export const ME = gql`
     {
@@ -26,14 +27,13 @@ export const ME = gql`
     }
     ${USER_FRAGMENT}
 `
-
 const Stack = createStackNavigator();
 
 const MainNavigation = () => {
   const [realLoading,setRealLoading] =useState(true);
   const setUser= useSetUser();
   const {data,loading,refetch,error}= useQuery(ME,{   
-    fetchPolicy:"network-only",
+    fetchPolicy:"cache-only",
     onCompleted:()=>{
         setUser(data.me);
         setRealLoading(false);
@@ -70,7 +70,6 @@ const MainNavigation = () => {
               <Stack.Screen options={{ headerShown: false }} name="ProfileNavigation" component={ProfileNavigation} />
               <Stack.Screen  options={{ headerShown: false }} name="NormalList" component={NormalList} />
               <Stack.Screen options={{ headerShown: false }}  name="Search" component={Search} />
-              
               <Stack.Screen 
                 options={{ 
                   headerShown: true
@@ -81,18 +80,24 @@ const MainNavigation = () => {
 
               <Stack.Screen 
                 options={{ 
-                headerShown: true
+                headerShown: false
                 }}  
                 name="UploadPost" 
                 component={UploadPost} 
               />
               
+              <Stack.Screen 
+                options={{ 
+                headerShown: false
+                }}  
+                name="SelectPhoto" 
+                component={SelectPhoto} 
+              />
             </Stack.Navigator>
           </NavigationContainer>
           <StatusBar barStyle="dark-content" backgroundColor="white" />
         </>
     )
 }
-
 export default MainNavigation;
 

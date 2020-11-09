@@ -12,7 +12,7 @@ import { useQuery } from "@apollo/client";
 import {gql} from "apollo-boost";
 import { FULL_POST, POST_FRAGMENT } from "../../fragments";
 import Loader from "../../components/Loader";
-import { useCurrentPost, useSetCurrentPost } from "../../AuthContext";
+import { useCurrentPost, useSetCurrentPost, useSetUser } from "../../AuthContext";
 import NavIcon from "../../components/NavIcon";
 import Like from "../../components/Like";
 
@@ -67,19 +67,23 @@ export const GET_FULL_POST=gql`
 const DetailNavigation =({navigation,route:{params:{id}}
 })=>{
     const setpost= useSetCurrentPost();
-
+    const setuser=  useSetUser();
     const {data,loading}=useQuery(GET_FULL_POST,
         {
         variables:{
             id
         },
-        fetchPolicy:"cache-first"
+        fetchPolicy:"network-only"
         ,
         onCompleted:()=>{
             setpost(data.seeFullPost);
-            console.log(data.seeFullPost);
-            // console.log({post});
-            // console.log({data});
+            setuser(e=>
+            (
+                {
+                    ...e,
+                    recentlyPost: [...(e.recentlyPost.filter(e=>(e.id!==data.seeFullPost.id))),data.seeFullPost]
+                } 
+            ))
         }
     });
     return (

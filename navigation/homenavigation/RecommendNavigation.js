@@ -1,20 +1,17 @@
 import { useQuery } from "@apollo/client";
 import {gql} from "apollo-boost";
-import React, { useState } from "react";
-import { ScrollView,TouchableOpacity } from "react-native";
+import React from "react";
+import { ScrollView } from "react-native";
 import styled from "styled-components";
 import { useUser } from "../../AuthContext";
 import Loader from "../../components/Loader";
 import NavIcon from "../../components/NavIcon";
 import Post from "../../components/Post";
 import { POST_FRAGMENT } from "../../fragments";
-import TempTabScreen from "../../screens/detail/tempTabScreen";
-import TempMainScreen from "../../screens/home/MainScreen";
 import RecommendBottomNavigation from "./RecommendBottomNavigation";
 
 const Container = styled.View`
   background-color:white;
-  /* justify-content:center; */
 `;
 
 const RecommendContainer = styled.View`

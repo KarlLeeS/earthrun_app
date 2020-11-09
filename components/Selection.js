@@ -4,7 +4,11 @@ import { Button, Text } from "react-native";
 import dummyData from "../uploadPostJson";
 import RightFilterButton from "./Detail/BottomTab/RightFilterButton";
 import styled from "styled-components"; 
-const Container= styled.View``;
+const Container= styled.View`
+    margin: 50px 0px 0px 20px;
+    flex-direction:row;
+    flex-wrap:wrap;
+`;
 
 const Selection=({
         certification,

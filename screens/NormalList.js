@@ -1,17 +1,16 @@
 
 import React, { useLayoutEffect, useState } from "react";
-import { Text, View,ScrollView,TouchableOpacity } from "react-native";
+import { Text, View,ScrollView } from "react-native";
 import styled from "styled-components";
 import NavIcon from "../components/NavIcon";
 import Post from "../components/Post"; 
 import constants from "../constants";
 
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import {gql} from "apollo-boost";
 import { POST_FRAGMENT, REVIEW_FRAGMENT } from "../fragments";
 import Loader from "../components/Loader";
 import Review from "../components/Detail/BottomTab/Review";
-import { useSetUser, useUser } from "../AuthContext";
 
 const Container = styled.View`
     background-color : white;
@@ -74,14 +73,6 @@ const Grid =styled.View`
   flex-wrap:wrap;
   justify-content:flex-start;
 `;
-
-
-const PostWrapper= styled.View`
-  justify-content:center;
-  align-items:center; 
-  /* margin-top:10px; */
-`; 
-
 
 export const GET_LIKES=gql`
   {
@@ -149,7 +140,7 @@ export default ({navigation,route}) =>{
   // const setUser = useSetUser();
   // const user = useUser()
   const {data,loading} = useQuery(makeGQL(route.params.type),{
-    fetchPolicy:"cache-first",
+    fetchPolicy:"network-only",
     onCompleted:()=>{
       setList(data);
     }}); 

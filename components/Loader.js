@@ -9,8 +9,9 @@ const Container = styled.View`
     align-items:center;
 `;
 
-export default ()=>(
+const Loader =()=>(
     <Container>
         <ActivityIndicator color={styles.blackColor}/>
     </Container>
 );
+export default Loader;

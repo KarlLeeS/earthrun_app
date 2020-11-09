@@ -56,7 +56,7 @@ const LeftFilter = ({
     const [filteringOption,setFilteringOption] = useState(initValue); 
 
     const submit=(type)=>{
-        OnSubmit("",[],[],type);
+        OnSubmit([],[],type);
         setOrderingoption(type);
         setLeftToggle(false);
     }

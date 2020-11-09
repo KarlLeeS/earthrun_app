@@ -138,17 +138,19 @@ const MainProfile = ({navigation}) => {
         </Header>
         <UserMeta>
           <Image  
-                resizeMode="center"
+                resizeMode="cover"
                 style={{
                     width:constants.width/4,
                     height:constants.height/8,
                     borderRadius: 100
                 }}
-                source={  require('./../../assets/post.png')}
-            />
-          <Username>{user.username}</Username>
+                source={{uri:user?.avatar}}
+          >
+
+          </Image>
+          <Username>{user?.username}</Username>
           <UserPreferPeriod>
-            <UserPrefer>{user.preference.name}</UserPrefer>
+            <UserPrefer>{user?.preference?.name}</UserPrefer>
             <UserPeriod>  {`${CalculateDays(user.typeStart)}`}일 째</UserPeriod>
           </UserPreferPeriod>
         </UserMeta>
@@ -211,7 +213,7 @@ const MainProfile = ({navigation}) => {
                 {
                     user?.recentlyPost?.map((e,i)=>(
                       <Post fromRecommendMyprofile={true} key={e.id}  {...e} />
-                    ))
+                    )).reverse()
                   }
                 </HorizontalGrid>
           </ScrollView>

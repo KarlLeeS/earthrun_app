@@ -38,10 +38,8 @@ export const ME = gql`
     ${USER_FRAGMENT}
 `
 
-
 const UserProfile = ({navigation})=>{
     const user =  useUser();
-    // console.log(user.avatar);
     return (
             <Touchable onPress={()=>{navigation.navigate("ProfileNavigation",{})}}>
             <Image 
@@ -55,7 +53,6 @@ const UserProfile = ({navigation})=>{
             </MetaInto>
         </Touchable>
         )
-        
 }
+
 export default withNavigation(UserProfile); 
-// export default withNavigation(React.memo(UserProfile)); 

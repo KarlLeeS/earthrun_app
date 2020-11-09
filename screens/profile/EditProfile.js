@@ -1,16 +1,18 @@
 
+import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
 import { Image ,ImageBackground,Text,TouchableOpacity} from "react-native";
 import { ScrollView } from "react-native";
 import styled from "styled-components";
-import { useUser } from "../../AuthContext";
+import { ME, usePhotoMaterial, useSetUser, useUser } from "../../AuthContext";
 import NavIcon from "../../components/NavIcon";
 import Post from "../../components/Post";
 import PreferenceImage from "../../components/Profile/PreferenceImage";
 import useInput from "../../components/useInput";
 import constants from "../../constants";
 import { ConvertToKorean } from "../../utils";
-
+import {gql} from "apollo-boost";
+import {USER_FRAGMENT} from "../../fragments"; 
 const Container = styled.View`
   background-color:white;
   /* height:${constants.height}; */
@@ -27,9 +29,13 @@ const HeaderTitle = styled.Text`
   left:5px;
   /* font-weight:bold; */
 `;
-const Touchable= styled.TouchableOpacity``
+const Touchable= styled.TouchableOpacity`
+  position:relative;
+
+`
 
 const UserMeta = styled.View`
+  position:relative;
   justify-content:center;
   align-items:center;
   border-bottom-color:#f4f4f4;
@@ -37,7 +43,7 @@ const UserMeta = styled.View`
   padding-bottom:15px;
 `;
 
-const UploadPicture = styled.View`
+const UploadPicture = styled.TouchableOpacity`
   position:absolute;
   width:26px;
   height:26px;
@@ -125,11 +131,13 @@ const Wrapper = styled.View`
   justify-content:center;
   align-items:center;
 `;
+
 const PreferItem = styled.View`
   flex-direction:row;
   align-items:center;
   margin-bottom:10px;
 `;
+
 const SmallText = styled.Text`
   font-size:12px;
 `;
@@ -152,19 +160,86 @@ const makeArr=(name)=>{
       
     case "폴로":
       return [0,0,0,0,0,1];
-      
   }
-
 }
 
-const EditProfile = ({navigation}) => {
-  const user=  useUser()
-  // console.log(user);
-  const usernameInput = useInput(user.username); 
-  const currentPreference = user.preference.name;
+const convertToText=(arr)=>{
 
+  const getText=(index)=>{
+    switch (index) {
+      case 1:
+        return "비건";
+        
+      case 2:
+        return "락토";
+      case 3:
+        return "오보";
+        
+      case 4:
+        return "락토오보";
+        
+      case 5: 
+        return "페스코";
+        
+      case 6:
+        return "폴로";
+    }
+  }
+  let result ;
+  arr.forEach((e,i)=>{
+    if(e===1){
+      result = getText(i);
+    }
+  })
+  return result;
   
+}
+
+export const EDIT_PROFILE = gql`
+  mutation editUser(
+    $username:String,
+    $preference:String,
+    $avatar:String
+  ){
+    editUser(
+      username:$username,
+      preference:$preference,
+      avatar:$avatar
+    )
+  }
+`;
+
+
+
+
+const EditProfile = ({navigation}) => {
+  const user=  useUser();
+  const setUser = useSetUser();
+  const usernameInput = useInput(user.username); 
+  const currentPreference = user.preference.name; 
+  const avatar = usePhotoMaterial();
   let [arr,setArr]=useState(makeArr(user.preference.name)); 
+
+  const OnSubmit = async()=>{
+    console.log(convertToText(arr));
+    console.log(usernameInput.value);
+    console.log(avatar);
+    // const result = await editProfileMutation();
+    // setTimeout(() => {
+    //   console.log(result);
+    //   navigation.goBack();       
+    // }, 200);
+    // console.log(result);
+  }
+
+  const [editProfileMutation] = useMutation(EDIT_PROFILE,{
+    variables:{
+      username:usernameInput.value,
+      preference:convertToText(arr),
+      avatar:avatar
+    },
+    refetchQueries: () => [{ query: ME }]
+  })
 
   
   return(
@@ -175,26 +250,32 @@ const EditProfile = ({navigation}) => {
             <NavIcon name={"md-arrow-back"} size={24} color={"#000"}/>
           </Touchable>
           <HeaderTitle>프로필 수정</HeaderTitle>
-          <Touchable>
+          <Touchable onPress={()=>OnSubmit()}>
             <Save>저장</Save>
           </Touchable>
         </Header>
         <UserMeta>
-          <ImageBackground
-            resizeMode="center"
-            style={{
+          <Touchable>
+            <Image 
+              style={{
+                resizeMode:"cover",
                 position:"relative",
                 width:constants.width/4,
                 height:constants.height/8,
                 borderRadius: 100,
-            }}
-            source={  require('./../../assets/post.png')}
-          >
-              <UploadPicture>
+              }}
+              source  ={{ uri: ((avatar) ? user.avatar: avatar)}}
+            >
+            </Image>
+            <UploadPicture onPress={()=>navigation.navigate("SelectPhoto",{
+                limit:1,
+                defaultViewCount:20
+              })}>
                 <NavIcon name={"md-camera"} size={18} color={"#a0a0a0"} />
               </UploadPicture>
-          </ImageBackground>
-          <Input value="이제니" />
+          </Touchable>
+          
+          <Input value={usernameInput.value} onChange={usernameInput.setValue} />
         </UserMeta>
         <Start>
           <Title>채식 시작일 날짜<SmallText> ( 유형을 바꾸시면 오늘로 바뀌어요! ) </SmallText></Title>
