@@ -9,10 +9,11 @@ import { ScrollView } from "react-native-swiper";
 import constants from "../../../constants";
 const Tab = createMaterialTopTabNavigator();
 
+import styled from "styled-components";
+
 const SubTabFood = ({subTabs}) =>{
-    console.log(`this is SubTabFood`);
     return (      
-        <Tab.Navigator 
+        <Tab.Navigator
             tabBarOptions={{
             tabBarIcon:({focused})=>{
             },
@@ -34,13 +35,14 @@ const SubTabFood = ({subTabs}) =>{
             }
             }}
         >
-            <Tab.Screen name={"대체육"} children={()=><MainScreen category={"대체육"} />} />
-            <Tab.Screen name={"빵"} children={()=><MainScreen category={"빵"} />}/>
-            <Tab.Screen name={"간편식·면류·통조림"} children={()=><MainScreen category={"간편식면류통조림"} />}/>
-            <Tab.Screen name={"음료"} children={()=><MainScreen category={"음료"} />}/>
-            <Tab.Screen name={"간식"} children={()=><MainScreen category={"간식"} />}/>
+            <Tab.Screen name={"대체육"} component={MainScreen}/>
+            <Tab.Screen name={"빵"} component={MainScreen} />
+            <Tab.Screen name={"간편식·면류·통조림"} component={MainScreen} />
+            <Tab.Screen name={"음료"} component={MainScreen} />
+            <Tab.Screen name={"간식"} component={MainScreen} />
         </Tab.Navigator>
       );
 }
 
 export default SubTabFood;
+// children={()=><MainScreen category={"간편식면류통조림"} />}

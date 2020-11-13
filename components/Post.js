@@ -121,7 +121,7 @@ let styles;
 
 const Post = ({
     id,brand,files,preferences,weight,reviewCount,rating,price,name,isLiked,
-    index,marginRight,fromRecommend,fromNormal,editting=false,
+    index,marginRight,fromRecommend,editting=false,
     fromRecommendBottom,
     fromRecommendMyprofile,
     fromMainScreenNormalList,
@@ -133,15 +133,17 @@ const Post = ({
 })=>{
     const setUser = useSetUser();
     const user= useUser();
-    // console.log()
+
     let styles=true; 
-    // console.log({postStyle});
+    
     if(fromRecommendBottom){
         styles = postStyle.fromRecommendBottom;
     }
+
     if(fromRecommendMyprofile){
         styles = postStyle.fromRecommendMyProfileRecently;
     }
+
     if(fromMainScreenNormalList){
         if(isEven(index+1)){
             styles = postStyle.fromMainScreenNormalListEven;
@@ -153,7 +155,7 @@ const Post = ({
     const [deleteRecentlyViewedPost] = useMutation(DELETE_RECENTLY_VIEWED_POST,{
         variables:{
             id,
-            user:user.id
+            user:user?.id
         }
     }); 
     
@@ -166,11 +168,12 @@ const Post = ({
     const [deleteUploadedPost] = useMutation(DELTE_UPLOAED_POST,{
         variables:{
             postId:id,
-            user:user.id
+            user:user?.id
         }
     })
 
     const deletePost= async()=>{
+        console.log(fromLike);
         if(fromRecentlyViewed){
             // 최근 목록 삭제 
             console.log("최근 목록 삭제 ");
@@ -183,7 +186,7 @@ const Post = ({
             setUser(user=>(
                 {
                     ...user,
-                    recentlyPost: (user.recentlyPost.filter(e=>e.id!==id))
+                    recentlyPost: (user?.recentlyPost.filter(e=>e.id!==id))
                 }
             ));
             await deleteRecentlyViewedPost();
@@ -211,7 +214,7 @@ const Post = ({
             setUser(user=>(
                 {
                     ...user,
-                    uploadedPost: (user.uploadedPost.filter(e=>e.id!==id))
+                    uploadedPost: (user?.uploadedPost.filter(e=>e.id!==id))
                 }
             ));
             await deleteUploadedPost();
@@ -220,7 +223,7 @@ const Post = ({
     }
 
 
-    return (styles&&(
+    return (styles&&user&&(
         <Touchable onPress={()=>{navigation.navigate("DetailNavigation",{id:id})}}
         data={styles.Touchable}
          >

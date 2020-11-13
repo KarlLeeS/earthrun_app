@@ -122,10 +122,10 @@ const InnerText = styled.Text`
 
 
 const MainProfile = ({navigation}) => {
+  console.log("MainProfile 다시하니?");
 
   const user=  useUser()
-  // console.log({user});
-  return(
+  return (
     <ScrollView>
       <Container>
         <Header>
@@ -151,7 +151,7 @@ const MainProfile = ({navigation}) => {
           <Username>{user?.username}</Username>
           <UserPreferPeriod>
             <UserPrefer>{user?.preference?.name}</UserPrefer>
-            <UserPeriod>  {`${CalculateDays(user.typeStart)}`}일 째</UserPeriod>
+            <UserPeriod>  {`${CalculateDays(user?.typeStart)}`}일 째</UserPeriod>
           </UserPreferPeriod>
         </UserMeta>
         
@@ -224,12 +224,12 @@ const MainProfile = ({navigation}) => {
             <Title>활동</Title>
           </NotBottomHeader>
           <NotBottomItem onPress={()=>{navigation.navigate("NormalList",{ type: "등록한 리뷰",review:true })}}>
-          <InnerText>등록한 리뷰 {(user.reviews[0]!==undefined)?`(${user.reviews.length})`:""}</InnerText>
+          <InnerText>등록한 리뷰 {(user?.reviews[0]!==undefined)?`(${user?.reviews.length})`:""}</InnerText>
           </NotBottomItem>
           <NotBottomItem onPress={()=>{navigation.navigate("NormalList",{ type: "등록한 상품" })}}>
-            <InnerText>등록한 상품 {(user.uploadedPost[0]!==undefined)?`(${user.uploadedPost.length})`:""}</InnerText>
+            <InnerText>등록한 상품 {(user?.uploadedPost[0]!==undefined)?`(${user?.uploadedPost.length})`:""}</InnerText>
           </NotBottomItem>
-          <NotBottomItemLast>
+          <NotBottomItemLast onPress={()=>{navigation.navigate("UploadPost")}}>
             <InnerText>새 상품 등록하기</InnerText>
           </NotBottomItemLast>
         </NotBottomImageContainer>

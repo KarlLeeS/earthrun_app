@@ -4,9 +4,9 @@ import { Alert, Keyboard,TouchableWithoutFeedback } from "react-native";
 import { useMutation } from "@apollo/client";
 import AuthInput from "../../components/Auth/AuthInput";
 import AuthButton from "../../components/Auth/AuthButton";
-import useInput from "../../components/useInput";
 import { CONFIRM_SECRET } from "./AuthQueries";
 import { useLogIn } from "../../AuthContext";
+import useInput from "../../hooks/useInput";
 
 const View = styled.View`
     justify-content:center; 

@@ -46,6 +46,8 @@ export const GET_BOTTOM_POSTS=gql`
 `;
 
 const RecommendBottom = ({navigation,type})=>{
+  console.log("RecommendBottom 다시하니?");
+
     //     식품
     // 건강미용
     // 생활용품
@@ -53,7 +55,7 @@ const RecommendBottom = ({navigation,type})=>{
     const user = useUser();
     const {loading, data} = useQuery(GET_BOTTOM_POSTS,{
         variables:{
-            userPrefer:user.preference.name,
+            userPrefer:user?.preference.name,
             category:type
         }
     });

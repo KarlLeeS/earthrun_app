@@ -18,6 +18,7 @@ const Container = styled.View`
     align-items:flex-start;
     width:${constants.width};
     justify-content:center;
+    flex:1;
 `; 
 
 const Header = styled.View`
@@ -145,22 +146,6 @@ export default ({navigation,route}) =>{
       setList(data);
     }}); 
 
-    {list&&list.getLikes&&list.getLikes.map((e,i)=>(
-      <Post key={e.id} setList={setList} editting={editting} {...e.post} index={i} fromNormal={true} key={e.id} />
-    ))}
-    {list&&list.RecentlyViewedPost&&list.RecentlyViewedPost.map((e,i)=>(
-      <Post key={e.id} setList={setList} editting={editting}  {...e} index={i} fromNormal={true} key={e.id} />
-    ))}
-
-    {list&&list.MyUploadedPosts&&list.MyUploadedPosts.map((e,i)=>(
-      <Post key={e.id} setList={setList} editting={editting} {...e} index={i} fromNormal={true} key={e.id} />
-    ))}
-    
-    {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
-      <Review key={e.id} setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />
-    ))}
-    
-
   useLayoutEffect(()=>{
     navigation.setOptions({
       title: route.params.type,
@@ -197,14 +182,14 @@ export default ({navigation,route}) =>{
 
           <Grid>
             {list&&list.getLikes&&list.getLikes.map((e,i)=>(
-              <Post fromMainScreenNormalList={true}  setList={setList} editting={editting} {...e.post} index={i} fromNormal={true} key={e.id} />
+              <Post fromMainScreenNormalList={true}  setList={setList} editting={editting} {...e.post} index={i} fromLike={true} key={e.id} />
             ))}
             {list&&list.RecentlyViewedPost&&list.RecentlyViewedPost.map((e,i)=>(
-              <Post fromMainScreenNormalList={true} fromRecentlyViewed={true} setList={setList} editting={editting}  {...e} index={i} fromNormal={true} key={e.id} />
+              <Post fromMainScreenNormalList={true} fromRecentlyViewed={true} setList={setList} editting={editting}  {...e} index={i} fromRecentlyViewed={true} key={e.id} />
             ))}
 
             {list&&list.MyUploadedPosts&&list.MyUploadedPosts.map((e,i)=>(
-                <Post fromMainScreenNormalList={true} fromMyUploaded={true} setList={setList} editting={editting} {...e} index={i} fromNormal={true} key={e.id} />
+                <Post fromMainScreenNormalList={true} fromMyUploaded={true} setList={setList} editting={editting} {...e} index={i} fromMyUploaded={true} key={e.id} />
             ))}
             {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
               <Review setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />

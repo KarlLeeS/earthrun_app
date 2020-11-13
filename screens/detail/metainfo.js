@@ -28,6 +28,7 @@ const PreferenceList = styled.View`
 `; 
 
 const Preference = styled.Text`
+  margin-left:10px;
   margin-top:10px;
   color: #000;
   font-size:16px;

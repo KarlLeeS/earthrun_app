@@ -16,11 +16,15 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "primaryColor":"#ffffff",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hariboux.earthrun",
+      "buildNumber": "1.0.0"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "android": {
+      "package": "com.hariboux.earthrun",
+      "versionCode": 1
     }
   }
 }

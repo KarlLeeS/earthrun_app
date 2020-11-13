@@ -3,12 +3,9 @@ import {Image, TouchableOpacity} from "react-native";
 import styled from "styled-components"; 
 import constants from "../../../constants";
 const Touchable = styled.TouchableOpacity`
-
 `; 
 
 const Certification = ({url})=>{
-
-    
     return (
         <Touchable>
             <Image

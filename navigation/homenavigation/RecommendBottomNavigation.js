@@ -7,6 +7,8 @@ const Tab = createMaterialTopTabNavigator(
 );
 
 export default () => {
+  console.log("RecommendBottomNavigation 다시하니?");
+
   return (
     <Tab.Navigator
 

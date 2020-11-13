@@ -1,14 +1,32 @@
 import { array } from "prop-types";
 import React, { useEffect, useState } from "react";
-import { Button, Text } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import dummyData from "../uploadPostJson";
 import RightFilterButton from "./Detail/BottomTab/RightFilterButton";
 import styled from "styled-components"; 
+import constants from "../constants";
 const Container= styled.View`
-    margin: 50px 0px 0px 20px;
+    /* padding: 20px 40px; */
     flex-direction:row;
     flex-wrap:wrap;
+    justify-content:center;
+    width:${constants.width/1.7};
+    margin-bottom:10px;
 `;
+const Touchable = styled.TouchableOpacity`
+    width:${constants.width/1.7};
+    height:${constants.height/25};
+    border-radius:10px;
+    background-color: ${props=>props.theme.blueColor};
+    justify-content:center;
+    align-items:center;
+    margin: 10px 0px;
+`; 
+
+const SelectText = styled.Text`
+    color:#fff;
+`;
+
 
 const Selection=({
         certification,
@@ -68,7 +86,7 @@ const Selection=({
         if(preferences){
             setPreferences(result);
         }
-        
+        Alert.alert("설정한 성향은 마이 페이지에서 언제든 바꿀 수 있어요 :)");
         console.log(result);
     }
 
@@ -80,14 +98,20 @@ const Selection=({
     // console.log(dummyData);
     // console.log(11);
     return(
-        <Container>
-            {
-                multiple&&multiple.map((e,i)=>(
-                    <RightFilterButton type={type} key={`${data[i]}`} index={i} value={e} setValue={setMultiple} text={data[i]}/>
-                ))
-            }
-            <Button title="결정" onPress={()=>onSubmit()}  />
-        </Container>
+        <>
+            <Container>
+                {
+                    multiple&&multiple.map((e,i)=>(
+                        <RightFilterButton type={type} key={`${data[i]}`} index={i} value={e} setValue={setMultiple} text={data[i]}/>
+                    ))
+                }
+            </Container>
+            <Touchable onPress={()=>onSubmit()}>
+                <SelectText>
+                    성향선택
+                </SelectText>
+            </Touchable>
+        </>
     )
 }
 

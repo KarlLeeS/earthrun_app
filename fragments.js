@@ -17,6 +17,7 @@ export const POST_FRAGMENT = gql`
     }
     rating
     weeklyHits
+    totalHits
     createdAt
   }
 `;
@@ -132,47 +133,6 @@ export const FULL_POST_TEST = gql`
   }
   ${REVIEW_FRAGMENT}
 `;
-
-
-
-// export const USER_FRAGMENT = gql`
-//   fragment UserParts on User {
-//     id
-//     avatar
-//     username
-//     email
-//     preference{
-//         id
-//         name
-//     }
-//     bio
-//     likes{
-//         post{
-//           id
-//           name
-//         }
-//     }
-//     isFollowing
-//     isSelf
-//     followingCount
-//     followersCount
-//     reviews{
-//       ...ReviewParts
-//     }
-//     recentlyPost{
-//       ...PostParts
-//     }
-//     uploadedPost{
-//       ...PostParts
-//     }
-//     badges{
-//         id
-//         name
-//     }
-//   }
-//   ${POST_FRAGMENT}
-//   ${REVIEW_FRAGMENT}
-// `;
 
 
 export const USER_FRAGMENT = gql`

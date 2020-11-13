@@ -7,7 +7,7 @@ import { ConvertToKorean } from "../../../utils";
 import Star from "./Star";
 import {gql} from "apollo-boost";
 import { withNavigation } from "@react-navigation/compat";
-import { useCurrentPost } from "../../../AuthContext";
+import { useCurrentPost, useSetUser } from "../../../AuthContext";
 
     // /* padding:${props=>props.fromNormal?"":} */
 
@@ -114,10 +114,10 @@ const Review = ({
     setList,
     navigation
     })=>{
+
     // console.log(id, rating,text, updatedAt,avatar,userId,username);
     const [fastClose,setfastClose] =useState(false);
-    const post = useCurrentPost();
-
+    const setUser = useSetUser();
     const [deleteReviewMutation] = useMutation(DELETE_REVIEW,{
         variables:{
             id,
@@ -126,6 +126,7 @@ const Review = ({
     }); 
 
     const deleteReview = async ()=>{
+        console.log(11);
         try{
 
             setList(e=>(
@@ -137,12 +138,15 @@ const Review = ({
             setUser(user=>(
                 {
                     ...user,
-                    reviews: (user.reviews.filter(e=>e.id!==id)),
-                    reviewCount: user.reviewCount-1
+                    reviews: (user?.reviews.filter(e=>e.id!==id)),
+                    reviewCount: user?.reviewCount-1
                 }
             ));
-            await deleteReviewMutation();
+            const result = await deleteReviewMutation();
+            console.log(result);
         }catch(e){
+            console.log(e);
+            throw Error();
             // todo re trial or something?? 
         }
 

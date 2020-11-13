@@ -2,15 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components"; 
 import { Alert, Keyboard,TouchableNativeFeedback,SectionList } from "react-native"; 
 import { useMutation } from "@apollo/client";
-// import { TouchableNativeFeedback } from "react-native";
 import AuthInput from "../../components/Auth/AuthInput";
 import AuthButton from "../../components/Auth/AuthButton";
-import useInput from "../../components/useInput";
-import RightFilterButton from "../../components/Detail/BottomTab/RightFilterButton";
 import constants from "../../constants";
-// import {} from "./a"
 import {CREATE_ACCOUNT} from "./AuthQueries";
-import fakeQuery from "../../fakeQuery";
+import useInput from "../../hooks/useInput";
+import Selection from "../../components/Selection";
 
 const View = styled.View`
     justify-content:center;
@@ -30,25 +27,27 @@ const Signup =({navigation,route})=>{
     const usernameInput = useInput(""); 
     const preferInput = useInput(""); 
     const [loading,setLoading] = useState(false); 
+    const [preferences,setPreferences]= useState([]);
 
     const [createAccountMutation] = useMutation(CREATE_ACCOUNT,{
         variables:{
             email:emailInput.value,
             username:usernameInput.value,
-            preference: "비건"
+            preference: preferences[0]
         }
     });
 
     const handleSignup = async ()=>{
         const {value:email} = emailInput;
-        // const {value:username} = usernameInput; 
-        // const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        // if(!emailRegex.test(email)){
-        //     return Alert.alert("That email is invalid"); 
-        // }
-        // if(username===""){
-        //     return Alert.alert("Invalid username");
-        // }
+        // console.log(emailInput.value,usernameInput.value, preferences[0])
+        const {value:username} = usernameInput; 
+        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(!emailRegex.test(email)){
+            return Alert.alert("That email is invalid"); 
+        }
+        if(username===""){
+            return Alert.alert("Invalid username");
+        }
         try{
             setLoading(true); 
             // real 
@@ -60,12 +59,6 @@ const Signup =({navigation,route})=>{
                 navigation.navigate("Login",{email});
             }
 
-
-            // fake
-            await fakeQuery(1);
-            console.log(1);
-            navigation.navigate("Login",{email});
-
         }catch(e){
             console.log(e);
             Alert.alert("Username taken","Log in instead");
@@ -74,7 +67,7 @@ const Signup =({navigation,route})=>{
             setLoading(false); 
         }
     }
-
+    
     return(
         <TouchableNativeFeedback onPress={Keyboard.dismiss}>
             <View>
@@ -90,10 +83,8 @@ const Signup =({navigation,route})=>{
                     placeholder="Nickname"
                     autoCapitalize="words"
                 />
-                <AuthInput 
-                    {...preferInput}
-                    placeholder="Preference"
-                />
+                <Selection preferences={preferences} setPreferences={setPreferences} type={"radio"}/>
+               
                 <AuthButton loading={loading} onPress={handleSignup} text="Sign up" />
             </View>
         </TouchableNativeFeedback>

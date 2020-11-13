@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import useInput from "../../components/useInput";
 import * as Permissions from "expo-permissions";
 import * as MediaLibrary from "expo-media-library";
 import axios from "axios";
@@ -15,6 +14,7 @@ import { ScrollView, State } from "react-native-gesture-handler";
 import { useMutation } from "@apollo/client";
 import SelectPhoto from "../SelectPhoto";
 import { usePhotoDisplay, usePhotoMaterial } from "../../AuthContext";
+import useInput from "../../hooks/useInput";
 
 const Container = styled.View``; 
 
@@ -189,7 +189,7 @@ const UploadPost = ({navigation}) => {
             />
 
             
-            <Selection preferences={preferences} setPreferences={setPreferences} type={"radio"}/>
+            <Selection preferences={preferences} setPreferences={setPreferences} type={"multi"}/>
             <Selection certification={certification} setCertification={setCertification} type={"multi"}/>
             <Selection rawMaterials={rawMaterials} setRawMaterials={setRawMaterials} type={"multi"}/>
               

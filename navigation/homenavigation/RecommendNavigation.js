@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
+import { useRoute } from "@react-navigation/native";
 import {gql} from "apollo-boost";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components";
 import { useUser } from "../../AuthContext";
@@ -95,34 +96,37 @@ export const GET_FRIENDS = gql`
     ${POST_FRAGMENT}
 `; 
 
-const RecommendNavigation = ()=>{
+const RecommendNavigation = ({navigation})=>{
+  
+
   const user = useUser(); 
+
   const {loading:loadingME, data:dataME} = useQuery(GET_ME,{
     variables:{
-      userPrefer:user.preference.name
+      userPrefer:user?.preference.name
     }
   }); 
   
   const {loading:loadingHOT, data:dataHOT} = useQuery(GET_HOTEST,{
     variables:{
-      userPrefer:user.preference.name
+      userPrefer:user?.preference.name
     }
   }); 
   
   const {loading:loadingNEW, data:dataNEW} = useQuery(GET_NEW,{
     variables:{
-      userPrefer:user.preference.name
+      userPrefer:user?.preference.name
     }
   }); 
   
   const {loading:loadingFRIENDS, data:dataFRIENDS} = useQuery(GET_FRIENDS); 
 
 
-  return (
+  return (  
     <Container>
       <RecommendContainer>
         <TopBar>
-          <TopBarText>{user.username}님을 위한 추첨 상품</TopBarText>
+          <TopBarText>{user?.username}님을 위한 추천 상품</TopBarText>
           <TopBarLink onPress={()=>{console.log(1)}}>
             <NavIcon name={"md-arrow-forward"} />
           </TopBarLink>
@@ -217,6 +221,3 @@ const RecommendNavigation = ()=>{
 
 export default RecommendNavigation;
 
-
-
-// TO DO 추천 리스트 4개 어떻게 표현할 것인가? 

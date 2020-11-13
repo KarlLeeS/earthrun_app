@@ -39,8 +39,11 @@ export const ME = gql`
 `
 
 const UserProfile = ({navigation})=>{
+  console.log("UserProfile 다시하니?");
+
     const user =  useUser();
-    return (
+    return user&&(
+        
             <Touchable onPress={()=>{navigation.navigate("ProfileNavigation",{})}}>
             <Image 
                 resizeMode={"cover"}
@@ -49,7 +52,7 @@ const UserProfile = ({navigation})=>{
             />
             <MetaInto>
                 <TextBold>{user?.username}</TextBold>
-                <TextLight>{user?.preference.name} {`${CalculateDays(user.typeStart)}`}일 째</TextLight>
+                <TextLight>{user?.preference.name} {`${CalculateDays(user?.typeStart)}`}일 째</TextLight>
             </MetaInto>
         </Touchable>
         )

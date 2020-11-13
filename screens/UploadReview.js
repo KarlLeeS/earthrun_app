@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components"; 
 import { useCurrentPost, useSetCurrentPost, useSetUser, useUser } from "../AuthContext";
-import {TouchableOpacity} from "react-native";
 import NavIcon from "../components/NavIcon";
 import Star from "../components/Detail/BottomTab/Star";
 import constants from "../constants";
-import useInput from "../components/useInput";
 import {gql} from "apollo-boost";
 import { useMutation } from "@apollo/client";
 import Loader from "../components/Loader";
+import useInput from "../hooks/useInput";
+import { REVIEW_FRAGMENT } from "../fragments";
 const Container = styled.View``; 
 const Header = styled.View``; 
 const Title = styled.Text``; 
@@ -54,9 +54,11 @@ export const ADD_REVIEW= gql`
             text:$text
             prevAvgRating:$prevAvgRating
             reviewCount:$reviewCount
-        )
+        ){
+            ...ReviewParts
+        }
     }
-
+    ${REVIEW_FRAGMENT}
 `;
 
 
@@ -79,9 +81,11 @@ export const EDIT_REVIEW= gql`
             prevAvgRating:$prevAvgRating,
             prevRating:$prevRating,
             reviewCount:$reviewCount,
-        )
+        ){
+            ...ReviewParts
+        }
     }
-
+    ${REVIEW_FRAGMENT}
 `;
 
 const UploadReview=({
@@ -102,7 +106,9 @@ const UploadReview=({
 
     const post = useCurrentPost(); 
     const user = useUser();
-
+    console.log(user);
+    const setUser = useSetUser();
+    const setPost = useSetCurrentPost();
     const [rate,setRate] = useState(rating?rating:0); 
     const reviewInput = useInput(text?text:"");
     const [loading,setLoading] =useState(false);
@@ -113,8 +119,9 @@ const UploadReview=({
             text:reviewInput.value, 
             prevAvgRating:post.rating, 
             reviewCount:post.reviewCount
-        }
-    })
+        },
+
+    });
 
     const [EDIT_REVIEW_MUTATION] = useMutation(EDIT_REVIEW,{
         variables:{
@@ -130,19 +137,50 @@ const UploadReview=({
 
     const onSubmit= async()=>{
         setLoading(true);
+        let result; 
         try{
             if(reviewId){
-                console.log("여기다");
-                await EDIT_REVIEW_MUTATION();
+                const {data:{editReview:review}} =  await EDIT_REVIEW_MUTATION();
+                result=review;
             }else{
-                await ADD_REVIEW_MUTATION(); 
+                
+                const {data:{addReview:review}} =  await ADD_REVIEW_MUTATION();
+                result=review;
             }
+            let tempPost ;
+            setPost(e=>{
+                tempPost = {
+                    ...e,
+                    reviewCount:result.post.reviewCount,
+                    reviews:[
+                        result,
+                        ...e.reviews
+                    ],
+                    rating:result.post.rating
+                }
+                return tempPost; 
+            })
+            
+            setUser(e=>(
+                {
+                    ...e,
+                    reviews:[
+                        result,
+                        ...e.reviews
+                    ],
+                    recentlyPost:[
+                        ...e.recentlyPost.filter(item=>item.id!==result.post.id),
+                        tempPost
+
+                    ]
+                }
+            ))
         }catch(e){
-            throw Error();
+            console.log(e);
+            throw Error(e);
         }
         setLoading(false);
-
-        navigation.navigate("HomeNavigation");
+        navigation.goBack();
     }
     
     return(

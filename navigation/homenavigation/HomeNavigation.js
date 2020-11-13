@@ -13,6 +13,7 @@ import SearchBar from "../../components/SearchBar"
 import constants from "../../constants";
 import { USER_FRAGMENT } from "../../fragments";
 import Loader from "../../components/Loader";
+import { useDynamicHeight } from "../../AuthContext";
 
 // TO DO 
 // 아무리 생각해봐도 이것은 스크린이 맞는 듯하다
@@ -23,7 +24,6 @@ import Loader from "../../components/Loader";
 // `;
 const Container = styled.View`
   background-color: white;
-  /* height: ${constants.height}; */
 `;
 
 const BoxList = styled.View`
@@ -47,26 +47,30 @@ const Search = styled.View`
 
 
 const HomeNavigation=({navigation,route})=>{
+
+  const dynamicHeight = useDynamicHeight();
+
   navigation.setOptions({
     navigationOptions :{
       header:null
     }
   });
+  console.log("HomeNavigation 다시하니?");
 
   return (
-        <Container>
-          <ScrollView>
-            <Header>
-              <UserProfile />
-              <Notification />
-            </Header>
-            <Search>
-              <SearchBar fake />
-            </Search>
+      <ScrollView>
+          <Container >
+              <Header>
+                <UserProfile />
+                <Notification />
+              </Header>
+              <Search>
+                <SearchBar fake />
+              </Search>
 
-            <TabNavigation />
-          </ScrollView>  
-        </Container>
+              <TabNavigation />
+          </Container>
+        </ScrollView>  
       )
   
 }

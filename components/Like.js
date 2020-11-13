@@ -4,6 +4,8 @@ import styled from "styled-components";
 import NavIcon from "./NavIcon";
 import {gql} from "apollo-boost"; 
 import { useMutation } from "@apollo/client";
+import { useSetUser } from "../AuthContext";
+import { withNavigation } from "@react-navigation/compat";
 const Touchable = styled.TouchableOpacity`
 
 `;
@@ -20,7 +22,8 @@ export const TOGGLE_LIKE=gql`
 
 const Like =({
     id:postId,
-    isLiked
+    isLiked,
+    navigation
 })=>{
     const [islikeS,setIslikeS] = useState(isLiked);
     const [toggleMutation] = useMutation(TOGGLE_LIKE,{
@@ -33,29 +36,27 @@ const Like =({
 
         if(islikeS){
             setIslikeS(false);
+
         }else{
             setIslikeS(true);
         }
-
         const result = await toggleMutation();
-        console.log(result); 
-
     }
     return(
         islikeS
         ?
             (
                 <Touchable onPress={()=>toggleLike()} >
-                    <NavIcon  name={"md-heart"} size={24} color={"#f00"} />
+                    <NavIcon  name={"md-heart"} size={40} color={"#f00"} />
                 </Touchable>
             )
         :
             (
                 <Touchable onPress={()=>toggleLike()} >
-                    <NavIcon name={"md-heart-outline"} size={24} color={"#000"} />
+                    <NavIcon name={"md-radio-button-off"} size={40} color={"#fff"} />
                 </Touchable>
             )
     ); 
 }
 
-export default Like; 
+export default withNavigation(Like) ; 

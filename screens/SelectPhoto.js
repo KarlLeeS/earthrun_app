@@ -157,7 +157,7 @@ const SelectPhoto=({
             });
 
             const res = Axios.post(
-                "http://83135c28ea28.ngrok.io/api/upload",
+                "https://earthrunbackend.herokuapp.com/api/upload",
                 formDataForDisplay,
                 {
                   headers:{
@@ -183,7 +183,7 @@ const SelectPhoto=({
             console.log(fromDataForMaterial);
 
             const res = Axios.post(
-                "http://83135c28ea28.ngrok.io/api/upload",
+                "https://earthrunbackend.herokuapp.com/api/upload",
                 fromDataForMaterial,
                 {
                   headers:{
@@ -195,7 +195,6 @@ const SelectPhoto=({
                 const {
                     data:{result} 
                 }=data; 
-                console.log("왓고 이거 넣었다",result);
                 SetPhotoMaterial([...result]);
             });
         }

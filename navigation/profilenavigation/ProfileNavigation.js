@@ -8,7 +8,10 @@ import NOTYET from "../../screens/NOTYET";
 
 const Stack = createStackNavigator(); 
 
-export default ()=>(
+export default ()=>{
+    console.log("ProfileNavigation 다시하니?");
+
+    return (
     <Stack.Navigator
         initialRouteName="MainProfile"
     >
@@ -19,3 +22,4 @@ export default ()=>(
         <Stack.Screen name="NOTYET" component={NOTYET}/>
     </Stack.Navigator>
 )
+    }

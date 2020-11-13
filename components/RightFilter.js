@@ -169,14 +169,14 @@ const RightFilter = ({
         console.log({certificationResult});
         setPreferences(preferenceResult);
         setCertification(certificationResult);
-        onSubmit("",preferenceResult,certificationResult);
+        onSubmit(preferenceResult,certificationResult);
         setRightToggle(false);
     }
 
     const setInit=()=>{
-        setPreferences([`${user.preference.name}`]);
+        setPreferences([`${user?.preference.name}`]);
         setCertification([]);
-        const initPrefer = initPreferS([`${user.preference.name}`]);
+        const initPrefer = initPreferS([`${user?.preference.name}`]);
         const initCerti = initCertiS([]);
         setprefer0(initPreferecnes[0]);
         setprefer1(initPreferecnes[1]);
@@ -193,7 +193,7 @@ const RightFilter = ({
         setcerti5(initCertification[5]);
     }
 
-    return (
+    return (user&&
         <Container>
             <Header>    
                 <TouchableOpacity onPress={()=>setRightToggle(false)}>

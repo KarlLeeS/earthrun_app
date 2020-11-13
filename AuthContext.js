@@ -19,6 +19,9 @@ export const ME = gql`
 `
 
 export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
+
+    const [dynamicHeight,setDynamicHeight] = useState(0);
+
     const [isLoggedIn,setIsLoggedIn] = useState(isLoggedInProp); 
     const [user,setUser]= useState({});
     const [currentPost,setCurrentPost] =useState([]); 
@@ -51,6 +54,10 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     };
     return (
     <AuthContext.Provider value={{
+                
+        dynamicHeight,
+        setDynamicHeight,
+
         avatar,
         setAvatar,
         photoDisplay,
@@ -62,6 +69,17 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     </AuthContext.Provider>
     )
 };
+
+export const useDynamicHeight=()=>{
+    const {dynamicHeight} =useContext(AuthContext);
+    return dynamicHeight;
+}
+
+export const useSetDynamicHeight=()=>{
+    const {setDynamicHeight} = useContext(AuthContext);
+    return setDynamicHeight;
+}
+
 
 export const useAvatar=()=>{
     const {avatar} =useContext(AuthContext);
@@ -122,6 +140,7 @@ export const useLogIn= ()=>{
     const {logUserIn} = useContext(AuthContext);
     return logUserIn;
 }
+
 
 export const useLogOut=()=>{
     const {logUserOut} = useContext(AuthContext); 

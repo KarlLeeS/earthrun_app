@@ -6,15 +6,8 @@ import Swiper from "react-native-swiper";
 import constants from "../../constants";
 
 export default ({files}) => {
-  // console.log({files});
+  console.log({files});
   
-  
-  const timeElapsed = Date.now();
-  const today = new Date(timeElapsed);
-
-  const a=today.toISOString(); // "2020-06-13T18:30:00.000Z"
-  console.log(a)
-
   return (
     <Swiper
         showsPagination={true}

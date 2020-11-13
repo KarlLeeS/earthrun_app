@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import NavIcon from "../components/NavIcon";
 import SearchBar from "../components/SearchBar";
-import useInput from "../components/useInput";
+import useInput from "../hooks/useInput"
 import constants from "../constants";
 import {gql} from "apollo-boost"; 
 import { useQuery } from "@apollo/client";
@@ -14,6 +14,7 @@ import MainScreen from "./home/MainScreen";
 import Post from "../components/Post";
 import LeftFilter from "../components/LeftFilter";
 import RightFilter from "../components/RightFilter";
+import { Alert, ScrollView } from "react-native";
 const Wrapper = styled.View`
     background-color : white;
     flex-direction:column;
@@ -135,16 +136,12 @@ const Search=({routes,navigation})=>{
       certification:[],
       preferences:[],
       orderingoption:"",
-      keyword:"뷁"
+      keyword:"FQ"
     },
-    onCompleted:()=>{
-      console.log(11);
-    },
-    fetchPolicy:"cache-first"
+    fetchPolicy:"cache-and-network"
   });
 
   
-  console.log({preferences});
 
   const onSubmit = async(_,preferenceList=[],certificationList=[],order=undefined)=>{
     
@@ -167,25 +164,24 @@ const Search=({routes,navigation})=>{
     }else{
       orderResult = order;
     }
+
     console.log(searchInput.value);
     console.log({preferenceResult});
     console.log({certificationResult});
     console.log({orderResult});
+    if(searchInput.value===""){
+      Alert.alert("검색어를 입력하세요");
+      return;
+    }
     await refetch({
       certification:certificationResult,
-      preferences:["비건"],
+      preferences:user?.preference.name,
       orderingoption:orderResult,
-      keyword:"칩"
+      keyword:searchInput.value
     })
   }
 
-  return loading
-  ?
-    (
-      <Loader />
-    )
-  :
-    (
+  return (
       <Wrapper>
         <Header>
           <SearchBar onChange={searchInput.onChange} value={searchInput.value} setValue={searchInput.setValue} onSubmit={onSubmit}/>
@@ -203,53 +199,53 @@ const Search=({routes,navigation})=>{
                   data.MainSearchBar[0]
                   ?
                     (
-                      <>
-                      <Container RightToggle={RightToggle}>
-                        <FilteringTools>
-                          <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
-                            <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-                            <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
-                          </LeftFilterIcon>
-                          {
-                            LeftToggle?(
-                              <LeftFilterWrapper  >
-                                <LeftFilter OnSubmit={onSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
-                              </LeftFilterWrapper>):(<></>)
-                          }
-                          
-                          <RightFilterIcon onPress={()=>setRightToggle(true)}>
-                            <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-                          </RightFilterIcon>
-                        </FilteringTools>
-                        <Posts>
+                      <ScrollView>
+                        <Container RightToggle={RightToggle}>
+                          <FilteringTools>
+                            <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
+                              <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+                              <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
+                            </LeftFilterIcon>
                             {
-                              data.MainSearchBar.map((e,i)=>(
-                                <Post key={e.id} fromMainScreenNormalList={true} {...e} />
-                              ))
+                              LeftToggle?(
+                                <LeftFilterWrapper  >
+                                  <LeftFilter OnSubmit={onSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+                                </LeftFilterWrapper>):(<></>)
                             }
-                        </Posts>
-                      </Container>
-                      {RightToggle
-                        ?
-                          (
-                          <RightFilterWrapper>
-                              <RightFilter
-                                onSubmit={onSubmit}
-                                certification={certification}
-                                preferences={preferences}
-                                setPreferences={setPreferences}
-                                setCertification={setCertification}
-                                setRightToggle={setRightToggle}
-                              />
-                          </RightFilterWrapper>
-                          )
-                        :
-                          (<></>)
-                      } 
-                      </>       
+                            
+                            <RightFilterIcon onPress={()=>setRightToggle(true)}>
+                              <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+                            </RightFilterIcon>
+                          </FilteringTools>
+                          <Posts>
+                              {
+                                data.MainSearchBar.map((e,i)=>(
+                                  <Post key={e.id} fromMainScreenNormalList={true} {...e} />
+                                ))
+                              }
+                          </Posts>
+                        </Container>
+                        {RightToggle
+                          ?
+                            (
+                            <RightFilterWrapper>
+                                <RightFilter
+                                  onSubmit={onSubmit}
+                                  certification={certification}
+                                  preferences={preferences}
+                                  setPreferences={setPreferences}
+                                  setCertification={setCertification}
+                                  setRightToggle={setRightToggle}
+                                />
+                            </RightFilterWrapper>
+                            )
+                          :
+                            (<></>)
+                        } 
+                      </ScrollView>       
                     )
                   :
-                    (<></>)
+                    (<Contents></Contents>)
                 )
             }
               
@@ -259,62 +255,3 @@ const Search=({routes,navigation})=>{
     )
 }
 export default Search;
-
-// 최근 검색어 가능하려면 
-// 1. 검색할 때 마다 유저에 search field를 만들어서 계속 더한다
-
-// 인기 검색어 가능하려면 
-// 1. 검색할 때 마다 유저에 search field를 만들어서 계속 더한다
-// 2. 인기 검색어란 현재를 기준으로 과거의 한 시점으로부터 많이 검색이 되었다는 것이니까. 
-// 3. 검색에 대한 내용은 서버쪽에서 이미 들고 있는 편이 좋겠네. 매 요청마다 쿼리를 가져오는 것은
-// 비 효율적이니까 이거는 모든 사용자가 검색할 때 마다 요청할 것이니까 그리고 customized query도
-// 아님. 
-// 4. 그런데 이렇게 하려면 조금 시간이 걸리고 귀찮어. 이게 본 목적이 아니니깐 넘어가자.
-
-
-
-// data.MainSearchBar[0]
-// ?
-  // <Container RightToggle={RightToggle}>
-  //   <FilteringTools>
-  //     <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
-  //       <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-  //       <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
-  //     </LeftFilterIcon>
-  //     {
-  //       LeftToggle?(
-  //         <LeftFilterWrapper  >
-  //           <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
-  //         </LeftFilterWrapper>):(<></>)
-  //     }
-      
-  //     <RightFilterIcon onPress={()=>setRightToggle(true)}>
-  //       <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-  //     </RightFilterIcon>
-  //   </FilteringTools>
-  //   <Posts>
-  //       {
-  //         data.MainSearchBar.map((e,i)=>(
-  //           <Post key={e.id} fromMainScreenNormalList={true} {...e} />
-  //         ))
-  //       }
-  //   </Posts>
-  // </Container>
-  // {
-  //     RightToggle?(
-  //     <RightFilterWrapper>
-  //         <RightFilter
-  //           onSubmit={OnSubmit}
-  //           certification={certification}
-  //           preferences={preferences}
-  //           setPreferences={setPreferences}
-  //           setCertification={setCertification}
-  //           setRightToggle={setRightToggle}
-  //         />
-  //     </RightFilterWrapper>
-  // }
-  //     ):(<></>)
-//     }
-//   )
-// :
-//   (<></>)

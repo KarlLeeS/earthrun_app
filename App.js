@@ -20,9 +20,10 @@ import { AppLoading } from 'expo';
 import styles from './styles';
 import Selection from './components/Selection';
 import UploadPost from './screens/profile/UploadPost';
-
+import { LogBox } from 'react-native';
 
 export default function App() {
+  LogBox.ignoreAllLogs();
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -39,11 +40,7 @@ export default function App() {
       await Asset.loadAsync([
         // 원하는 만큼 load 할 수가 있겠지. 
         require("./assets/logo.png"), 
-        require("./assets/post1.jpg"),
-        require("./assets/post2.jpg"),
-        require("./assets/post3.jpg"),
-        require("./assets/post4.jpg"),
-        require("./assets/post5.jpg")
+        require("./assets/post.png"), 
       ]);
 
       // device의 storage의 정보를 cache에 올림

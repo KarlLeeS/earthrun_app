@@ -6,16 +6,15 @@ import { ScrollView } from "react-native";
 import styled from "styled-components";
 import { ME, usePhotoMaterial, useSetUser, useUser } from "../../AuthContext";
 import NavIcon from "../../components/NavIcon";
-import Post from "../../components/Post";
 import PreferenceImage from "../../components/Profile/PreferenceImage";
-import useInput from "../../components/useInput";
 import constants from "../../constants";
 import { ConvertToKorean } from "../../utils";
 import {gql} from "apollo-boost";
 import {USER_FRAGMENT} from "../../fragments"; 
+import useInput from "../../hooks/useInput";
+import Loader from "../../components/Loader";
 const Container = styled.View`
   background-color:white;
-  /* height:${constants.height}; */
 `; 
 const Header = styled.View`
   flex-direction:row;
@@ -167,21 +166,21 @@ const convertToText=(arr)=>{
 
   const getText=(index)=>{
     switch (index) {
-      case 1:
+      case 0:
         return "비건";
         
-      case 2:
+      case 1:
         return "락토";
-      case 3:
+      case 2:
         return "오보";
         
-      case 4:
+      case 3:
         return "락토오보";
         
-      case 5: 
+      case 4: 
         return "페스코";
         
-      case 6:
+      case 5:
         return "폴로";
     }
   }
@@ -213,18 +212,22 @@ export const EDIT_PROFILE = gql`
 
 
 const EditProfile = ({navigation}) => {
+  console.log("EditProfile 다시하니?");
+
   const user=  useUser();
   const setUser = useSetUser();
-  const usernameInput = useInput(user.username); 
-  const currentPreference = user.preference.name; 
+  const usernameInput = useInput(user?.username); 
+  const currentPreference = user?.preference.name; 
   const avatar = usePhotoMaterial();
-  let [arr,setArr]=useState(makeArr(user.preference.name)); 
+  const [loading,setLoading] = useState(false); 
+  let [arr,setArr]=useState(makeArr(user?.preference.name)); 
 
   const OnSubmit = async()=>{
-    console.log(convertToText(arr));
-    console.log(usernameInput.value);
-    console.log(avatar);
-    // const result = await editProfileMutation();
+    setLoading(true);
+    const result = await editProfileMutation();
+
+    setLoading(false);
+
     // setTimeout(() => {
     //   console.log(result);
     //   navigation.goBack();       
@@ -236,13 +239,42 @@ const EditProfile = ({navigation}) => {
     variables:{
       username:usernameInput.value,
       preference:convertToText(arr),
-      avatar:avatar
+      avatar:avatar[0]
     },
-    refetchQueries: () => [{ query: ME }]
+    onCompleted:()=>{
+        // console.log("Before" ,user);
+        if(user.preference.name !== convertToText(arr)){
+          setUser(user=>(
+            {
+                ...user,
+                username:usernameInput.value,
+                preference:{
+                  name:convertToText(arr)
+                },
+                avatar:avatar[0] ,
+                typeStart:new Date().toISOString()
+            }
+          ));
+        }else{
+          setUser(user=>(
+            {
+                ...user,
+                username:usernameInput.value,
+                avatar:avatar[0]
+            }
+          ));
+        }
+            
+    }
   })
 
   
-  return(
+  return loading?
+    (
+      <Loader />
+    )
+  :
+    ( user&&
     <ScrollView>
       <Container>
         <Header>
@@ -264,7 +296,17 @@ const EditProfile = ({navigation}) => {
                 height:constants.height/8,
                 borderRadius: 100,
               }}
-              source  ={{ uri: ((avatar) ? user.avatar: avatar)}}
+              source ={
+                  user
+                  ?
+                    avatar[0]
+                    ?
+                      {uri:avatar[0]}
+                    :
+                      {uri:user?.avatar}
+                  : 
+                    require("../../assets/empty.png") 
+              }
             >
             </Image>
             <UploadPicture onPress={()=>navigation.navigate("SelectPhoto",{
@@ -275,12 +317,12 @@ const EditProfile = ({navigation}) => {
               </UploadPicture>
           </Touchable>
           
-          <Input value={usernameInput.value} onChange={usernameInput.setValue} />
+          <Input value={usernameInput.value} onChangeText={usernameInput.onChange} />
         </UserMeta>
         <Start>
           <Title>채식 시작일 날짜<SmallText> ( 유형을 바꾸시면 오늘로 바뀌어요! ) </SmallText></Title>
           <StartContainer>
-          <StartText>{`${ConvertToKorean(user.typeStart)}`}</StartText>
+          <StartText>{`${ConvertToKorean(user?.typeStart)}`}</StartText>
           </StartContainer>
         </Start>
 

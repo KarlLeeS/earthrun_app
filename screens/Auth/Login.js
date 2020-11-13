@@ -4,8 +4,8 @@ import {TouchableWithoutFeedback,Keyboard,Alert} from "react-native";
 import { useMutation } from "@apollo/client";
 import AuthInput from "../../components/Auth/AuthInput";
 import AuthButton from "../../components/Auth/AuthButton";
-import useInput from "../../components/useInput";
 import { LOG_IN } from "./AuthQueries";
+import useInput from "../../hooks/useInput";
 
 const View = styled.View`
     justify-content:center; 
@@ -20,7 +20,7 @@ const Login=({route,navigation})=>{
     const [loading,setLoading] =useState(false); 
     const [requestSecretMutation] = useMutation(LOG_IN, {
         variables:{
-            email:"1@1.com"
+            email:emailInput.value
         }
     }); 
 
@@ -30,9 +30,9 @@ const Login=({route,navigation})=>{
         if (value === "") {
             return Alert.alert("Email can't be empty");
         }
-        // else if(!value.includes("@") || !value.includes(".")){
-        //     return Alert.alert("please write an email"); 
-        // }
+        else if(!value.includes("@") || !value.includes(".")){
+            return Alert.alert("please write an email"); 
+        }
         try{
             setLoading(true); 
             const {
@@ -42,7 +42,7 @@ const Login=({route,navigation})=>{
                 // Alert.alert("Check your email"); 
                 
                 // navigation.navigate("Confirm",{email:value,secret:requestSecret}); 
-                navigation.navigate("Confirm",{email:"1@1.com",secret:requestSecret}); 
+                navigation.navigate("Confirm",{email:emailInput.value,secret:requestSecret}); 
             }else{
                 Alert.alert("Account not found"); 
                 navigation.navigate("Signup",{email:value}); 
@@ -55,13 +55,6 @@ const Login=({route,navigation})=>{
         }
     }
     
-  // 삭제 
-    useEffect(() => {
-        setTimeout(() => {
-            emailInput.setValue("1@1.com");
-            handleLogin();
-        }, 300);
-    }, [])
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

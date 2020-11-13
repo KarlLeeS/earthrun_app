@@ -8,6 +8,7 @@ const View = styled.View`
     justify-content:center;
     align-items:center; 
     flex:1 ; 
+    background-color:white;
 `;
 
 
@@ -33,11 +34,11 @@ const AuthHome =({navigation})=>(
     <View>
         <Image resizeMode={"contain"} source={require("../../assets/post.png")}  />
         
-        <AuthButton text={"Create New Account"} onPress={()=>navigation.navigate("Signup")}/>
+        <AuthButton text={"Earthrun 가입하기"} onPress={()=>navigation.navigate("Signup")}/>
         
         <Touchable onPress={()=>navigation.navigate("Login")}>
             <LoginLink>
-                <LoginLinkText>Log in</LoginLinkText>
+                <LoginLinkText>로그인</LoginLinkText>
             </LoginLink>
         </Touchable>
     </View>

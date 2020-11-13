@@ -30,10 +30,11 @@ export const ME = gql`
 const Stack = createStackNavigator();
 
 const MainNavigation = () => {
+  console.log("MainNavigation다시하니?");
   const [realLoading,setRealLoading] =useState(true);
   const setUser= useSetUser();
   const {data,loading,refetch,error}= useQuery(ME,{   
-    fetchPolicy:"cache-only",
+    fetchPolicy:"cache-and-network",
     onCompleted:()=>{
         setUser(data.me);
         setRealLoading(false);
@@ -53,6 +54,7 @@ const MainNavigation = () => {
         <>
         <NavigationContainer>
             <Stack.Navigator
+              lazy="true"
               backBehavior="order"
               screenOptions={{
                 headerStyle:{

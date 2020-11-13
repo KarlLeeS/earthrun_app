@@ -6,11 +6,6 @@ import constants from "../constants";
 import {Ionicons} from "@expo/vector-icons";
 import { withNavigation } from "@react-navigation/compat";
 
-import styles from "../styles";
-import NavIcon from "./NavIcon";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import useInput from "./useInput";
-
 const SearchContainer = styled.View`
   position:relative;
   flex-direction:row;

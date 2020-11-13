@@ -28,15 +28,15 @@ const SpecialButtonText=  styled.Text`
 `;
 
 
-const Rawmaterial =(props)=>{
+const Rawmaterial =({label,special})=>{
     return(
-        props && props.special ? (
+        special && special ? (
             <SpecialButton>
-                <SpecialButtonText>{props.label}</SpecialButtonText>
+                <SpecialButtonText>{label}</SpecialButtonText>
             </SpecialButton>
          ):(
             <NormalButton>
-            <NormalButtonText>{props.label}</NormalButtonText>
+            <NormalButtonText>{label}</NormalButtonText>
             </NormalButton>
          )
     )

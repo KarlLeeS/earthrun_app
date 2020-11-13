@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import constants from "../../constants";
-import { ScrollView } from "react-native";
+import { ActivityIndicator, ScrollView } from "react-native";
 import {gql} from "apollo-boost";
 import {POST_FRAGMENT} from "../../fragments";
 import { useUser } from "../../AuthContext";
@@ -12,29 +12,25 @@ import NavIcon from "../../components/NavIcon";
 import {  useQuery } from "@apollo/client";
 import LeftFilter from "../../components/LeftFilter";
 import RightFilter from "../../components/RightFilter";
+import {useRoute} from '@react-navigation/native';
 
-
-const View = styled.View`
-  margin : 20px;
-  text-align:center;
-`;
+import {Dimensions} from "react-native";
+import { setStatusBarStyle } from "expo-status-bar";
+import styles from "../../styles";
 
 const Container = styled.View`
   background-color : #fff;
   position:relative;
-  min-height:${constants.height};
+  flex:1;
+  /* height:${props=>props.height}; */
 `;
 
 const RightFilterWrapper = styled.View`
   position:absolute;
-  top:0;
+  /* top:0; */
   left:0;
   z-index:10;
-  bottom:0;
-`;
-
-const Text = styled.Text`
-  font-weight:900;
+  top:0;
 `;
 
 const Posts = styled.View`
@@ -70,12 +66,12 @@ const LeftFilterText = styled.Text`
   font-size:14px;
 `;
 
-// BYLOWPRICE
-// BYHIGHPRICE
-// BYRATING
-// BYCLICK
-// BYREVIEWCOUNT
-// BYLATEST
+const Loading =styled.View`
+  justify-content:center;
+  align-items:center;
+  width:${constants.width};
+  height:200px;
+`; 
 
 const OrderMapper= {
   "BYRATING":"별점 순",
@@ -105,13 +101,28 @@ export const GET_MAIN_TOP_TAB= gql`
   ${POST_FRAGMENT}
 `;
 
-const MainScreen = ({category,searchKeyword,searchRefetch})=>{
+const MainScreen = ({searchKeyword,searchRefetch, navigation})=>{
+  const [height,setHeight] = useState();
+  const user = useUser();
+  const {name:category} = useRoute();
+  console.log("여기는" ,category);
+  console.log("높이:" ,height);
+
+  // console.log(navigation);
+  const screen = Dimensions.get("screen");
+  const window = Dimensions.get("window");
+
+  // console.log("여기는 " +category);
+  // console.log({screen});
+  // console.log({window});
+  const [posts,setPosts]= useState();
+
   const [LeftToggle,setLeftToggle] = useState(false); 
   const [RightToggle,setRightToggle] = useState(false); 
-  const user = useUser();
   const [certification,setCertification] = useState([]); 
   const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
+  const [loaded,setLoaded] = useState(false);
 
   const {loading,data,refetch,updateQuery}= useQuery(GET_MAIN_TOP_TAB,{ 
     variables:{
@@ -120,17 +131,47 @@ const MainScreen = ({category,searchKeyword,searchRefetch})=>{
       orderingoption:"BYRATING",
       categories:category
     },
-    fetchPolicy:"network-only"
+    fetchPolicy:"cache-first",
+    onCompleted:()=>{
+      console.log("뭐여@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+      let index ; 
+      let realElement ; 
+      switch(orderingoption){
+        case "BYRATING":
+          index= data.MainTopTab.findIndex(e=>e.rating>0);
+          realElement = data.MainTopTab.splice(index); 
+          setPosts([...realElement,...data.MainTopTab])
+          break;
+        case "BYCLICK":
+          index= data.MainTopTab.findIndex(e=>e.totalHits>0);
+          realElement = data.MainTopTab.splice(index); 
+          setPosts([...realElement,...data.MainTopTab])
+
+          break;  
+        case "BYREVIEWCOUNT":
+          index= data.MainTopTab.findIndex(e=>e.reviewCount>0);
+          realElement = data.MainTopTab.splice(index); 
+          setPosts([...realElement,...data.MainTopTab])
+          break;  
+        case "BYLOWPRICE":
+        case "BYHIGHPRICE":
+        case "BYLATEST":
+          setPosts([...data.MainTopTab]);
+          break;  
+      }
+      setLoaded(true);
+      
+    }
   });
 
   const OnSubmit = async (preferenceList=[],certificationList=[],order=undefined)=>{
     let preferenceResult, certificationResult,orderResult ;
     if(preferenceList===undefined || preferenceList.length===0){
-      preferenceResult = preferences;
+      preferenceResult = user.preference.name;
     }else{
       preferenceResult=preferenceList
     }
-
+    // TODO 이 컴포넌트도 조금 의심스럽네. 굳이 필요한가? 그냥 userContext로 다 받아서 해결해도 되는 부분아닌가?
     if(certificationList===undefined || certificationList.length===0){
       certificationResult = certification;
     }else{
@@ -142,70 +183,82 @@ const MainScreen = ({category,searchKeyword,searchRefetch})=>{
     }else{
       orderResult = order;
     }
-
+    
     console.log({preferenceResult});
     console.log({certificationResult});
     console.log({orderResult});
+    setLoaded(false);
     await refetch({
       certification:certificationResult,
       preferences:preferenceResult,
       orderingoption:orderResult,
       categories:category
     });
+    setLoaded(true);
+
+    console.log("##################################################",data.MainTopTab.length);
 
   }
 
   return (
-    <ScrollView>
-      <Container RightToggle={RightToggle}>
-        <FilteringTools>
-          <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
-            <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-            <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
-          </LeftFilterIcon>
-          {
-            LeftToggle
-              ?
-                (
-                  <LeftFilterWrapper  >
-                    <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
-                  </LeftFilterWrapper>
-                )
-              :
-                (
-                  <></>
-                )
-          }
-          <RightFilterIcon onPress={()=>setRightToggle(true)}>
-            <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-          </RightFilterIcon>
-        </FilteringTools>
-        <Posts>
-          {loading?(
-             <Loader />
+    <>
+      <Container 
+      height={height?height:0}
+      RightToggle={RightToggle}>
+        {
+          !loaded?
+          (
+            <Loading>
+              <ActivityIndicator color={styles.blackColor}/>
+            </Loading>
           ):
           (
-            data&&data?.MainTopTab&&data?.MainTopTab.map((e,i)=>(
-              <Post key={e.id} fromMainScreenNormalList={true} {...e} />
-              ))
+            <>
+              <FilteringTools>
+                  <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
+                    <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+                    <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
+                  </LeftFilterIcon>
+                  {
+                    LeftToggle
+                      ?
+                        (
+                          <LeftFilterWrapper  >
+                            <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+                          </LeftFilterWrapper>
+                        )
+                      :
+                        (
+                          <></>
+                        )
+                  }
+                  <RightFilterIcon onPress={()=>setRightToggle(true)}>
+                    <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+                  </RightFilterIcon>
+                </FilteringTools>
+              
+                <Posts>
+                    {posts&&posts?.map(e=>(<Post key={e.id} fromMainScreenNormalList={true} {...e} />))}
+                </Posts>
+                {RightToggle?(
+                  <RightFilterWrapper>
+                      <RightFilter
+                        onSubmit={OnSubmit}
+                        certification={certification}
+                        preferences={preferences}
+                        setPreferences={setPreferences}
+                        setCertification={setCertification}
+                        setRightToggle={setRightToggle}
+                      />
+                  </RightFilterWrapper>
+                  ):(<></>)
+                }
+            </> 
           )
-            }
-        </Posts>
+        }
+        
       </Container>
-      {RightToggle?(
-        <RightFilterWrapper>
-            <RightFilter
-              onSubmit={OnSubmit}
-              certification={certification}
-              preferences={preferences}
-              setPreferences={setPreferences}
-              setCertification={setCertification}
-              setRightToggle={setRightToggle}
-            />
-        </RightFilterWrapper>
-        ):(<></>)
-      }
-    </ScrollView>
+    </>
   )
 }
 

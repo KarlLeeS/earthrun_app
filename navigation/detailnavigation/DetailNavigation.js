@@ -66,6 +66,8 @@ export const GET_FULL_POST=gql`
 
 const DetailNavigation =({navigation,route:{params:{id}}
 })=>{
+    console.log("DetailNavigation 다시하니?");
+
     const setpost= useSetCurrentPost();
     const setuser=  useSetUser();
     const {data,loading}=useQuery(GET_FULL_POST,
@@ -73,9 +75,10 @@ const DetailNavigation =({navigation,route:{params:{id}}
         variables:{
             id
         },
-        fetchPolicy:"network-only"
+        fetchPolicy:"cache-first"
         ,
         onCompleted:()=>{
+
             setpost(data.seeFullPost);
             setuser(e=>
             (
@@ -86,6 +89,7 @@ const DetailNavigation =({navigation,route:{params:{id}}
             ))
         }
     });
+        
     return (
         loading
         ?
@@ -117,8 +121,10 @@ const DetailNavigation =({navigation,route:{params:{id}}
                 </Container>
             )
     )
+   
 }
 
 export default DetailNavigation;
 
 // // &&
+
