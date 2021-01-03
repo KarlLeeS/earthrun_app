@@ -1,6 +1,5 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import RecommendNavigation from "../RecommendNavigation";
 import tempTabScreen from "../../../screens/detail/tempTabScreen";
 
 import tabInfo from "../tabInfo.json"
@@ -45,4 +44,3 @@ const SubTabFood = ({subTabs}) =>{
 }
 
 export default SubTabFood;
-// children={()=><MainScreen category={"간편식면류통조림"} />}

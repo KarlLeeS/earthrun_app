@@ -17,7 +17,7 @@ const Touchable= styled.TouchableOpacity`
   height:40;
   background-color:#fff;
   padding:20px;
-  border-radius:5;
+  border-radius:50;
   border-color:#dbdbdb;
   border-width:1;
 `;

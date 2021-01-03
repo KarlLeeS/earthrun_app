@@ -7,3 +7,4 @@ export default {
     blueColor: "#3897f0",
     darkBlueColor: "#003569"
   };
+

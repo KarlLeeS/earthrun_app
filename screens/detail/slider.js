@@ -5,13 +5,13 @@ import {View,Text, Image} from "react-native";
 import Swiper from "react-native-swiper";
 import constants from "../../constants";
 
-export default ({files}) => {
+export default ({files,height=2.5}) => {
   console.log({files});
   
   return (
     <Swiper
         showsPagination={true}
-        style={{ height: constants.height / 2.5 }}
+        style={{ height: constants.height / height }}
         index={0}
       >
         {

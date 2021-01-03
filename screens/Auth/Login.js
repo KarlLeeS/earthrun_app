@@ -16,7 +16,9 @@ const View = styled.View`
 
 const Login=({route,navigation})=>{
     const see = route?.params?.email; 
-    const emailInput= useInput(see); 
+    // const emailInput= useInput(see); 
+    const emailInput= useInput("1@1.com"); 
+    
     const [loading,setLoading] =useState(false); 
     const [requestSecretMutation] = useMutation(LOG_IN, {
         variables:{
@@ -54,6 +56,10 @@ const Login=({route,navigation})=>{
             setLoading(false); 
         }
     }
+
+    useEffect(()=>{
+        handleLogin();
+    },[])
     
 
     return (

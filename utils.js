@@ -80,3 +80,16 @@ export const ConvertToKorean=(date)=>{
     const pip = segment.split('-'); 
     return `${pip[0]}년 ${pip[1]}월 ${pip[2]}일` 
 }
+
+export const getParentTab=(sub)=>{
+    switch (sub) {
+        case "대체육":
+        case "빵":
+        case "간편식·면류·통조림":
+        case "음료":
+        case "간식":
+            return "식품"
+        default:
+            break;
+    }
+}
