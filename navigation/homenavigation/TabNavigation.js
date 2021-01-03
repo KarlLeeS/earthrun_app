@@ -1,25 +1,29 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import RecommendNavigation from "./RecommendNavigation";
-import tempTabScreen from "../../screens/detail/tempTabScreen";
-import { Text, View } from "react-native";
 
-import tabInfo from "./tabInfo.json"
-// import tempMainScreen from "../../screens/home/MainScreen";
-// import SubTabNavigation from "./subTabNavigation/SubTabFashionOthers";
+import constants from "../../constants";
 
+import MainTab from "../../screens/home/MainTab";
 import SubTabFood from "./subTabNavigation/SubTabFood"
 import SubTabLife from "./subTabNavigation/SubTabLife";
 import SubTabHealthBeauty from "./subTabNavigation/SubTabHealthBeauty";
 import SubTabFashionOthers from "./subTabNavigation/SubTabFashionOthers";
-import styles from "../../styles";
-import constants from "../../constants";
+import SubTabNavigation from "./subTabNavigation/SubTabFashionOthers";
+
+
+// import tempMainScreen from "../../screens/home/MainScreen";
+
+// import styles from "../../styles";
+
 const Tab = createMaterialTopTabNavigator();
 
 export default () =>{
-  console.log("TabNavigation 다시하니?");
+  console.log("Rendering HomeNavigation/TabNavigation");
+
   return (
     <Tab.Navigator
+      lazy="true"
+      initialRouteName="추천"
       tabBarOptions={{
         scrollEnabled :true,
         indicatorStyle:{
@@ -42,7 +46,7 @@ export default () =>{
         }
       }}
     >
-        <Tab.Screen name="추천" component={RecommendNavigation} />
+        <Tab.Screen name="신상품" component={MainTab} />
         <Tab.Screen name="식품" component={SubTabFood} />
         {/* <Tab.Screen name="건강/미용"  component={SubTabHealthBeauty} />
         <Tab.Screen name="생활용품"  component={SubTabLife} />
@@ -50,10 +54,3 @@ export default () =>{
       </Tab.Navigator>
   );
 }
-
-
-// (
-      
-// )
-
-

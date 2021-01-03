@@ -41,6 +41,17 @@ export default function App() {
         // 원하는 만큼 load 할 수가 있겠지. 
         require("./assets/logo.png"), 
         require("./assets/post.png"), 
+        require("./assets/icon_chemical.png"),
+        require("./assets/icon_vegetype_color_chicken.png"),
+        require("./assets/icon_vegetype_color_egg.png"),
+        require("./assets/icon_vegetype_color_fish.png"),
+        require("./assets/icon_vegetype_color_leaf.png"),
+        require("./assets/icon_vegetype_color_milk.png"),
+        require("./assets/icon_vegetype_grey_chicken.png"),
+        require("./assets/icon_vegetype_grey_egg.png"),
+        require("./assets/icon_vegetype_grey_fish.png"),
+        require("./assets/icon_vegetype_grey_leaf.png"),
+        require("./assets/icon_vegetype_grey_milk.png"),
       ]);
 
       // device의 storage의 정보를 cache에 올림

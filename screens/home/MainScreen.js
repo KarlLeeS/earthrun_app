@@ -2,32 +2,28 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import constants from "../../constants";
-import { ActivityIndicator, ScrollView } from "react-native";
-import {gql} from "apollo-boost";
-import {POST_FRAGMENT} from "../../fragments";
+import { ActivityIndicator } from "react-native";
+import {GET_MAIN_TOP_TAB} from "../../fragments";
 import { useUser } from "../../AuthContext";
-import Loader from "../../components/Loader";
 import Post from "../../components/Post";
 import NavIcon from "../../components/NavIcon";
-import {  useQuery } from "@apollo/client";
+import {useQuery} from "@apollo/client";
 import LeftFilter from "../../components/LeftFilter";
 import RightFilter from "../../components/RightFilter";
+import { withNavigation } from "@react-navigation/compat";
 import {useRoute} from '@react-navigation/native';
-
 import {Dimensions} from "react-native";
-import { setStatusBarStyle } from "expo-status-bar";
 import styles from "../../styles";
+import { getParentTab } from "../../utils";
 
 const Container = styled.View`
   background-color : #fff;
   position:relative;
   flex:1;
-  /* height:${props=>props.height}; */
 `;
 
 const RightFilterWrapper = styled.View`
   position:absolute;
-  /* top:0; */
   left:0;
   z-index:10;
   top:0;
@@ -82,57 +78,34 @@ const OrderMapper= {
   "BYLATEST":"최근출시 순",
 }
 
-export const GET_MAIN_TOP_TAB= gql`
-  query MainTopTab(
-      $certification:[String]
-      $preferences:[String]
-      $orderingoption:String
-      $categories:String!
-  ){
-    MainTopTab(
-      certification:$certification
-      preferences:$preferences
-      orderingoption:$orderingoption
-      categories:$categories
-    ){
-      ...PostParts
-    }
-  }
-  ${POST_FRAGMENT}
-`;
-
-const MainScreen = ({searchKeyword,searchRefetch, navigation})=>{
-  const [height,setHeight] = useState();
+const MainScreen = ({navigation})=>{
+  // const [height,setHeight] = useState();
   const user = useUser();
-  const {name:category} = useRoute();
-  console.log("여기는" ,category);
-  console.log("높이:" ,height);
+  const {name:childrenTab} = useRoute();
+  const parentTab = getParentTab(childrenTab);
 
-  // console.log(navigation);
-  const screen = Dimensions.get("screen");
-  const window = Dimensions.get("window");
+  console.log(childrenTab, parentTab);
 
-  // console.log("여기는 " +category);
-  // console.log({screen});
-  // console.log({window});
-  const [posts,setPosts]= useState();
+  // const screen = Dimensions.get("screen");
+  // const window = Dimensions.get("window");
+
+  // const [posts,setPosts]= useState();
+  const [loaded,setLoaded] = useState(true);
 
   const [LeftToggle,setLeftToggle] = useState(false); 
   const [RightToggle,setRightToggle] = useState(false); 
   const [certification,setCertification] = useState([]); 
   const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
-  const [loaded,setLoaded] = useState(false);
 
   const {loading,data,refetch,updateQuery}= useQuery(GET_MAIN_TOP_TAB,{ 
+    fetchPolicy:"no-cache",
     variables:{
-      certification:certification,
-      preferences:preferences,
-      orderingoption:"BYRATING",
-      categories:category
+      certification,preferences,orderingoption,
+      categories:childrenTab
     },
-    fetchPolicy:"cache-first",
     onCompleted:()=>{
+      console.log(data.MainTopTab)
       console.log("뭐여@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       let index ; 
       let realElement ; 
@@ -203,9 +176,8 @@ const MainScreen = ({searchKeyword,searchRefetch, navigation})=>{
   return (
     <>
       <Container 
-      height={height?height:0}
-      RightToggle={RightToggle}>
-        {
+        RightToggle={RightToggle}>
+        { 
           !loaded?
           (
             <Loading>
@@ -232,14 +204,16 @@ const MainScreen = ({searchKeyword,searchRefetch, navigation})=>{
                           <></>
                         )
                   }
-                  <RightFilterIcon onPress={()=>setRightToggle(true)}>
+                  <RightFilterIcon onPress={()=> navigation.navigate("DetailFilter",{
+                    OnSubmit,certification,preferences,setPreferences,setCertification,setRightToggle
+                    })}>
                     <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
                   </RightFilterIcon>
                 </FilteringTools>
               
-                <Posts>
+                {/* <Posts>
                     {posts&&posts?.map(e=>(<Post key={e.id} fromMainScreenNormalList={true} {...e} />))}
-                </Posts>
+                </Posts> */}
                 {RightToggle?(
                   <RightFilterWrapper>
                       <RightFilter
@@ -262,4 +236,4 @@ const MainScreen = ({searchKeyword,searchRefetch, navigation})=>{
   )
 }
 
-export default MainScreen;
+export default withNavigation(MainScreen);

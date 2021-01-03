@@ -168,47 +168,49 @@ export default {
             "flexDirection":"row",
             "height":constants.height/8,
             "marginLeft":"10px",
-            "padding":"5px 0px",
+            "padding":"0px 0px 10px 0px",
             "marginBottom":0,
-            "marginRight":0,
+            "marginRight":"10px",
+            "marginBottom":"10px",
+            "marginTop":"0px",
+            "borderBottomColor":"#f1f1f1",
+            "borderBottomWidth":"1px"
         },
         "MetaInfo":{
             "position":"relative"  ,
             "height":constants.height/8,
-            "marginLeft":"30",
+            "marginLeft":"20",
             "flexDirection":"column",
-            "justifyContent":"flex-start"
+            "justifyContent":"center"
         },
         "TextBrand":{
-            "fontSize":"14px",
+            "fontSize":"12px",
             "fontWeight":"bold",
-            "color":"#a0a0a0",
+            "color":"#3d3d3d",
             "letterSpacing":"0px",
             "paddingTop":" 0px",
         },
         "TextProductName":{
-            "color": "#333333",
-            "fontSize": "15px",
+            "color": "#000000",
+            "fontSize": "14px",
             "letterSpacing":"1px",
-            "paddingTop" : "4px",
+            "paddingTop" : "2px",
             "fontWeight":"bold"
         },
         "TextWieghtPrice":{
-            "fontSize": "13px",
+            "fontSize": "12px",
             "fontWeight":"bold",
             "paddingTop" : "5px",
             "color":"#a0a0a0"
-
-            
         },
         "Scores":{
-            "position":"absolute",
+            "position":"relative",
             "bottom":"0",
             "left":"0",
             "flexDirection":"row",
             "justifyContent":"flex-start",
             "alignItems":"center",
-            "paddingTop":"0px",
+            "paddingTop":"5px",
 
         }
     }

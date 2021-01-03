@@ -1,12 +1,8 @@
-import {gql} from "apollo-boost"
-import {  useQuery } from "@apollo/client";
-import React, { useState } from "react";
-import {TouchableOpacity, Image} from "react-native";
+import React from "react";
+import { Image} from "react-native";
 import styled from "styled-components"; 
 import constants from "../constants";
-import { USER_FRAGMENT } from "../fragments";
-import Loader from "./Loader";
-import { useSetUser, useUser } from "../AuthContext";
+import {  useUser } from "../AuthContext";
 import { CalculateDays } from "../utils";
 import { withNavigation } from "@react-navigation/compat";
 
@@ -29,21 +25,10 @@ const TextLight = styled.Text`
     color:#717171;
 `;
 
-export const ME = gql`
-    {
-        me{
-            ...UserParts
-        }
-    }
-    ${USER_FRAGMENT}
-`
-
 const UserProfile = ({navigation})=>{
-  console.log("UserProfile 다시하니?");
-
-    const user =  useUser();
+    console.log("Rendering HomeNavigation/UserProfile");
+    const user = useUser()
     return user&&(
-        
             <Touchable onPress={()=>{navigation.navigate("ProfileNavigation",{})}}>
             <Image 
                 resizeMode={"cover"}
@@ -52,7 +37,7 @@ const UserProfile = ({navigation})=>{
             />
             <MetaInto>
                 <TextBold>{user?.username}</TextBold>
-                <TextLight>{user?.preference.name} {`${CalculateDays(user?.typeStart)}`}일 째</TextLight>
+                <TextLight>{user?.preference.name} {CalculateDays(user?.typeStart)}일 째</TextLight>
             </MetaInto>
         </Touchable>
         )

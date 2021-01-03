@@ -9,23 +9,70 @@ import Loader from "./components/Loader";
 
 export const AuthContext = createContext(); 
 
-export const ME = gql`
+const post = []; 
+const initialMainPosts= {
+    "식품":
     {
-        me{
-            ...UserParts
-        }
-    }
-    ${USER_FRAGMENT}
-`
+        "대체육":{posts:[ ...post ]},
+        "빵":[],
+        "간편식·면류·통조림":[],
+        "음료":[] 
+    },
+    "식품":
+    {
+        "대체육":[ ...post ],
+        "빵":[],
+        "간편식·면류·통조림":[],
+        "음료":[] 
+    },
+    "식품":
+    {
+        "대체육":[ ...post ],
+        "빵":[],
+        "간편식·면류·통조림":[],
+        "음료":[] 
+    },
+}
+
+
+const initialMainTabPostsLoading= {
+    "식품":
+    {
+        "대체육":true,
+        "빵":true,
+        "간편식·면류·통조림":[],
+        "음료":[] 
+    },
+    "식품":
+    {
+        "대체육":[ ...post ],
+        "빵":[],
+        "간편식면류통조림":[],
+        "음료":[] 
+    },
+    "식품":
+    {
+        "대체육":[ ...post ],
+        "빵":[],
+        "간편식면류통조림":[],
+        "음료":[] 
+    },
+}
 
 export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
-
-    const [dynamicHeight,setDynamicHeight] = useState(0);
-
     const [isLoggedIn,setIsLoggedIn] = useState(isLoggedInProp); 
-    const [user,setUser]= useState({});
-    const [currentPost,setCurrentPost] =useState([]); 
 
+    const [user,setUser]= useState({});
+    const [ME_Loading,setMe_Loading] =useState(true); 
+
+    const [MainTabPosts,setMainTabPosts] = useState(undefined); 
+    const [MainTabPostsLoading,setMainTabPostsLoading] = useState(true); 
+
+    // 위 더미데이터 참고
+    const [MainPosts,setMainPosts] = useState([]);
+    const [MainPostsLoading,setMainPostsLoading] = useState([]);
+
+    const [currentPost,setCurrentPost] =useState([]); 
     const [avatar,setAvatar] = useState("");
     const [photoDisplay,setphotoDisplay] = useState([]);
     const [photomaterial,setphotoMaterial] = useState("");
@@ -54,32 +101,51 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     };
     return (
     <AuthContext.Provider value={{
-                
-        dynamicHeight,
-        setDynamicHeight,
-
-        avatar,
-        setAvatar,
-        photoDisplay,
-        setphotoDisplay,
-        photomaterial,
-        setphotoMaterial,
-        currentPost,setCurrentPost,user,SettingUser,isLoggedIn,logUserIn,logUserOut}}>
+        MainTabPosts,setMainTabPosts,
+        MainTabPostsLoading,setMainTabPostsLoading,
+        ME_Loading,setMe_Loading,
+        avatar,setAvatar,
+        photoDisplay,setphotoDisplay,
+        photomaterial,setphotoMaterial,
+        currentPost,setCurrentPost,
+        user,SettingUser,
+        isLoggedIn,logUserIn,
+        logUserOut
+        }}>
             {children}
     </AuthContext.Provider>
     )
 };
 
-export const useDynamicHeight=()=>{
-    const {dynamicHeight} =useContext(AuthContext);
-    return dynamicHeight;
+export const useMainTabPosts=()=>{
+    const {MainTabPosts} =useContext(AuthContext);
+    return MainTabPosts;
 }
 
-export const useSetDynamicHeight=()=>{
-    const {setDynamicHeight} = useContext(AuthContext);
-    return setDynamicHeight;
+export const usesetMainTabPosts=()=>{
+    const {setMainTabPosts} = useContext(AuthContext);
+    return setMainTabPosts;
 }
 
+export const useMainTabPostsLoading=()=>{
+    const {MainTabPostsLoading} =useContext(AuthContext);
+    return MainTabPostsLoading;
+}
+
+export const usesetMainTabPostsLoading=()=>{
+    const {setMainTabPostsLoading} = useContext(AuthContext);
+    return setMainTabPostsLoading;
+}
+
+export const useME_Loading=()=>{
+    const {ME_Loading} =useContext(AuthContext);
+    return ME_Loading;
+}
+
+export const usesetMe_Loading=()=>{
+    const {setMe_Loading} = useContext(AuthContext);
+    return setMe_Loading;
+}
 
 export const useAvatar=()=>{
     const {avatar} =useContext(AuthContext);

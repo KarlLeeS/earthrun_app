@@ -8,6 +8,7 @@ import { useMutation } from "@apollo/client";
 import { useSetUser, useUser } from "../AuthContext";
 import { withNavigation } from "@react-navigation/compat";
 import postStyle from "../postStyle";
+import Star, { Onestart } from "./Detail/BottomTab/Star";
 const isEven =(number)=>{
     return ((number%2)===0);
 }
@@ -18,8 +19,11 @@ const Touchable = styled.TouchableOpacity`
     margin-left:${props=>props.data.marginLeft};
     margin-right:${props=>props.data.marginRight};
     margin-bottom:${props=>props.data.marginBottom};
+    margin-top:${props=>props.data.marginTop?props.data.marginTop:"0px"};
     flex-direction:${props=>props.data.flexDirection};
     padding:${props=>props.data.padding};
+    border-bottom-color: ${props=>props.data.borderBottomColor?props.data.borderBottomColor:"#000"};
+    border-bottom-width:${props=>props.data.borderBottomWidth?props.data.borderBottomWidth:"0px"};
 `;
 
 const MetaInfo = styled.View`
@@ -71,11 +75,13 @@ const Scores = styled.View`
 
 const TextRating = styled.Text`
     color: #0069ca;
+    padding-left:3px;
 `;
 
 const TextReviewCount = styled.Text`
     color: #717171;
-    padding-left:5px;
+    padding-left:3px;
+    letter-spacing:-1px;
 `;
 
 const BottomWrapper =styled.View`
@@ -120,8 +126,9 @@ export const DELTE_UPLOAED_POST= gql`
 let styles; 
 
 const Post = ({
-    id,brand,files,preferences,weight,reviewCount,rating,price,name,isLiked,
-    index,marginRight,fromRecommend,editting=false,
+    id,brand,files,weight,
+    reviewCount,rating,price,name,isLiked,
+    index,editting=false,
     fromRecommendBottom,
     fromRecommendMyprofile,
     fromMainScreenNormalList,
@@ -239,7 +246,7 @@ const Post = ({
             <BottomWrapper>
                 <MetaInfo data={styles.MetaInfo} 
                  >
-                    <TextBrand data={styles.TextBrand}>{brand}</TextBrand>
+                    <TextBrand data={styles.TextBrand}>{brand.name}</TextBrand>
                     <TextProductName data={styles.TextProductName}>{name}</TextProductName>
                     <TextWieghtPrice data={styles.TextWieghtPrice}>
                         {
@@ -248,9 +255,9 @@ const Post = ({
                         }
                     </TextWieghtPrice>
                     <Scores data={styles.Scores}>
-                        {rating?(<NavIcon name={'md-star'} color={"#0069ca"} size={20} />):<></>}
-                        <TextRating>{rating?`${rating}`:""}</TextRating>
-                        <TextReviewCount>{reviewCount?`(${reviewCount})`:""}</TextReviewCount>
+                        <Onestart rating={rating?rating:0} size={20} />
+                        <TextRating>{rating?rating:0}</TextRating>
+                        <TextReviewCount>{reviewCount?`( ${reviewCount} )`:`( 0 )`}</TextReviewCount>
                     </Scores>
                 </MetaInfo>
                 {editting&&
