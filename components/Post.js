@@ -136,7 +136,9 @@ const Post = ({
     fromRecentlyViewed,
     fromMyUploaded,
     setList,
-    navigation
+    navigation,
+    childrenTab,
+    Postindex
 })=>{
     const setUser = useSetUser();
     const user= useUser();
@@ -231,7 +233,8 @@ const Post = ({
 
 
     return (styles&&user&&(
-        <Touchable onPress={()=>{navigation.navigate("DetailNavigation",{id:id})}}
+        <Touchable onPress={()=>{navigation.navigate("DetailNavigation",{childrenTab,
+            Postindex})}}
         data={styles.Touchable}
          >
             <Image

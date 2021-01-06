@@ -40,7 +40,7 @@ const MainTab = ()=>{
   const user = useUser(); 
   
   const {loading:done, data,refetch,error} = useQuery(GET_HOTEST,{ 
-    fetchPolicy:"no-cache",
+    fetchPolicy:"network-only",
     variables:{ userPrefer:user?.preference.name },
     onCompleted:()=>{ 
       setposts(data.RecommendHotest);

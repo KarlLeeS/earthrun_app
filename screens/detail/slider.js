@@ -6,7 +6,7 @@ import Swiper from "react-native-swiper";
 import constants from "../../constants";
 
 export default ({files,height=2.5}) => {
-  console.log({files});
+  // console.log({files});
   
   return (
     <Swiper
