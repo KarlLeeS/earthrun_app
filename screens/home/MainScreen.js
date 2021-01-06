@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import constants from "../../constants";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Image } from "react-native";
 import {GET_MAIN_TOP_TAB} from "../../fragments";
-import { useUser } from "../../AuthContext";
+import { useMainPosts, useMainPostsLoading, usesetMainposts, usesetMainPostsLoading, useUser } from "../../AuthContext";
 import Post from "../../components/Post";
 import NavIcon from "../../components/NavIcon";
 import {useQuery} from "@apollo/client";
@@ -15,6 +15,9 @@ import {useRoute} from '@react-navigation/native';
 import {Dimensions} from "react-native";
 import styles from "../../styles";
 import { getParentTab } from "../../utils";
+import produce from "immer"
+import { useEffect } from "react/cjs/react.development";
+
 
 const Container = styled.View`
   background-color : #fff;
@@ -79,106 +82,107 @@ const OrderMapper= {
 }
 
 const MainScreen = ({navigation})=>{
-  // const [height,setHeight] = useState();
   const user = useUser();
   const {name:childrenTab} = useRoute();
-  const parentTab = getParentTab(childrenTab);
+  console.log(`Rendering HomeNavigation/TabNavigation/${childrenTab}`);
 
-  console.log(childrenTab, parentTab);
+  const MainPosts =useMainPosts(childrenTab)  ;
+  const loading =useMainPostsLoading(childrenTab); 
+  const setMainposts =usesetMainposts(); 
+  const setLoading =usesetMainPostsLoading(); 
 
-  // const screen = Dimensions.get("screen");
-  // const window = Dimensions.get("window");
-
-  // const [posts,setPosts]= useState();
-  const [loaded,setLoaded] = useState(true);
 
   const [LeftToggle,setLeftToggle] = useState(false); 
-  const [RightToggle,setRightToggle] = useState(false); 
   const [certification,setCertification] = useState([]); 
-  const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
+  const [foodtypes,setFoodtypes] = useState(user?.foodtypes.map(e=>e.name)); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
 
-  const {loading,data,refetch,updateQuery}= useQuery(GET_MAIN_TOP_TAB,{ 
-    fetchPolicy:"no-cache",
+  const {data,loading:loadingQ}= useQuery(GET_MAIN_TOP_TAB,{ 
+    // fetchPolicy:"no-cache",
+    fetchPolicy:"network-only",
     variables:{
-      certification,preferences,orderingoption,
-      categories:childrenTab
+      certification,foodtypes,orderingoption,categories:childrenTab
     },
     onCompleted:()=>{
-      console.log(data.MainTopTab)
-      console.log("뭐여@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-      let index ; 
-      let realElement ; 
-      switch(orderingoption){
-        case "BYRATING":
-          index= data.MainTopTab.findIndex(e=>e.rating>0);
-          realElement = data.MainTopTab.splice(index); 
-          setPosts([...realElement,...data.MainTopTab])
-          break;
-        case "BYCLICK":
-          index= data.MainTopTab.findIndex(e=>e.totalHits>0);
-          realElement = data.MainTopTab.splice(index); 
-          setPosts([...realElement,...data.MainTopTab])
-
-          break;  
-        case "BYREVIEWCOUNT":
-          index= data.MainTopTab.findIndex(e=>e.reviewCount>0);
-          realElement = data.MainTopTab.splice(index); 
-          setPosts([...realElement,...data.MainTopTab])
-          break;  
-        case "BYLOWPRICE":
-        case "BYHIGHPRICE":
-        case "BYLATEST":
-          setPosts([...data.MainTopTab]);
-          break;  
+      console.log(`${childrenTab}의 api 호출이 완료되었습니다.`);
+      if(data.length!==0){
+        setMainposts(childrenTab,data.MainTopTab,false);
+      }else{
+        // setMainposts(childrenTab,[],true);
       }
-      setLoaded(true);
+      setLoading(childrenTab);
+
+      // let index ; 
+      // let realElement ; 
+      // switch(orderingoption){
+      //   case "BYRATING":
+      //     index= data.MainTopTab.findIndex(e=>e.rating>0);
+      //     realElement = data.MainTopTab.splice(index); 
+      //     setPosts([...realElement,...data.MainTopTab])
+      //     break;
+      //   case "BYCLICK":
+      //     index= data.MainTopTab.findIndex(e=>e.totalHits>0);
+      //     realElement = data.MainTopTab.splice(index); 
+      //     setPosts([...realElement,...data.MainTopTab])
+
+      //     break;  
+      //   case "BYREVIEWCOUNT":
+      //     index= data.MainTopTab.findIndex(e=>e.reviewCount>0);
+      //     realElement = data.MainTopTab.splice(index); 
+      //     setPosts([...realElement,...data.MainTopTab])
+      //     break;  
+      //   case "BYLOWPRICE":
+      //   case "BYHIGHPRICE":
+      //   case "BYLATEST":
+      //     setPosts([...data.MainTopTab]);
+      //     break;  
+      // }
       
     }
   });
+  console.log(MainPosts);
 
   const OnSubmit = async (preferenceList=[],certificationList=[],order=undefined)=>{
-    let preferenceResult, certificationResult,orderResult ;
-    if(preferenceList===undefined || preferenceList.length===0){
-      preferenceResult = user.preference.name;
-    }else{
-      preferenceResult=preferenceList
-    }
-    // TODO 이 컴포넌트도 조금 의심스럽네. 굳이 필요한가? 그냥 userContext로 다 받아서 해결해도 되는 부분아닌가?
-    if(certificationList===undefined || certificationList.length===0){
-      certificationResult = certification;
-    }else{
-      certificationResult = certificationList;
-    }
+    // let preferenceResult, certificationResult,orderResult ;
+    // if(preferenceList===undefined || preferenceList.length===0){
+    //   preferenceResult = user.preference.name;
+    // }else{
+    //   preferenceResult=preferenceList
+    // }
+    // // TODO 이 컴포넌트도 조금 의심스럽네. 굳이 필요한가? 그냥 userContext로 다 받아서 해결해도 되는 부분아닌가?
+    // if(certificationList===undefined || certificationList.length===0){
+    //   certificationResult = certification;
+    // }else{
+    //   certificationResult = certificationList;
+    // }
     
-    if(order===undefined){
-      orderResult = orderingoption;
-    }else{
-      orderResult = order;
-    }
+    // if(order===undefined){
+    //   orderResult = orderingoption;
+    // }else{
+    //   orderResult = order;
+    // }
     
-    console.log({preferenceResult});
-    console.log({certificationResult});
-    console.log({orderResult});
-    setLoaded(false);
-    await refetch({
-      certification:certificationResult,
-      preferences:preferenceResult,
-      orderingoption:orderResult,
-      categories:category
-    });
-    setLoaded(true);
-
-    console.log("##################################################",data.MainTopTab.length);
+    // console.log({preferenceResult});
+    // console.log({certificationResult});
+    // console.log({orderResult});
+    // setLoaded(false);
+    // await refetch({
+    //   certification:certificationResult,
+    //   foodtypes:preferenceResult,
+    //   orderingoption:orderResult,
+    //   categories:category
+    // });
+    // setLoaded(true);
 
   }
 
+  // console.log(MainPosts["식품"]["간식"]===undefined);
+
   return (
     <>
-      <Container 
-        RightToggle={RightToggle}>
+      <Container>
         { 
-          !loaded?
+          loading?
           (
             <Loading>
               <ActivityIndicator color={styles.blackColor}/>
@@ -187,8 +191,15 @@ const MainScreen = ({navigation})=>{
           (
             <>
               <FilteringTools>
-                  <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
-                    <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+                  <LeftFilterIcon onPress={()=>setLeftToggle(prev=>!prev)} >
+                    <Image 
+                      resizeMode="contain"
+                      style={{  
+                        width: constants.width/20, 
+                        height: constants.height /40 
+                      }}
+                      source={ require("../../assets/sort.png") }
+                    />
                     <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
                   </LeftFilterIcon>
                   {
@@ -205,28 +216,24 @@ const MainScreen = ({navigation})=>{
                         )
                   }
                   <RightFilterIcon onPress={()=> navigation.navigate("DetailFilter",{
-                    OnSubmit,certification,preferences,setPreferences,setCertification,setRightToggle
+                    OnSubmit,certification,foodtypes,setFoodtypes,setCertification,setRightToggle
                     })}>
-                    <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+                    <Image 
+                      resizeMode="contain"
+                      style={{  
+                        width: constants.width/20, 
+                        height: constants.height /40 
+                      }}
+                      source={ require("../../assets/filter.png") }
+                    />
                   </RightFilterIcon>
                 </FilteringTools>
               
-                {/* <Posts>
-                    {posts&&posts?.map(e=>(<Post key={e.id} fromMainScreenNormalList={true} {...e} />))}
-                </Posts> */}
-                {RightToggle?(
-                  <RightFilterWrapper>
-                      <RightFilter
-                        onSubmit={OnSubmit}
-                        certification={certification}
-                        preferences={preferences}
-                        setPreferences={setPreferences}
-                        setCertification={setCertification}
-                        setRightToggle={setRightToggle}
-                      />
-                  </RightFilterWrapper>
-                  ):(<></>)
-                }
+                <Posts>
+                    {MainPosts&&
+                    MainPosts.posts?.map((e,i)=>(<Post key={e.id} childrenTab={childrenTab} Postindex={i} fromMainScreenNormalList={true} {...e} />))}
+                </Posts>
+                
             </> 
           )
         }
@@ -236,4 +243,4 @@ const MainScreen = ({navigation})=>{
   )
 }
 
-export default withNavigation(MainScreen);
+export default (withNavigation(React.memo(MainScreen)));

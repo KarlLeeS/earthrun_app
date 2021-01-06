@@ -13,6 +13,7 @@ import styled from "styled-components";
 const SubTabFood = ({subTabs}) =>{
     return (      
         <Tab.Navigator
+            lazy="true"
             tabBarOptions={{
             tabBarIcon:({focused})=>{
             },

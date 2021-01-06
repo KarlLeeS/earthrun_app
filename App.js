@@ -52,6 +52,14 @@ export default function App() {
         require("./assets/icon_vegetype_grey_fish.png"),
         require("./assets/icon_vegetype_grey_leaf.png"),
         require("./assets/icon_vegetype_grey_milk.png"),
+        require("./assets/certi1.png"),
+        require("./assets/certi2.png"),
+        require("./assets/certi3.png"),
+        require("./assets/certi4.png"),
+        require("./assets/certi5.png"),
+        require("./assets/certi6.png"),
+        require("./assets/certi7.png"),
+        require("./assets/certi8.png"),
       ]);
 
       // device의 storage의 정보를 cache에 올림

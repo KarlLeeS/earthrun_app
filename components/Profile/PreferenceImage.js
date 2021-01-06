@@ -14,7 +14,7 @@ const Wrapper = styled.View`
 const SmallText = styled.Text`
   font-size:12px;
   letter-spacing:-1px;
-  color:${props=>props.empty===true?"transparent":"#000"}
+  color:${props=>props.empty===true?"transparent":"#000"};
 `;
 
 const PreferenceImage =({name,url,empty})=>{

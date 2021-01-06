@@ -1,25 +1,22 @@
-export const ConvertPreference=(arr)=>{
+export const ConvertFoodtypes=(arr)=>{
     const result= []; 
     arr.forEach((e,i)=>{
-        if(e===1){
+        if(e===true){
             switch(i){
                 case 0:
-                    result.push("비건");
+                    result.push("채식");
                     break;
                 case 1:
-                    result.push("락토");
+                    result.push("유제품");
                     break;
                 case 2:
-                    result.push("오보");
+                    result.push("달걀");
                     break;
                 case 3:
-                    result.push("락토오보");
+                    result.push("어류");
                     break;
                 case 4:
-                    result.push("페스코");
-                    break;
-                case 5:
-                    result.push("폴로");
+                    result.push("조류");
                     break;
             }
         }

@@ -9,12 +9,12 @@ export const POST_FRAGMENT = gql`
     id
     brand{
       name
-      description
+      # description
     }
     name
     weight
     price
-    isLiked
+    # isLiked
     preference{
         name
     },
@@ -26,9 +26,9 @@ export const POST_FRAGMENT = gql`
         url
     }
     rating
-    weeklyHits
-    totalHits
-    createdAt
+    # weeklyHits
+    # totalHits
+    # createdAt
   }
 `;
 
@@ -76,10 +76,6 @@ export const FULL_POST = gql`
     rating
     weeklyHits
     createdAt
-    preferences{
-      id
-      name
-    }
     certification{
       id
       name
@@ -93,6 +89,10 @@ export const FULL_POST = gql`
       id 
       name
       text
+      ischemical
+      foodtypes{
+        name
+      }
     }
     reviews{
       ...ReviewParts     
@@ -262,18 +262,18 @@ export const GET_HOTEST = gql`
 export const GET_MAIN_TOP_TAB= gql`
   query MainTopTab(
       $certification:[String]
-      $preferences:[String]
+      $foodtypes:[String]
       $orderingoption:String
       $categories:String!
   ){
     MainTopTab(
       certification:$certification
-      preferences:$preferences
+      foodtypes:$foodtypes
       orderingoption:$orderingoption
       categories:$categories
     ){
       ...PostParts
     }
   }
-  ${POST_FRAGMENT}
+  ${FULL_POST}
 `;
