@@ -89,7 +89,7 @@ export const FULL_POST = gql`
       id 
       name
       text
-      ischemical
+      isChemical
       foodtypes{
         name
       }

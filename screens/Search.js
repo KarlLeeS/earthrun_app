@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import NavIcon from "../components/NavIcon";
 import SearchBar from "../components/SearchBar";
@@ -15,6 +15,7 @@ import Post from "../components/Post";
 import LeftFilter from "../components/LeftFilter";
 import RightFilter from "../components/RightFilter";
 import { Alert, ScrollView } from "react-native";
+import { useRef } from "react";
 const Wrapper = styled.View`
     background-color : white;
     flex-direction:column;
@@ -123,14 +124,13 @@ const OrderMapper= {
 
 const Search=({routes,navigation})=>{
   const searchInput = useInput("");
-  
   const [LeftToggle,setLeftToggle] = useState(false); 
   const [RightToggle,setRightToggle] = useState(false); 
   const user = useUser();
   const [certification,setCertification] = useState([]); 
   const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
-
+  
   const {loading,data,refetch}= useQuery(GET_SEARCH_KEYWORDS,{
     variables:{
       certification:[],
@@ -140,7 +140,6 @@ const Search=({routes,navigation})=>{
     },
     fetchPolicy:"cache-and-network"
   });
-
   
 
   const onSubmit = async(_,preferenceList=[],certificationList=[],order=undefined)=>{

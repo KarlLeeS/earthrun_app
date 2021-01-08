@@ -102,14 +102,13 @@ const ReviewList = styled.View`
 
 const ReviewRating =({
     navigation,
-    // post.reviewCount=0,
-    // post.rating=0,
-    // post.reviews=[]
-})=>{
-    const post = useCurrentPost();
-    // console.log(post);
+    reviewCount,
+    rating,
+    reviews,
+})=>{   
+    console.log("rendering detail/subtab/review");
 
-    return (post&&
+    return(
         <Container>
             <UploadReview>
                 <TouchableOpacity onPress={()=>{navigation.navigate("UploadReview",{
@@ -124,9 +123,9 @@ const ReviewRating =({
                 <ReviewTopInfo>
                     <Left>
                         <LeftTop>
-                            <Title>총 리뷰 {post.reviewCount===null?0:post.reviewCount}개</Title>
-                            <Star rating={post.rating===null?0:post.rating} />
-                            <Rating>({post.rating===null?0: (post.rating).toFixed(1)})</Rating>
+                            <Title>총 리뷰 {reviewCount===null?0:reviewCount}개</Title>
+                            <Star rating={rating===null?0:rating} />
+                            <Rating>({rating===null?0: (rating).toFixed(1)})</Rating>
                         </LeftTop>
                         <LeftBottom>
                             {/* todo nstate를 통해서 바뀐 값 onPress를 통해 입력받고 리렌더링하기. */}
@@ -141,7 +140,7 @@ const ReviewRating =({
                 </ReviewTopInfo>
                 <ReviewList>
                     {
-                        post.reviews&&post.reviews[0]&&post.reviews.map(e=>(
+                        reviews.map(e=>(
                             <Review key={e.id}
                                 {...e}
                             />
@@ -151,6 +150,7 @@ const ReviewRating =({
             </TotalReview>
         </Container>
     )
+    
 }
 
 export default withNavigation(ReviewRating);

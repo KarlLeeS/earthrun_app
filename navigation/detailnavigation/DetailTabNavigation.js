@@ -9,10 +9,15 @@ import constants from "../../constants";
 const Tab = createMaterialTopTabNavigator();
 
 const DetailTabNavigation=({data:{
-    description,certification,rawMaterials,rawMaterialURL,
+    rawMaterials,
+    
+    description,certification,
+    rawMaterialURL,
     reviewCount,rating,reviews=[],
     offline,online
 }})=>{
+    
+
     return(
         <Tab.Navigator
             lazy="true"

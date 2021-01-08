@@ -112,6 +112,7 @@ const MainScreen = ({navigation})=>{
       }
       setLoading(childrenTab);
 
+      
       // let index ; 
       // let realElement ; 
       // switch(orderingoption){

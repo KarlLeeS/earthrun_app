@@ -51,6 +51,7 @@ const Lines = ({
     offline,
     online
 })=>{
+    console.log("rendering detail/subtab/Lines");
     return(
         <Container>
             <OffLine>
@@ -77,6 +78,8 @@ const Lines = ({
             </OnLine>
         </Container>
     )
+    
 }
+
 
 export default Lines;
