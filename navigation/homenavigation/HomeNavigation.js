@@ -34,7 +34,7 @@ const HomeNavigation=()=>{
                 <Notification />
               </Header>
               <Search>
-                <SearchBar fake />
+                <SearchBar fake={true} />
               </Search>
               <TabNavigation />
           </Container>

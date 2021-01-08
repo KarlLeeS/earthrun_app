@@ -1,5 +1,5 @@
 import React from "react"; 
-import { Image } from "react-native";
+import { Image, View } from "react-native";
 import styled from "styled-components"; 
 import constants from "../../../constants";
 import Certification from "./Certification";
@@ -33,18 +33,68 @@ const CertificationImages = styled.View`
 const RawMaterialWrap= styled.View`
     margin-top:20px;
     padding : 0px 15px;
-`; 
+    display:flex;
 
-const RawMaterialList = styled.View`
-    flex-direction:row;
-    justify-content:flex-start;
-    flex-wrap:wrap;
 `; 
 
 const RawMaterialImageWrap = styled.View`
     padding:15px;
 
 `; 
+
+const FoodtypeWrapper= styled.View`
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    /* width:${constants.width/2}; */
+    padding:20px 0;
+    margin-left:10px;
+    border-top-color: #f0f0f0;
+    border-top-width:1px;
+`;
+const MeterialList= styled.View`
+    display:flex;
+    flex-direction:row;
+    width:${constants.width/1.17-constants.width/7};
+    /* background-color:black; */
+    flex-wrap:wrap;
+    /* margin-top:10px; */
+`;
+
+const Meterial= styled.View`
+    padding:10px;
+    border-color:black;
+    border-width:1px;
+    border-radius:10px;
+    margin-right:7px;
+    margin-top:15px;
+  background-color:red;
+
+    box-shadow: 0px 1px 2px #A0A0A0;
+`;
+
+const MeterialText = styled.Text`
+    font-weight:bold;
+`;
+
+
+const FoodType= styled.View`
+    align-self:flex-start;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-right:20px;
+  width:${constants.width/7};
+  /* background-color:red; */
+`
+const FoodTypeText= styled.Text`
+  font-size:16px;
+  font-weight:bold;
+  width:${constants.width/5};
+  text-align:center;
+  /* margin */
+`
+
 
 
 const ProductInfo=({
@@ -53,6 +103,42 @@ const ProductInfo=({
     rawMaterials,
     rawMaterialURL
 })=>{
+    console.log("rendering detail/subtab/ProductInfo");
+    let leaf=[],milk=[],egg=[],fish=[],chicken=[], chemical=[];
+    const resfunc=()=>{
+
+        for(let i=0; i <rawMaterials.length;i++){
+            if(rawMaterials[i].isChemical) chemical.push(rawMaterials[i]); 
+            for(let j=0; j<rawMaterials[i].foodtypes.length;j++){
+                const t= rawMaterials[i].foodtypes[j].name; 
+                switch (t) {
+                    case "채식":
+                        // console.log(`이것은 ${t} 입니다. 그래서 leaf에 넣겠습니다`)
+
+                        leaf.push(rawMaterials[i])
+                        break;
+                    case "유제품":
+                        // console.log(`이것은 ${t} 입니다. 그래서 milk에 넣겠습니다`)
+                        milk.push(rawMaterials[i])
+                        break;
+                    case "달걀":
+                        // console.log(`이것은 ${t} 입니다. 그래서 egg에 넣겠습니다`)
+                        egg.push(rawMaterials[i])
+                        break;
+                    case "어류":
+                        // console.log(`이것은 ${t} 입니다. 그래서 fish에 넣겠습니다`)
+                        fish.push(rawMaterials[i])
+                        break;
+                    case "조류":
+                        // console.log(`이것은 ${t} 입니다. 그래서 chicken에 넣겠습니다`)
+                        chicken.push(rawMaterials[i])
+                        break;
+                }
+            }
+            
+        }
+    }
+    resfunc();
     return(
         <Container>
             <DescriptionWrap>
@@ -63,19 +149,206 @@ const ProductInfo=({
                 <Title>인증 마크</Title>
                 <CertificationImages>
                     {certification.map(e=>(
-                        <Certification key={e.id} url={e.url}/>
+                        <Certification key={e.id} name={e.name}/>
                     ))}
                 </CertificationImages>
             </CertificationWrap>
             <RawMaterialWrap>
-                <Title>원재료</Title>
-                <RawMaterialList>
-                    {
-                        rawMaterials.map(e=>(
-                            <Rawmaterial key={e.id} label={e.name}/>
-                        ))
-                    }
-                </RawMaterialList>
+                <Title>유의할 원재료</Title>
+                {
+                    leaf.length!==0 ?
+                        (
+                            <FoodtypeWrapper>
+                                <FoodType>
+                                    <Image resizeMode="contain"
+                                    style={{
+                                        width:constants.width/8,
+                                        height:constants.height/16,
+                                    }}
+                                    source={require('../../../assets/icon_vegetype_color_leaf.png')}
+                                    />
+                                    <View style={{justifyContent:"flex-end",alignItems:"center"}}>
+                                    <FoodTypeText>
+                                        채식
+                                    </FoodTypeText>
+                                    </View>
+                                </FoodType>
+                                <MeterialList>
+                                    {
+                                        leaf.map(e=>(
+                                            <Meterial>
+                                                <MeterialText>{e.name}</MeterialText>
+                                            </Meterial>
+                                        ))
+                                    }
+                                </MeterialList>
+                            </FoodtypeWrapper>
+                        )
+                    :<></>
+                }
+                
+                
+                {
+                    milk.length!==0 ?
+                        (
+                            <FoodtypeWrapper>
+                                <FoodType>
+                                    <Image resizeMode="contain"
+                                    style={{
+                                        width:constants.width/8,
+                                        height:constants.height/16,
+                                    }}
+                                    source={require('../../../assets/icon_vegetype_color_milk.png')}
+                                    />
+                                    <View style={{justifyContent:"flex-end",alignItems:"center"}}>
+                                    <FoodTypeText>
+                                        유제품
+                                    </FoodTypeText>
+                                    </View>
+                                </FoodType>
+                                <MeterialList>
+                                    {
+                                        milk.map(e=>(
+                                            <Meterial>
+                                                <MeterialText>{e.name}</MeterialText>
+                                            </Meterial>
+                                        ))
+                                    }
+                                </MeterialList>
+                            </FoodtypeWrapper>
+                        )
+                    :<></>
+                }
+                
+                
+                {
+                    egg.length!==0 ?
+                        (
+                            <FoodtypeWrapper>
+                                <FoodType>
+                                    <Image resizeMode="contain"
+                                    style={{
+                                        width:constants.width/8,
+                                        height:constants.height/16,
+                                    }}
+                                    source={require('../../../assets/icon_vegetype_color_egg.png')}
+                                    />
+                                    <View style={{justifyContent:"flex-end",alignItems:"center"}}>
+                                    <FoodTypeText>
+                                        달걀
+                                    </FoodTypeText>
+                                    </View>
+                                </FoodType>
+                                <MeterialList>
+                                    {
+                                        egg.map(e=>(
+                                            <Meterial>
+                                                <MeterialText>{e.name}</MeterialText>
+                                            </Meterial>
+                                        ))
+                                    }
+                                </MeterialList>
+                            </FoodtypeWrapper>
+                        )
+                    :<></>
+                }
+                
+                
+                {
+                    fish.length!==0 ?
+                        (
+                            <FoodtypeWrapper>
+                                <FoodType>
+                                    <Image resizeMode="contain"
+                                    style={{
+                                        width:constants.width/8,
+                                        height:constants.height/16,
+                                    }}
+                                    source={require('../../../assets/icon_vegetype_color_fish.png')}
+                                    />
+                                    <View style={{justifyContent:"flex-end",alignItems:"center"}}>
+                                    <FoodTypeText>
+                                        어류
+                                    </FoodTypeText>
+                                    </View>
+                                </FoodType>
+                                <MeterialList>
+                                    {
+                                        fish.map(e=>(
+                                            <Meterial>
+                                                <MeterialText>{e.name}</MeterialText>
+                                            </Meterial>
+                                        ))
+                                    }
+                                </MeterialList>
+                            </FoodtypeWrapper>
+                        )
+                    :<></>
+                }
+                
+                {
+                    chicken.length!==0 ?
+                        (
+                            <FoodtypeWrapper>
+                                <FoodType>
+                                    <Image resizeMode="contain"
+                                    style={{
+                                        width:constants.width/8,
+                                        height:constants.height/16,
+                                    }}
+                                    source={require('../../../assets/icon_vegetype_color_chicken.png')}
+                                    />
+                                    <View style={{justifyContent:"flex-end",alignItems:"center"}}>
+                                    <FoodTypeText>
+                                        조류
+                                    </FoodTypeText>
+                                    </View>
+                                </FoodType>
+                                <MeterialList>
+                                    {
+                                        chicken.map(e=>(
+                                            <Meterial>
+                                                <MeterialText>{e.name}</MeterialText>
+                                            </Meterial>
+                                        ))
+                                    }
+                                </MeterialList>
+                            </FoodtypeWrapper>
+                        )
+                    :<></>
+                }
+                
+                {
+                    chemical.length!==0 ?
+                        (
+                            <FoodtypeWrapper>
+                                <FoodType>
+                                    <Image resizeMode="contain"
+                                    style={{
+                                        width:constants.width/8,
+                                        height:constants.height/16,
+                                    }}
+                                    source={require('../../../assets/icon_chemical.png')}
+                                    />
+                                    <View style={{justifyContent:"flex-end",alignItems:"center"}}>
+                                    <FoodTypeText>
+                                        화학첨가물
+                                    </FoodTypeText>
+                                    </View>
+                                </FoodType>
+                                <MeterialList>
+                                    {
+                                        chemical.map(e=>(
+                                            <Meterial>
+                                                <MeterialText>{e.name}</MeterialText>
+                                            </Meterial>
+                                        ))
+                                    }
+                                </MeterialList>
+                            </FoodtypeWrapper>
+                        )
+                    :<></>
+                }
             </RawMaterialWrap>
             <RawMaterialImageWrap>
                 <Title>성분표</Title>

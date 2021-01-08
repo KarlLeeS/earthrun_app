@@ -11,10 +11,6 @@ import SubTabFashionOthers from "./subTabNavigation/SubTabFashionOthers";
 import SubTabNavigation from "./subTabNavigation/SubTabFashionOthers";
 
 
-// import tempMainScreen from "../../screens/home/MainScreen";
-
-// import styles from "../../styles";
-
 const Tab = createMaterialTopTabNavigator();
 
 export default () =>{

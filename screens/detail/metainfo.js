@@ -45,6 +45,7 @@ const Preference= styled.View`
 `
 const PreferenceText= styled.Text`
   color:#fff;
+  font-weight:bold;
   /* text-align:center; */
 `
 
@@ -52,10 +53,10 @@ const FoodTypes= styled.View`
   display:flex;
   flex-direction:row;
   justify-content:flex-start;
-  /* margin-right:100px; */
+  /* margin-left:100px; */
   width: ${constants.width-constants.width/7};
   height:100%;
-  margin-left:10px;
+  margin-left:20px;
 `
 const FoodType= styled.View`
   display:flex;
@@ -77,24 +78,34 @@ export default ({
   preference,
   foodtypes
 }) => {
-  console.log(
-    
-  brand,
-  name,
-  weight,
-  price,
-  preference,
-  foodtypes
-  );
-  
-  
-  const [] = useState(foodtypes.map(e=>e.name)); 
-  
-console.log(preference);
-  // {
-  //   const result = [0,0,0,0,0]; 
 
-  // }
+  const result = (()=>{
+    const res = new Array(5).fill(0); 
+    foodtypes.forEach(({name},i)=>{
+      switch (name) {
+        case "채식":
+          res[0]=1; 
+          break;
+      
+        case "유제품":
+          res[1]=1; 
+          break;
+    
+        case "달걀":
+          res[2]=1; 
+          break;
+  
+        case "어류":
+          res[3]=1; 
+          break;
+
+        case "조류":
+          res[4]=1; 
+          break;
+      }
+    })
+    return res; 
+  })();
 
   return(<Container>
       <Brand>{brand}</Brand>
@@ -114,9 +125,9 @@ console.log(preference);
                 width:constants.width/10,
                 height:constants.height/20
               }}
-              source={require("../../assets/icon_vegetype_grey_egg.png")}
+              source={result[0]===1?require('../../assets/icon_vegetype_color_leaf.png'):require('../../assets/icon_vegetype_grey_leaf.png')}
             />
-            <View style={{flex:1,justifyContent:"flex-end",alignItems:"center"}}>
+            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
               <FoodTypeText>
                 {foodtypes[0].name}
               </FoodTypeText>
@@ -130,9 +141,9 @@ console.log(preference);
                 width:constants.width/10,
                 height:constants.height/20
               }}
-              source={require("../../assets/icon_vegetype_grey_egg.png")}
+              source={result[1]===1?require('../../assets/icon_vegetype_color_milk.png'):require('../../assets/icon_vegetype_grey_milk.png')}
             />
-            <View style={{flex:1,justifyContent:"flex-end",alignItems:"center"}}>
+            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
               <FoodTypeText>
                 채식 
               </FoodTypeText>
@@ -146,9 +157,9 @@ console.log(preference);
                 width:constants.width/10,
                 height:constants.height/20
               }}
-              source={require("../../assets/icon_vegetype_grey_egg.png")}
+              source={result[2]===1?require('../../assets/icon_vegetype_color_egg.png'):require('../../assets/icon_vegetype_grey_egg.png')}
             />
-            <View style={{flex:1,justifyContent:"flex-end",alignItems:"center"}}>
+            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
               <FoodTypeText>
                 채식 
               </FoodTypeText>
@@ -162,9 +173,9 @@ console.log(preference);
                 width:constants.width/10,
                 height:constants.height/20
               }}
-              source={require("../../assets/icon_vegetype_grey_egg.png")}
+              source={result[3]===1?require('../../assets/icon_vegetype_color_fish.png'):require('../../assets/icon_vegetype_grey_fish.png')}
             />
-            <View style={{flex:1,justifyContent:"flex-end",alignItems:"center"}}>
+            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
               <FoodTypeText>
                 채식 
               </FoodTypeText>
@@ -179,14 +190,13 @@ console.log(preference);
                 width:constants.width/10,
                 height:constants.height/20
               }}
-              source={require("../../assets/icon_vegetype_grey_egg.png")}
+              source={result[4]===1?require('../../assets/icon_vegetype_color_chicken.png'):require('../../assets/icon_vegetype_grey_chicken.png')}
             />
-            <View style={{flex:1,justifyContent:"flex-end",alignItems:"center"}}>
+            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
               <FoodTypeText>
                 채식 
               </FoodTypeText>
             </View>
-            
           </FoodType>
 
         </FoodTypes>
