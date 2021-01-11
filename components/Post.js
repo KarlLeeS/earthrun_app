@@ -135,6 +135,7 @@ const Post = ({
     fromLike,
     fromRecentlyViewed,
     fromMyUploaded,
+    fromSearchScreen,
     setList,
     navigation,
     childrenTab,
@@ -143,7 +144,7 @@ const Post = ({
     const setUser = useSetUser();
     const user= useUser();
 
-    let styles=true; 
+    let styles=undefined; 
     
     if(fromRecommendBottom){
         styles = postStyle.fromRecommendBottom;
@@ -161,6 +162,9 @@ const Post = ({
         }
     }
 
+    if(fromSearchScreen){
+        styles=postStyle.fromSearchScreen;
+    }
     const [deleteRecentlyViewedPost] = useMutation(DELETE_RECENTLY_VIEWED_POST,{
         variables:{
             id,
