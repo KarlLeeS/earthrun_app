@@ -1,27 +1,29 @@
 
 import React, { forwardRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import NavIcon from "../components/NavIcon";
-import SearchBar from "../components/SearchBar";
-import useInput from "../hooks/useInput"
-import constants from "../constants";
+import NavIcon from "../../components/NavIcon";
+import SearchBar from "../../components/SearchBar";
+import useInput from "../../hooks/useInput"
 import {gql} from "apollo-boost"; 
 import { useQuery } from "@apollo/client";
-import { POST_FRAGMENT } from "../fragments";
-import Loader from "../components/Loader";
-import { useUser } from "../AuthContext";
-import MainScreen from "./home/MainScreen";
-import Post from "../components/Post";
-import LeftFilter from "../components/LeftFilter";
-import RightFilter from "../components/RightFilter";
+import { POST_FRAGMENT } from "../../fragments";
+import Loader from "../../components/Loader";
+import { useUser } from "../../AuthContext";
+// import MainScreen from "../home/MainScreen";
+// import Post from "../../components/Post";
+// import LeftFilter from "../../components/LeftFilter";
+// import RightFilter from "../../components/RightFilter";
 import { Alert, ScrollView } from "react-native";
 import { useRef } from "react";
+import SearchTabNavigation from "../../navigation/SearchTabNavigation";
+import constants from "../../constants";
+
 const Wrapper = styled.View`
     background-color : white;
     flex-direction:column;
     align-items:flex-start;
     width:${constants.width};
-    height:${constants.height};
+    /* height:${constants.height}; */
     justify-content:flex-start;
 `; 
 
@@ -43,6 +45,8 @@ const Contents = styled.View`
   flex-direction:row; 
   justify-content:flex-start;
   flex-wrap:wrap;
+  width:${constants.width};
+  height:${constants.height};
 `; 
 
 const Container = styled.View`
@@ -125,21 +129,20 @@ const OrderMapper= {
 const Search=({routes,navigation})=>{
   const searchInput = useInput("");
   const [LeftToggle,setLeftToggle] = useState(false); 
-  const [RightToggle,setRightToggle] = useState(false); 
   const user = useUser();
   const [certification,setCertification] = useState([]); 
   const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
   
-  const {loading,data,refetch}= useQuery(GET_SEARCH_KEYWORDS,{
-    variables:{
-      certification:[],
-      preferences:[],
-      orderingoption:"",
-      keyword:"FQ"
-    },
-    fetchPolicy:"cache-and-network"
-  });
+  // const {loading,data,refetch}= useQuery(GET_SEARCH_KEYWORDS,{
+  //   variables:{
+  //     certification:[],
+  //     preferences:[],
+  //     orderingoption:"",
+  //     keyword:"FQ"
+  //   },
+  //   fetchPolicy:"cache-and-network"
+  // });
   
 
   const onSubmit = async(_,preferenceList=[],certificationList=[],order=undefined)=>{
@@ -189,68 +192,72 @@ const Search=({routes,navigation})=>{
           </CancleText>
         </Header>
         <Contents>
-            {
-              loading
-              ?
-                (<Loader />)
-              :
-                (
-                  data.MainSearchBar[0]
-                  ?
-                    (
-                      <ScrollView>
-                        <Container RightToggle={RightToggle}>
-                          <FilteringTools>
-                            <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
-                              <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-                              <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
-                            </LeftFilterIcon>
-                            {
-                              LeftToggle?(
-                                <LeftFilterWrapper  >
-                                  <LeftFilter OnSubmit={onSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
-                                </LeftFilterWrapper>):(<></>)
-                            }
-                            
-                            <RightFilterIcon onPress={()=>setRightToggle(true)}>
-                              <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
-                            </RightFilterIcon>
-                          </FilteringTools>
-                          <Posts>
-                              {
-                                data.MainSearchBar.map((e,i)=>(
-                                  <Post key={e.id} fromMainScreenNormalList={true} {...e} />
-                                ))
-                              }
-                          </Posts>
-                        </Container>
-                        {RightToggle
-                          ?
-                            (
-                            <RightFilterWrapper>
-                                <RightFilter
-                                  onSubmit={onSubmit}
-                                  certification={certification}
-                                  preferences={preferences}
-                                  setPreferences={setPreferences}
-                                  setCertification={setCertification}
-                                  setRightToggle={setRightToggle}
-                                />
-                            </RightFilterWrapper>
-                            )
-                          :
-                            (<></>)
-                        } 
-                      </ScrollView>       
-                    )
-                  :
-                    (<Contents></Contents>)
-                )
-            }
-              
-                
+          <SearchTabNavigation />
         </Contents>
       </Wrapper>
     )
 }
 export default Search;
+
+
+
+// {
+//   loading
+//   ?
+//     (<Loader />)
+//   :
+//     (
+//       data.MainSearchBar[0]
+//       ?
+//         (
+//           <ScrollView>
+            // <Container RightToggle={RightToggle}>
+            //   <FilteringTools>
+            //     <LeftFilterIcon onPress={()=>setLeftToggle(true)} >
+            //       <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+            //       <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
+            //     </LeftFilterIcon>
+            //     {
+            //       LeftToggle?(
+            //         <LeftFilterWrapper  >
+            //           <LeftFilter OnSubmit={onSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+            //         </LeftFilterWrapper>):(<></>)
+            //     }
+                
+            //     <RightFilterIcon onPress={()=>setRightToggle(true)}>
+            //       <NavIcon name={'md-color-filter'} color={"#000"} size={30}/>
+            //     </RightFilterIcon>
+            //   </FilteringTools>
+            //   <Posts>
+            //       {
+            //         data.MainSearchBar.map((e,i)=>(
+            //           <Post key={e.id} fromMainScreenNormalList={true} {...e} />
+            //         ))
+            //       }
+            //   </Posts>
+            // </Container>
+            // {RightToggle
+            //   ?
+            //     (
+            //     <RightFilterWrapper>
+            //         <RightFilter
+            //           onSubmit={onSubmit}
+            //           certification={certification}
+            //           preferences={preferences}
+            //           setPreferences={setPreferences}
+            //           setCertification={setCertification}
+            //           setRightToggle={setRightToggle}
+            //         />
+            //     </RightFilterWrapper>
+            //     )
+            //   :
+            //     (<></>)
+            // } 
+//           </ScrollView>       
+//         )
+//       :
+//         (<Contents></Contents>)
+//     )
+// }
+  
+    

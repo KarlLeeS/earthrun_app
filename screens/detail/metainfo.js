@@ -2,6 +2,7 @@ import React from "react";
 import { Image, View } from "react-native";
 import { useState } from "react/cjs/react.development";
 import styled from "styled-components";
+import Foodtype from "../../components/Foodtype";
 import constants from "../../constants";
 
 
@@ -53,22 +54,10 @@ const FoodTypes= styled.View`
   display:flex;
   flex-direction:row;
   justify-content:flex-start;
-  /* margin-left:100px; */
   width: ${constants.width-constants.width/7};
   height:100%;
   margin-left:20px;
 `
-const FoodType= styled.View`
-  display:flex;
-  justify-content:space-between;
-  margin-right:20px;
-
-`
-const FoodTypeText= styled.Text`
-  font-size:12px;
-  font-weight:bold;
-`
-
 
 export default ({
   brand,
@@ -107,7 +96,8 @@ export default ({
     return res; 
   })();
 
-  return(<Container>
+  return(
+  <Container>
       <Brand>{brand}</Brand>
       <Name>{name}</Name>
       <WeightPrice>{weight}g / {price}원</WeightPrice>
@@ -118,87 +108,12 @@ export default ({
           </PreferenceText>
         </Preference>
         <FoodTypes>
-          <FoodType>
-            <Image
-              resizeMode="contain"
-              style={{
-                width:constants.width/10,
-                height:constants.height/20
-              }}
-              source={result[0]===1?require('../../assets/icon_vegetype_color_leaf.png'):require('../../assets/icon_vegetype_grey_leaf.png')}
-            />
-            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
-              <FoodTypeText>
-                {foodtypes[0].name}
-              </FoodTypeText>
-            </View>
-          </FoodType>
-
-          <FoodType>
-            <Image 
-              resizeMode="contain"
-              style={{
-                width:constants.width/10,
-                height:constants.height/20
-              }}
-              source={result[1]===1?require('../../assets/icon_vegetype_color_milk.png'):require('../../assets/icon_vegetype_grey_milk.png')}
-            />
-            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
-              <FoodTypeText>
-                채식 
-              </FoodTypeText>
-            </View>
-          </FoodType>
-
-          <FoodType>
-            <Image 
-              resizeMode="contain"
-              style={{
-                width:constants.width/10,
-                height:constants.height/20
-              }}
-              source={result[2]===1?require('../../assets/icon_vegetype_color_egg.png'):require('../../assets/icon_vegetype_grey_egg.png')}
-            />
-            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
-              <FoodTypeText>
-                채식 
-              </FoodTypeText>
-            </View>
-          </FoodType>
-
-          <FoodType>
-            <Image 
-              resizeMode="contain"
-              style={{
-                width:constants.width/10,
-                height:constants.height/20
-              }}
-              source={result[3]===1?require('../../assets/icon_vegetype_color_fish.png'):require('../../assets/icon_vegetype_grey_fish.png')}
-            />
-            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
-              <FoodTypeText>
-                채식 
-              </FoodTypeText>
-            </View>
-            
-          </FoodType>
-
-          <FoodType>
-            <Image 
-              resizeMode="contain"
-              style={{
-                width:constants.width/10,
-                height:constants.height/20
-              }}
-              source={result[4]===1?require('../../assets/icon_vegetype_color_chicken.png'):require('../../assets/icon_vegetype_grey_chicken.png')}
-            />
-            <View style={{justifyContent:"flex-end",alignItems:"center"}}>
-              <FoodTypeText>
-                채식 
-              </FoodTypeText>
-            </View>
-          </FoodType>
-
+          <Foodtype type={"채식"} status={result[0]} />
+          <Foodtype type={"유제품"} status={result[1]} />
+          <Foodtype type={"달걀"} status={result[2]} />
+          <Foodtype type={"어류"} status={result[3]} />
+          <Foodtype type={"조류"} status={result[4]} />
+          {/* <Foodtype type={"화학첨가물"} status={result[5]} /> */}
         </FoodTypes>
       </TypeInfo>
     </Container>

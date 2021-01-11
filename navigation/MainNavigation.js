@@ -6,7 +6,7 @@ import { StatusBar } from "react-native";
 import HomeNavigation from "./homenavigation/HomeNavigation";
 import DetailNavigation from "./detailnavigation/DetailNavigation";
 import ProfileNavigation from "./profilenavigation/ProfileNavigation"; 
-import Search from "../screens/Search";
+import Search from "../screens/Search/Search";
 import NormalList from "../screens/NormalList";
 import { useME_Loading, usesetMe_Loading, useSetUser } from "../AuthContext";
 import Loader from "../components/Loader";
@@ -18,6 +18,7 @@ import UploadPost from "../screens/profile/UploadPost";
 import SelectPhoto from "../screens/SelectPhoto";
 import DetailFilter from "../screens/DetailFilter";
 import CertificationInfo from "../screens/CertificationInfo";
+import MaterialDetail from "../screens/Search/MaterialDetail";
 
 
 const Stack = createStackNavigator();
@@ -68,6 +69,7 @@ const MainNavigation =  () => {
           <Stack.Screen options={{ headerShown: false }} name="ProfileNavigation" component={ProfileNavigation} />
           <Stack.Screen options={{ headerShown: false }} name="NormalList" component={NormalList} />
           <Stack.Screen options={{ headerShown: false }}  name="Search" component={Search} />
+          <Stack.Screen options={{ headerShown: false }}  name="MaterialDetail" component={MaterialDetail} />
           <Stack.Screen options={{ headerShown: true }} name="UploadReview" component={UploadReview} />
           <Stack.Screen options={{ headerShown: false}}  name="UploadPost" component={UploadPost} />
           <Stack.Screen options={{ headerShown: false}}  name="SelectPhoto" component={SelectPhoto} />

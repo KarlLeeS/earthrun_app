@@ -1,5 +1,5 @@
-import React from "react"; 
-import {Text,TextInput} from "react-native";
+import React, { useEffect, useRef } from "react"; 
+import {Keyboard, KeyboardAvoidingView, Text,TextInput} from "react-native";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import constants from "../constants";
@@ -13,13 +13,6 @@ const SearchContainer = styled.View`
   align-items:center;
 `;
 
-// const TSearchContainer = styled.Touchable`
-//   position:relative;
-//   flex-direction:row;
-//   align-items:center;
-// `;
-
-
 
 const Touchable= styled.TouchableOpacity`
   width:${constants.width};
@@ -27,45 +20,20 @@ const Touchable= styled.TouchableOpacity`
 `;
 
 
-const TextInputZ =React.forwardRef(
-  ({
-    onChange,
-onSubmit,
-value,
-fake
-  },ref)=>(
-    <TextInput
-        // ref={ref}
-        style={{
-          width: constants.width - 80,
-          height: constants.height/20,
-          backgroundColor: "#fff",
-          borderRadius: 5,
-          textAlign: "center",
-          borderColor:"#DBDBDB",
-          borderWidth:1,
-          
-        }}
-        returnKeyType="search"
-        onChangeText={onChange}
-        onEndEditing={onSubmit}
-        value={value}
-        placeholder={fake===true?"상품,브랜드,원재료,성분":"검색어를 입력해주세요"}
-        placeholderTextColor={"#000"}
-        />
-  )
-) 
 
-const SearchBar = (onChange, value, onSubmit,setValue, fake ,navigation) => {
+const SearchBar = ({onChange, value, onSubmit,setValue, fake ,navigation}) => {
   
   const searchBar = useRef();
 
-  useEffect(()=>{
   const defaultFocus=()=>{
+    // searchBar.current.focus();
     console.log(searchBar);
     // searchBar.current.focus();
   }
-  defaultFocus()
+  useEffect(()=>{
+    if(searchBar.current){
+      defaultFocus()
+    }
   },[])
 
   return (
@@ -76,9 +44,7 @@ const SearchBar = (onChange, value, onSubmit,setValue, fake ,navigation) => {
             <Ionicons style={{position:"absolute",zIndex:10,paddingLeft:15}}
             name={'md-search'} color={"#717171"} size={30} />
               <TextInput
-                ref={ref}
                 style={{
-                  
                   width: constants.width - 40,
                   height: constants.height/20,
                   backgroundColor: "#fff",
@@ -86,9 +52,14 @@ const SearchBar = (onChange, value, onSubmit,setValue, fake ,navigation) => {
                   textAlign: "left",
                   borderColor:"#DBDBDB",
                   borderWidth:1,
-                  paddingLeft:50
+                  paddingLeft:50,
+
                 }}
-                onTouchStart={()=>{navigation.navigate("Search",{})}}
+                // onTouchStart={()=>{navigation.navigate("Search",{})}}
+                // onPress={()=>Keyboard.dismiss()}
+                onTouchStart={()=>navigation.navigate("Search",{})}
+                showSoftInputOnFocus={false}
+                // onPress={()=>console.log(2)}
                 returnKeyType="search"
                 value={value}
                 placeholder={"상품,브랜드,원재료,성분"}
@@ -102,13 +73,27 @@ const SearchBar = (onChange, value, onSubmit,setValue, fake ,navigation) => {
         <SearchContainer>
           <Ionicons style={{position:"absolute",zIndex:10,paddingLeft:15}}
           name={'md-search'} color={"#717171"} size={30} />
-          <TextInputZ
-              ref={searchBar}
-              onChangeText={onChange}
-              onEndEditing={onSubmit}
-              value={value}
-              fake={fake}
-            />
+          <TextInput
+          style={{
+            width: constants.width - 80,
+            height: constants.height/20,
+            backgroundColor: "#fff",
+            borderRadius: 5,
+            textAlign: "left",
+            borderColor:"#DBDBDB",
+            borderWidth:1,
+            paddingLeft:50,
+            
+          }}
+          showSoftInputOnFocus={false}
+          returnKeyType="search"
+          onChangeText={onChange}
+          onEndEditing={()=>{Keyboard.dismiss()}}
+          onSubmit={onSubmit}
+          value={value}
+          placeholder={"상품,브랜드,원재료,성분"}
+          placeholderTextColor={"#000"}
+        />
           <Ionicons onPress={()=>{ setValue("") }} style={{position:"absolute",zIndex:10,right:10,paddingRight:15}} name={"md-refresh"} color={"#000"} size={24} />
         </SearchContainer>
       )
@@ -116,4 +101,4 @@ const SearchBar = (onChange, value, onSubmit,setValue, fake ,navigation) => {
 }
   
   
-export default React.forwardRef(withNavigation(SearchBar ));
+export default withNavigation(SearchBar);
