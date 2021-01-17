@@ -8,7 +8,7 @@ import {gql} from "apollo-boost";
 import { useQuery } from "@apollo/client";
 import { POST_FRAGMENT } from "../../fragments";
 import Loader from "../../components/Loader";
-import { useUser } from "../../AuthContext";
+import { usesearchInput, useUser } from "../../AuthContext";
 // import MainScreen from "../home/MainScreen";
 // import Post from "../../components/Post";
 // import LeftFilter from "../../components/LeftFilter";
@@ -127,13 +127,11 @@ const OrderMapper= {
 }
 
 const Search=({routes,navigation})=>{
-  const searchInput = useInput("");
-  const [LeftToggle,setLeftToggle] = useState(false); 
+  console.log("rendering Search ")
+  // const searchInput = usesearchInput();
   const user = useUser();
-  const [certification,setCertification] = useState([]); 
-  const [preferences,setPreferences] = useState([`${user?.preference?.name}`]); 
-  const [orderingoption,setOrderingoption] = useState("BYRATING");
-  
+  const searchInput= useInput("");
+
   // const {loading,data,refetch}= useQuery(GET_SEARCH_KEYWORDS,{
   //   variables:{
   //     certification:[],
@@ -147,41 +145,42 @@ const Search=({routes,navigation})=>{
 
   const onSubmit = async(_,preferenceList=[],certificationList=[],order=undefined)=>{
     
-    let preferenceResult, certificationResult,orderResult ;
+    // let preferenceResult, certificationResult,orderResult ;
 
-    if(preferenceList===undefined || preferenceList.length===0){
-      preferenceResult = preferences;
-    }else{
-      preferenceResult=preferenceList
-    }
+    // if(preferenceList===undefined || preferenceList.length===0){
+    //   preferenceResult = preferences;
+    // }else{
+    //   preferenceResult=preferenceList
+    // }
 
-    if(certificationList===undefined || certificationList.length===0){
-      certificationResult = certification;
-    }else{
-      certificationResult = certificationList;
-    }
+    // if(certificationList===undefined || certificationList.length===0){
+    //   certificationResult = certification;
+    // }else{
+    //   certificationResult = certificationList;
+    // }
     
-    if(order===undefined){
-      orderResult = orderingoption;
-    }else{
-      orderResult = order;
-    }
+    // if(order===undefined){
+    //   orderResult = orderingoption;
+    // }else{
+    //   orderResult = order;
+    // }
 
-    console.log(searchInput.value);
-    console.log({preferenceResult});
-    console.log({certificationResult});
-    console.log({orderResult});
-    if(searchInput.value===""){
-      Alert.alert("검색어를 입력하세요");
-      return;
-    }
-    await refetch({
-      certification:certificationResult,
-      preferences:user?.preference.name,
-      orderingoption:orderResult,
-      keyword:searchInput.value
-    })
+    // console.log(searchInput.value);
+    // console.log({preferenceResult});
+    // console.log({certificationResult});
+    // console.log({orderResult});
+    // if(searchInput.value===""){
+    //   Alert.alert("검색어를 입력하세요");
+    //   return;
+    // }
+    // await refetch({
+    //   certification:certificationResult,
+    //   preferences:user?.preference.name,
+    //   orderingoption:orderResult,
+    //   keyword:searchInput.value
+    // })
   }
+
 
   return (
       <Wrapper>

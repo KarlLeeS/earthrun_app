@@ -6,6 +6,8 @@ import constants from "../constants";
 import {Ionicons} from "@expo/vector-icons";
 import { withNavigation } from "@react-navigation/compat";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSearchBarSubmit, usesearchInput } from "../AuthContext";
+import useInput from "../hooks/useInput";
 
 const SearchContainer = styled.View`
   position:relative;
@@ -15,32 +17,22 @@ const SearchContainer = styled.View`
 
 
 const Touchable= styled.TouchableOpacity`
-  width:${constants.width};
-  background-color:red;
+position:relative;
+flex-direction:row;
+align-items:center;
 `;
 
 
 
-const SearchBar = ({onChange, value, onSubmit,setValue, fake ,navigation}) => {
-  
-  const searchBar = useRef();
-
-  const defaultFocus=()=>{
-    // searchBar.current.focus();
-    console.log(searchBar);
-    // searchBar.current.focus();
-  }
-  useEffect(()=>{
-    if(searchBar.current){
-      defaultFocus()
-    }
-  },[])
-
+const SearchBar = ({  fake ,navigation}) => {
+  const SearchBarSubmit = useSearchBarSubmit()
+  // const searchInput = usesearchInput();
+  const searchInput = useInput();
   return (
     fake
     ?
       (
-          <SearchContainer>
+          <Touchable onPress={()=>navigation.navigate("Search",{})}>
             <Ionicons style={{position:"absolute",zIndex:10,paddingLeft:15}}
             name={'md-search'} color={"#717171"} size={30} />
               <TextInput
@@ -55,17 +47,17 @@ const SearchBar = ({onChange, value, onSubmit,setValue, fake ,navigation}) => {
                   paddingLeft:50,
 
                 }}
+                editable={false}
                 // onTouchStart={()=>{navigation.navigate("Search",{})}}
                 // onPress={()=>Keyboard.dismiss()}
-                onTouchStart={()=>navigation.navigate("Search",{})}
+                
                 showSoftInputOnFocus={false}
                 // onPress={()=>console.log(2)}
                 returnKeyType="search"
-                value={value}
                 placeholder={"상품,브랜드,원재료,성분"}
                 placeholderTextColor={"#000"}
                 />
-          </SearchContainer>
+          </Touchable>
 
       )
     :
@@ -74,27 +66,33 @@ const SearchBar = ({onChange, value, onSubmit,setValue, fake ,navigation}) => {
           <Ionicons style={{position:"absolute",zIndex:10,paddingLeft:15}}
           name={'md-search'} color={"#717171"} size={30} />
           <TextInput
-          style={{
-            width: constants.width - 80,
-            height: constants.height/20,
-            backgroundColor: "#fff",
-            borderRadius: 5,
-            textAlign: "left",
-            borderColor:"#DBDBDB",
-            borderWidth:1,
-            paddingLeft:50,
-            
-          }}
-          showSoftInputOnFocus={false}
-          returnKeyType="search"
-          onChangeText={onChange}
-          onEndEditing={()=>{Keyboard.dismiss()}}
-          onSubmit={onSubmit}
-          value={value}
-          placeholder={"상품,브랜드,원재료,성분"}
-          placeholderTextColor={"#000"}
+            style={{
+              width: constants.width - 80,
+              height: constants.height/20,
+              backgroundColor: "#fff",
+              borderRadius: 5,
+              textAlign: "left",
+              borderColor:"#DBDBDB",
+              borderWidth:1,
+              paddingLeft:50,
+              
+            }}
+            // showSoftInputOnFocus={false}
+            autoFocus
+            returnKeyType="search"
+            onChangeText={searchInput.onChange}
+            // onEndEditing={SearchBarSubmit}
+            onEndEditing={()=>{
+              Keyboard.dismiss();
+            }}
+            onSubmit={()=>{
+              SearchBarSubmit(undefined,undefined,undefined,searchInput.value)
+             }}
+            value={searchInput.value}
+            placeholder={"상품,브랜드,원재료,성분"}
+            placeholderTextColor={"#000"}
         />
-          <Ionicons onPress={()=>{ setValue("") }} style={{position:"absolute",zIndex:10,right:10,paddingRight:15}} name={"md-refresh"} color={"#000"} size={24} />
+          <Ionicons onPress={()=>{ searchInput.setValue("") }} style={{position:"absolute",zIndex:10,right:10,paddingRight:15}} name={"md-refresh"} color={"#000"} size={24} />
         </SearchContainer>
       )
   );

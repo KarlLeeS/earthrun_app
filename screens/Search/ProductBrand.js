@@ -1,8 +1,12 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { ScrollView ,Image} from 'react-native';
 import styled from "styled-components"; 
 import constants from '../../constants';
 import Post from "../../components/Post"
+import { useSearchBarSubmit, usesearchInput, useSearchPost, useUser } from '../../AuthContext';
+import LeftFilter from '../../components/LeftFilter';
+import { withNavigation } from "@react-navigation/compat";
+import { GET_MAIN_SEARCH_BAR } from '../../fragments';
 
 const Container = styled.View`
     width:${constants.width};
@@ -119,7 +123,37 @@ const Icon = styled.Text`
     font-size:16px;
 `;
 
+
+const FilteringTools = styled.View`
+  flex-direction:row;
+  justify-content:space-between;
+  margin: 15px 20px 10px 20px;
+`;
+
+const LeftFilterIcon = styled.TouchableOpacity`
+  flex-direction:row; 
+  align-items:center;
+  position:relative;
+`;
+
+const LeftFilterWrapper =styled.View`
+  position:absolute;
+  top:5;
+  left:25;
+  z-index:10;
+`;
+
+const RightFilterIcon = styled.TouchableOpacity`
+`;
+
+const LeftFilterText = styled.Text`
+  margin-left:10px;
+  font-size:14px;
+`;
+
+
 const Posts = styled.View`
+  min-height:${constants.height};
   flex-direction:row; 
   justify-content:flex-start;
   flex-wrap:wrap;
@@ -127,13 +161,102 @@ const Posts = styled.View`
 
 
 
-const ProductBrand = (props) => {
+const OrderMapper= {
+    "BYRATING":"별점 순",
+    "BYCLICK":"조회 순",
+    "BYREVIEWCOUNT":"리뷰 순",
+    "BYLOWPRICE":"낮은 가격순",
+    "BYHIGHPRICE":"높은 가격순",
+    "BYLATEST":"최근출시 순",
+  }
+
+
+  
+//   GET_MAIN_SEARCH_BAR
+
+const ProductBrand = ({
+    // onSubmit=(()=>{}),
+    navigation
+}) => {
+    const user = useUser();
+    const SearchBarSubmit = useSearchBarSubmit();
+    const searchInput = usesearchInput();
+    const posts = useSearchPost();
+    const [LeftToggle,setLeftToggle] = useState(false); 
+    const [certification,setCertification] = useState([]); 
+    console.log(user?.foodtypes.map(e=>e.name));
+    const [foodtypes,setFoodtypes] = useState(user?.foodtypes.map(e=>e.name)); 
+    const [orderingoption,setOrderingoption] = useState("BYRATING");
 
     const color = "#fff";
     const backgroundColor = "#00cf85";
-    const onSubmit= ()=>{
-        console.log("이 키워드로 검색");
+    const onSubmit= (FoodtypesResult,certificationResult,orderingType)=>{
+        console.log({FoodtypesResult});
+        console.log({certificationResult});
+    console.log({orderingType});
+        console.log({searchInput});
+        let orderingForSubmit,foodtypeForSubmit,certiForSubmit; 
+        if(FoodtypesResult.length===0){
+            foodtypeForSubmit = foodtypes;
+        }
+        if(certificationResult.length===0){
+            certiForSubmit =certification;
+        }
+        if(orderingType===undefined) {
+            orderingForSubmit = orderingoption; 
+        }
+        SearchBarSubmit(foodtypeForSubmit,certiForSubmit,orderingForSubmit);
+        // TODO submit 로직 짜기
+        // const foodtypeForSubmit = 
+        // const certiForSubmit = 
+        // console.log("이 키워드로 검색");
     }
+
+    
+//   const {data,loading:loadingQ}= useQuery(GET_MAIN_SEARCH_BAR,{ 
+//     // fetchPolicy:"no-cache",
+//     fetchPolicy:"network-only",
+//     variables:{
+//         certification,foodtypes,orderingoption,keyword
+//     },
+//     onCompleted:()=>{
+//       console.log(`${childrenTab}의 api 호출이 완료되었습니다.`);
+//       if(data.length!==0){
+//         setMainposts(childrenTab,data.MainTopTab,false);
+//       }else{
+//         // setMainposts(childrenTab,[],true);
+//       }
+//       setLoading(childrenTab);
+
+      
+//       // let index ; 
+//       // let realElement ; 
+//       // switch(orderingoption){
+//       //   case "BYRATING":
+//       //     index= data.MainTopTab.findIndex(e=>e.rating>0);
+//       //     realElement = data.MainTopTab.splice(index); 
+//       //     setPosts([...realElement,...data.MainTopTab])
+//       //     break;
+//       //   case "BYCLICK":
+//       //     index= data.MainTopTab.findIndex(e=>e.totalHits>0);
+//       //     realElement = data.MainTopTab.splice(index); 
+//       //     setPosts([...realElement,...data.MainTopTab])
+
+//       //     break;  
+//       //   case "BYREVIEWCOUNT":
+//       //     index= data.MainTopTab.findIndex(e=>e.reviewCount>0);
+//       //     realElement = data.MainTopTab.splice(index); 
+//       //     setPosts([...realElement,...data.MainTopTab])
+//       //     break;  
+//       //   case "BYLOWPRICE":
+//       //   case "BYHIGHPRICE":
+//       //   case "BYLATEST":
+//       //     setPosts([...data.MainTopTab]);
+//       //     break;  
+//       // }
+      
+//     }
+//   });
 
     // const beforeSearch= true;
     const beforeSearch= false;
@@ -141,7 +264,7 @@ const ProductBrand = (props) => {
         <Container>
         <ScrollView>
             {
-                beforeSearch
+                posts===undefined
                 ?
                     (
                         <>
@@ -208,63 +331,86 @@ const ProductBrand = (props) => {
                         <>
                             <SectionFirst>
                                 <Title>브랜드</Title>
-                                <Brand>
-                                    <ImageWrapper>
-                                        <Image 
-                                        resizeMode={"cover"}
-                                        style={{
-                                            width:constants.width/6,             
-                                            height:constants.height/12, 
-                                            borderRadius: 100,
-                                            borderColor:"#dbdbdb",
-                                            borderWidth:1
-                                        }}
-                                        source={require("../../assets/certi8.png")}
-                                        />
-                                    </ImageWrapper>
-                                    
-                                    <Description>
-                                        <DescriptionWrapper>
-                                            <MainText>더브레드블루</MainText>
-                                            <SubText numberOfLines={2}>더브레드블루는 사랑입니다.더브레드블루는 사랑입니다.더브레드블루는 사랑입니다더브레드블루는 사랑입니다.더브레드블루는 사랑입니다.더브레드블루는 사랑입니다.</SubText>
-                                        </DescriptionWrapper>
-                                        <Link>
-                                            <Icon>이동</Icon>
-                                        </Link>
+                                    <Brand>
+                                        <ImageWrapper>
+                                            <Image 
+                                            resizeMode={"cover"}
+                                            style={{
+                                                width:constants.width/6,             
+                                                height:constants.height/12, 
+                                                borderRadius: 100,
+                                                borderColor:"#dbdbdb",
+                                                borderWidth:1
+                                            }}
+                                            source={require("../../assets/certi8.png")}
+                                            />
+                                        </ImageWrapper>
                                         
-                                    </Description>
-                                </Brand>
+                                        <Description>
+                                            <DescriptionWrapper>
+                                                <MainText>더브레드블루</MainText>
+                                                <SubText numberOfLines={2}>더브레드블루는 사랑입니다.더브레드블루는 사랑입니다.더브레드블루는 사랑입니다더브레드블루는 사랑입니다.더브레드블루는 사랑입니다.더브레드블루는 사랑입니다.</SubText>
+                                            </DescriptionWrapper>
+                                            <Link>
+                                                <Icon>이동</Icon>
+                                            </Link>
+                                            
+                                        </Description>
+                                    </Brand>
                             </SectionFirst>
                             
                             
                             <SectionLast>
-                                <Title>상품 87건</Title>
-                                
+                                <Title>상품 {posts.length} 건</Title>
+
+                                <FilteringTools>
+                                    <LeftFilterIcon onPress={()=>setLeftToggle(prev=>!prev)} >
+                                        <Image 
+                                        resizeMode="contain"
+                                        style={{  
+                                            width: constants.width/20, 
+                                            height: constants.height /40 
+                                        }}
+                                        source={ require("../../assets/sort.png") }
+                                        />
+                                        <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
+                                    </LeftFilterIcon>
+                                    {
+                                        LeftToggle
+                                        ?
+                                            (
+                                            <LeftFilterWrapper  >
+                                                <LeftFilter OnSubmit={onSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+                                            </LeftFilterWrapper>
+                                            )
+                                        :
+                                            (
+                                            <></>
+                                            )
+                                    }
+                                    <RightFilterIcon onPress={()=> navigation.navigate("DetailFilter",{
+                                        onSubmit,certification,foodtypes,setFoodtypes,setCertification
+                                        })}>
+                                        <Image 
+                                        resizeMode="contain"
+                                        style={{  
+                                            width: constants.width/20, 
+                                            height: constants.height /40 
+                                        }}
+                                        source={ require("../../assets/filter.png") }
+                                        />
+                                    </RightFilterIcon>
+                                </FilteringTools>
+
+
                                 <Posts>
-                                    <Post 
-                                    id={1}
-                                    brand={{name:"브랜드"}}
-                                    files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}
-                                    weight={1000}
-                                    reviewCount={10}
-                                    rating={4.8}
-                                    price={123}
-                                    name={"제품"}
-                                    index={1}
-                                    fromSearchScreen={true}
-                                    />
-                                    <Post id={1} brand={{name:"브랜드"}}files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}weight={1000}reviewCount={10}rating={2.3}price={123}name={"제품"}index={1}fromSearchScreen={true}/>
-                                    <Post id={1} brand={{name:"브랜드"}}files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}weight={1000}reviewCount={10}rating={2.3}price={123}name={"제품"}index={1}fromSearchScreen={true}/>
-                                    <Post id={1} brand={{name:"브랜드"}}files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}weight={1000}reviewCount={10}rating={2.3}price={123}name={"제품"}index={1}fromSearchScreen={true}/>
-                                    <Post id={1} brand={{name:"브랜드"}}files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}weight={1000}reviewCount={10}rating={2.3}price={123}name={"제품"}index={1}fromSearchScreen={true}/>
-                                    <Post id={1} brand={{name:"브랜드"}}files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}weight={1000}reviewCount={10}rating={2.3}price={123}name={"제품"}index={1}fromSearchScreen={true}/>
-                                    <Post id={1} brand={{name:"브랜드"}}files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}weight={1000}reviewCount={10}rating={2.3}price={123}name={"제품"}index={1}fromSearchScreen={true}/>
-                                    <Post id={1} brand={{name:"브랜드"}}files={[{url:"https://cdn.pixabay.com/photo/2020/12/19/03/27/person-5843476_960_720.jpg"}]}weight={1000}reviewCount={10}rating={2.3}price={123}name={"제품"}index={1}fromSearchScreen={true}/>
-                                {/* {
-                                    data.MainSearchBar.map((e,i)=>(
-                                    <Post key={e.id} fromMainScreenNormalList={true} {...e} />
-                                    ))
-                                } */}
+                                    {posts.map((e,i)=>(
+                                        <Post 
+                                            post={e}
+                                            index={i}
+                                            fromSearchScreen={true}
+                                        />
+                                    ))}
                             </Posts>
                             </SectionLast>
 
@@ -278,4 +424,4 @@ const ProductBrand = (props) => {
 
 }
 
-export default ProductBrand;
+export default withNavigation(ProductBrand);

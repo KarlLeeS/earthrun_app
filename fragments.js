@@ -255,7 +255,7 @@ export const GET_HOTEST = gql`
         ...PostParts
       }
     }
-    ${POST_FRAGMENT}
+    ${FULL_POST}
 `; 
 
 
@@ -277,3 +277,57 @@ export const GET_MAIN_TOP_TAB= gql`
   }
   ${FULL_POST}
 `;
+
+export const GET_MAIN_SEARCH_BAR= gql`
+mutation MainSearchBar(
+    $certification:[String]!
+    $foodtypes:[String]!
+    $orderingoption:String
+    $keyword:String!
+){
+    MainSearchBar(
+      certification:$certification
+      foodtypes:$foodtypes
+      orderingoption:$orderingoption
+      keyword:$keyword
+    ){
+      ...PostParts
+    }
+}
+${FULL_POST}
+`;
+
+
+
+export const RAWMATERIAL_FRAGMENT = gql`
+  fragment RawMaterialParts on RawMaterial {
+    id
+    name
+    text
+    foodtypes{
+      id
+      name
+    }
+    isChemical
+    nameEng
+    jaum
+  }
+`;
+
+
+
+export const GET_MATERIAL_SEARCH= gql`
+mutation MaterialSearch(
+    $jaum:String
+    $keyword:String
+){
+    MaterialSearch(
+      jaum:$jaum
+      keyword:$keyword
+    ){
+      ...RawMaterialParts
+    }
+}
+${RAWMATERIAL_FRAGMENT}
+`;
+

@@ -6,30 +6,17 @@ import { ActivityIndicator, Image } from "react-native";
 import {GET_MAIN_TOP_TAB} from "../../fragments";
 import { useMainPosts, useMainPostsLoading, usesetMainposts, usesetMainPostsLoading, useUser } from "../../AuthContext";
 import Post from "../../components/Post";
-import NavIcon from "../../components/NavIcon";
 import {useQuery} from "@apollo/client";
 import LeftFilter from "../../components/LeftFilter";
-import RightFilter from "../../components/RightFilter";
 import { withNavigation } from "@react-navigation/compat";
 import {useRoute} from '@react-navigation/native';
-import {Dimensions} from "react-native";
 import styles from "../../styles";
-import { getParentTab } from "../../utils";
-import produce from "immer"
-import { useEffect } from "react/cjs/react.development";
-
 
 const Container = styled.View`
   background-color : #fff;
   position:relative;
   flex:1;
-`;
-
-const RightFilterWrapper = styled.View`
-  position:absolute;
-  left:0;
-  z-index:10;
-  top:0;
+  min-height:${constants.height};
 `;
 
 const Posts = styled.View`
@@ -141,7 +128,7 @@ const MainScreen = ({navigation})=>{
       
     }
   });
-  console.log(MainPosts);
+  // console.log(MainPosts);
 
   const OnSubmit = async (preferenceList=[],certificationList=[],order=undefined)=>{
     // let preferenceResult, certificationResult,orderResult ;
@@ -217,7 +204,7 @@ const MainScreen = ({navigation})=>{
                         )
                   }
                   <RightFilterIcon onPress={()=> navigation.navigate("DetailFilter",{
-                    OnSubmit,certification,foodtypes,setFoodtypes,setCertification,setRightToggle
+                    OnSubmit,certification,foodtypes,setFoodtypes,setCertification
                     })}>
                     <Image 
                       resizeMode="contain"
@@ -232,7 +219,7 @@ const MainScreen = ({navigation})=>{
               
                 <Posts>
                     {MainPosts&&
-                    MainPosts.posts?.map((e,i)=>(<Post key={e.id} childrenTab={childrenTab} Postindex={i} fromMainScreenNormalList={true} {...e} />))}
+                    MainPosts.posts?.map((e,i)=>(<Post key={e.id} fromMainScreenNormalList={true} post={e} />))}
                 </Posts>
                 
             </> 

@@ -28,6 +28,7 @@ const RecommendContainer = styled.View`
 
 const Grid =styled.View`
   flex-direction:column; 
+  min-height:${constants.height}; 
 `;
 
 
@@ -61,14 +62,14 @@ const MainTab = ()=>{
             <Grid>
               {
                 posts.map(e=>(
-                  <Post key={e.id} fromRecommendBottom={true} {...e} />
+                  <Post key={e.id} fromRecommendBottom={true} post={e} />
                 ))
               }
             </Grid>
           </ScrollView>
       </RecommendContainer>
-
     </Container>
+
 }
 
 export default MainTab;

@@ -6,7 +6,7 @@ import RightFilterButton from "../components/Detail/BottomTab/RightFilterButton"
 import NavIcon from "../components/NavIcon";
 import constants from "../constants";
 import { ConvertCertification, ConvertFoodtypes } from "../utils";
-
+import {initFoodtypes} from "../utils"
 
 const FoodtypeButton = styled(RightFilterButton)`
     background-color: #00CF85;
@@ -122,72 +122,46 @@ const Foodtype = styled.TouchableOpacity`
 
 
 const initCertiS=(certification)=>{
-    const tempArr= [0,0,0,0,0,0];
+    const tempArr= [false,false,false,false,false,false];
     certification.forEach(e=>{
         switch(e){
             case "한국 비건인증원":
-                tempArr[0]=1; 
+                tempArr[0]=true; 
                 break;
             case "영국 비건 협회":
-                tempArr[1]=1; 
+                tempArr[1]=true; 
                 break;
             case "우수 재활용":
-                tempArr[2]=1; 
+                tempArr[2]=true; 
                 break;
             case "리핑 버니":
-                tempArr[3]=1; 
+                tempArr[3]=true; 
                 break;
             case "환경표지":
-                tempArr[4]=1; 
+                tempArr[4]=true; 
                 break;
             case "저탄소":
-                tempArr[5]=1; 
+                tempArr[5]=true; 
         }
     })
-    // console.log({tempArr})
     return tempArr;
 }
 
-const initFoodtypes=(foodtypes)=>{
-    const tempArr= [false,false,false,false,false];
-    foodtypes.forEach(({name})=>{
-        switch(name){
-            case "채식":
-                tempArr[0]=true; 
-                break;
-            case "유제품":
-                tempArr[1]=true; 
-                break;
-            case "달걀":
-                tempArr[2]=true; 
-                break;
-            case "어류":
-                tempArr[3]=true; 
-                break;
-            case "조류":
-                tempArr[4]=true; 
-                break;
-        }
-    })
-    return tempArr;
-}
 
 
 const DetailFilter = ({
     navigation,
     route:{params:{
-        OnSubmit,
+        onSubmit,
         certification,setCertification,
-        foodtypes,setFoodtypes,
-        setRightToggle
+        foodtypes,setFoodtypes
     }}
 })=>{   
     const user = useUser();
-    
-    // console.log(`안녕 rightFilter`, certification,preferences)
-    console.log({foodtypes});
-
+    console.log({certification}); 
+    console.log({foodtypes}); 
     const arr_Foodtype = initFoodtypes(foodtypes);
+
     const arr_Certification = initCertiS(certification);
     
     // [채식,유제품,달걀,어류,조류]
@@ -205,14 +179,13 @@ const DetailFilter = ({
     const [certi4,setcerti4] = useState(arr_Certification[4]); 
     const [certi5,setcerti5] = useState(arr_Certification[5]); 
 
-    // console.log(prefer0,prefer1,prefer2,prefer3,prefer4,prefer5);
-    // console.log(certi0,certi1,certi2,certi3,certi4,certi5);
 
     const submit=()=>{  
         const FoodtypesResult=ConvertFoodtypes([foodtypeLeaf,foodtypeMilk,foodtypeEgg,foodtypeFish,foodtypeChicken,]);
         const certificationResult=ConvertCertification([certi0,certi1,certi2,certi3,certi4,certi5]);
-        console.log({FoodtypesResult});
-        console.log({certificationResult});
+        
+        console.log(FoodtypesResult);
+        console.log(certificationResult);
         setFoodtypes(FoodtypesResult);
         setCertification(certificationResult);
         onSubmit(FoodtypesResult,certificationResult);

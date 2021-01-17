@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Foodtype from "../../components/Foodtype";
 import NavIcon from "../../components/NavIcon";
 import constants from "../../constants";
+import { initFoodtypes } from "../../utils";
 
 const Container = styled.View`
     background-color:white;
@@ -61,9 +62,23 @@ const BodyText = styled.Text`
 
 
 const MaterialDetail = ({
-    name,description,result
-})=>{   
+    navigation,
+    route:
+    {params:{
+        material
+}}})=>{   
+    console.log(material);
+    const {
+        name,
+        text,
+        foodtypes,
+        isChemical,
+        nameEng
+    } = material;
+    console.log({material});
 
+    const foodtypesArr = initFoodtypes(foodtypes.map(e=>e.name));
+    console.log({foodtypesArr});
     return (
         <Container>
             <Header>    
@@ -72,23 +87,23 @@ const MaterialDetail = ({
                 </TouchableOpacity>
             </Header>
             <Title>
-                <MainText>갈색황색소</MainText>
-                <SubText>Persimmon Color</SubText>
+                <MainText>{name}</MainText>
+                <SubText>{nameEng}</SubText>
             </Title>
             <FoodTypes>
-                <Foodtype type={"채식"} status={1} />
-                <Foodtype type={"유제품"} status={1} />
-                <Foodtype type={"달걀"} status={1} />
-                <Foodtype type={"어류"} status={1} />
-                <Foodtype type={"조류"} status={1} />
-                <Foodtype type={"화학첨가물"} status={1} />
+                <Foodtype type={"채식"} status={foodtypesArr[0]===true?1:0} />
+                <Foodtype type={"유제품"} status={foodtypesArr[1]===true?1:0} />
+                <Foodtype type={"달걀"} status={foodtypesArr[2]===true?1:0} />
+                <Foodtype type={"어류"} status={foodtypesArr[3]===true?1:0} />
+                <Foodtype type={"조류"} status={foodtypesArr[4]===true?1:0} />
+                <Foodtype type={"화학첨가물"} status={isChemical===true?1:0} />
             </FoodTypes>
             <Body>
                 <BodyTitle>
                     관련 설명 
                 </BodyTitle>
                 <BodyText>
-                한이 품목은 감나무의 과실을 발효 * 열처리하여 얻어진 색소로서 플라보노이드를 주성분으로 하는 것이다. 다만 색가조정, 품질보존 등을 위하여 희석제, 안정제 및 용제등을 첨가할 수 있다.
+                {text}
                 </BodyText>
             </Body>
         </Container>

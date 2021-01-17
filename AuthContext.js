@@ -1,12 +1,13 @@
 import React , {createContext, useContext, useState} from "react";
 import AsyncStorage from "@react-native-community/async-storage";
 
-import { USER_FRAGMENT } from "./fragments";
-import { useQuery } from "@apollo/client";
+import { GET_MAIN_SEARCH_BAR, USER_FRAGMENT,GET_MATERIAL_SEARCH } from "./fragments";
+import { useMutation, useQuery } from "@apollo/client";
 import {gql} from "apollo-boost";
 import { cos } from "react-native-reanimated";
 import Loader from "./components/Loader";
 import produce from "immer";
+import useInput from "./hooks/useInput";
 
 export const AuthContext = createContext(); 
 
@@ -54,6 +55,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     
     const [isLoggedIn,setIsLoggedIn] = useState(isLoggedInProp); 
 
+
     const [user,setUser]= useState({});
     const [ME_Loading,setMe_Loading] =useState(true); 
 
@@ -73,7 +75,31 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     const [MainPostLoading3,setMainPostLoadings3]= useState(true)
     const [MainPostLoading4,setMainPostLoadings4]= useState(true)
     
+    const searchInput=useInput("");
 
+
+    const [SearchPost,setSearchPost] = useState();
+    
+    const [MAIN_SEARCH_BAR] = useMutation(GET_MAIN_SEARCH_BAR);
+
+    const SearchBarSubmit= async (
+        foodtypes=[...user?.foodtypes.map(e=>e.name)],
+        certification=[],
+        orderingoption="BYRATING",
+        search = searchInput
+    )=>{
+        searchInput.setValue(search);
+        const {data:{MainSearchBar}} =  await MAIN_SEARCH_BAR(
+            {
+                variables:{
+                    certification,foodtypes,orderingoption,keyword:search
+                }
+            }
+        );
+        setSearchPost(MainSearchBar);
+        
+    }
+   
     const setMainpostsWrapper=(type,posts,check)=>{
         if(check) return ; 
         switch (type) {
@@ -115,6 +141,25 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         }
     }
 
+    const [materials,setMaterials] = useState(undefined);
+    const [RAWMATERIAL_FRAGMENT] = useMutation(GET_MATERIAL_SEARCH);
+    const settingMaterials = async (jaum,keyword="")=>{
+        // console.log("jaum,keyword");
+        // console.log(jaum,keyword);
+        // return;
+        const {data:{MaterialSearch}} = await RAWMATERIAL_FRAGMENT({
+            variables:{
+                jaum,keyword
+            }
+        });
+        setMaterials(MaterialSearch);
+        MaterialSearch.map(e=>console.log(e.name));
+        // console.log("done");
+    }
+
+    
+
+
 
     const [currentPost,setCurrentPost] =useState([]); 
     const [avatar,setAvatar] = useState("");
@@ -149,7 +194,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
             await AsyncStorage.setItem("jwt",token); 
             setIsLoggedIn(true);
         }catch(e){
-            console.log(e);
+            // console.log(e);
             throw Error(e);
         }
     };
@@ -158,11 +203,16 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
             await AsyncStorage.setItem("isLoggedIn","false"); 
             setIsLoggedIn(false); 
         }catch(e){
-            console.log(e); 
+            // console.log(e); 
         }
     };
     return (
     <AuthContext.Provider value={{
+        materials,
+        settingMaterials,
+        SearchPost,
+        SearchBarSubmit,
+        searchInput,
         MainPost0,MainPost1,MainPost2,MainPost3,MainPost4,setMainpostsWrapper,
         MainPostLoading0,MainPostLoading1,MainPostLoading2,MainPostLoading3,MainPostLoading4
         ,setMainPostsLoadingWrapper,
@@ -182,6 +232,34 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     )
 };
 
+export const usematerials=()=>{
+    const {materials} = useContext(AuthContext);
+    return materials;
+}
+
+
+export const usesettingMaterials=()=>{
+    const {settingMaterials} = useContext(AuthContext);
+    return settingMaterials;
+}
+
+
+export const useSearchPost=()=>{
+    const {SearchPost} = useContext(AuthContext);
+    return SearchPost;
+}
+
+
+export const useSearchBarSubmit=()=>{
+    const {SearchBarSubmit} = useContext(AuthContext);
+    return SearchBarSubmit;
+}
+
+
+export const usesearchInput=()=>{
+    const {searchInput} = useContext(AuthContext);
+    return searchInput;
+}
 
 export const useMainPosts=(type)=>{
     const {MainPost0,MainPost1,MainPost2,MainPost3,MainPost4} =useContext(AuthContext);

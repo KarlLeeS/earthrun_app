@@ -123,12 +123,10 @@ export const DELTE_UPLOAED_POST= gql`
         removeUploadedPost(postId:$postId,user:$user)
     }
 `;
-let styles; 
 
 const Post = ({
-    id,brand,files,weight,
-    reviewCount,rating,price,name,isLiked,
-    index,editting=false,
+    post,
+    editting=false,
     fromRecommendBottom,
     fromRecommendMyprofile,
     fromMainScreenNormalList,
@@ -141,6 +139,12 @@ const Post = ({
     childrenTab,
     Postindex
 })=>{
+    // console.log({post});
+    const {
+        id,brand:{name:brand},files,weight,
+        reviewCount,rating,price,name,isLiked,
+        index,
+    }= post; 
     const setUser = useSetUser();
     const user= useUser();
 
@@ -186,10 +190,10 @@ const Post = ({
     })
 
     const deletePost= async()=>{
-        console.log(fromLike);
+        // console.log(fromLike);
         if(fromRecentlyViewed){
             // 최근 목록 삭제 
-            console.log("최근 목록 삭제 ");
+            // console.log("최근 목록 삭제 ");
             setList(e=>(
                 {
                     ...e,
@@ -206,7 +210,7 @@ const Post = ({
         }
         if(fromLike){
             // 찜목록 삭제
-            console.log("찜목록 삭제");
+            // console.log("찜목록 삭제");
             setList(e=>(
                 {
                     ...e,
@@ -217,7 +221,7 @@ const Post = ({
         }
         if(fromMyUploaded){
             // 업로드 게시글 삭제
-            console.log("업로드 게시글 삭제 ");
+            // console.log("업로드 게시글 삭제 ");
             setList(e=>(
                 {
                     ...e,
@@ -237,8 +241,10 @@ const Post = ({
 
 
     return (styles&&user&&(
-        <Touchable onPress={()=>{navigation.navigate("DetailNavigation",{childrenTab,
-            Postindex})}}
+        <Touchable onPress={()=>{navigation.navigate("DetailNavigation",{
+            // childrenTab,
+            // Postindex,
+            post})}}
         data={styles.Touchable}
          >
             <Image
@@ -254,7 +260,11 @@ const Post = ({
                 <MetaInfo data={styles.MetaInfo} 
                  >
                     <TextBrand data={styles.TextBrand}>{brand.name}</TextBrand>
-                    <TextProductName data={styles.TextProductName}>{name}</TextProductName>
+                    <TextProductName  data={styles.TextProductName}>
+                        {name.length < 10
+                        ? `${name}`
+                        : `${name.substring(0, 10)}...`}
+                        </TextProductName>
                     <TextWieghtPrice data={styles.TextWieghtPrice}>
                         {
                             weight&&price&&

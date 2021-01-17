@@ -139,7 +139,7 @@ const RightFilter = ({
     onSubmit
 })=>{   
     const user = useUser();
-    
+    // console.log()
     // console.log(`안녕 rightFilter`, certification,preferences)
     const initPreferecnes = initPreferS(preferences);
     const initCertification = initCertiS(certification);

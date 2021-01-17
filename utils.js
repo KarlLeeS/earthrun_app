@@ -25,9 +25,10 @@ export const ConvertFoodtypes=(arr)=>{
 }
 
 export const ConvertCertification=(arr)=>{
+    // console.log("arr :",arr);
     const result= []; 
     arr.forEach((e,i)=>{
-        if(e===1){
+        if(e===true){
             switch(i){
                 case 0:
                     result.push("한국 비건인증원");
@@ -89,4 +90,30 @@ export const getParentTab=(sub)=>{
         default:
             break;
     }
+}
+
+
+
+export const initFoodtypes=(foodtypes)=>{
+    const tempArr= [false,false,false,false,false];
+    foodtypes.forEach((e)=>{
+        switch(e){
+            case "채식":
+                tempArr[0]=true; 
+                break;
+            case "유제품":
+                tempArr[1]=true; 
+                break;
+            case "달걀":
+                tempArr[2]=true; 
+                break;
+            case "어류":
+                tempArr[3]=true; 
+                break;
+            case "조류":
+                tempArr[4]=true; 
+                break;
+        }
+    })
+    return tempArr;
 }

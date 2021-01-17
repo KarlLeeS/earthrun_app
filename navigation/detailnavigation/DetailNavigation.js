@@ -65,15 +65,15 @@ export const GET_FULL_POST=gql`
 
 
 const DetailNavigation =({navigation,route:{params:{
-    childrenTab,Postindex
+    post
 }}
 })=>{
     console.log("rendering/DetailPage");
     
-    const MainPosts =useMainPosts(childrenTab);
+    // const MainPosts =useMainPosts(childrenTab);
         
-    return MainPosts&&MainPosts?.posts[Postindex]&&
-    (
+    // return MainPosts&&MainPosts?.posts[Postindex]&&
+    return (
         <Container>
             <ScrollView>
                 <HeaderWrapper>
@@ -81,20 +81,20 @@ const DetailNavigation =({navigation,route:{params:{
                         <Touchable onPress={()=>navigation.goBack()}>
                             <NavIcon name={"md-arrow-back"} size={24} color={"#000"}/>
                         </Touchable>
-                        <Like id={MainPosts.posts[Postindex].id} isLiked={MainPosts.posts[Postindex].isLiked} />
+                        <Like id={post.id} isLiked={post.isLiked} />
                     </Header>
                 </HeaderWrapper>
 
-                <Sliders files={MainPosts.posts[Postindex].files} />
+                <Sliders files={post.files} />
                 <Metainfo 
-                    brand={MainPosts.posts[Postindex].brand.name}
-                    name={MainPosts.posts[Postindex].name}
-                    weight={MainPosts.posts[Postindex].weight}
-                    price={MainPosts.posts[Postindex].price}
-                    preference={MainPosts.posts[Postindex].preference.name}
-                    foodtypes={MainPosts.posts[Postindex].foodtypes}
+                    brand={post.brand.name}
+                    name={post.name}
+                    weight={post.weight}
+                    price={post.price}
+                    preference={post.preference.name}
+                    foodtypes={post.foodtypes}
                 />
-                <DetailTabNavigation data={MainPosts.posts[Postindex]}/>
+                <DetailTabNavigation data={post}/>
             </ScrollView>
         </Container>
     )
