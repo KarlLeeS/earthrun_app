@@ -1,6 +1,6 @@
 
 import React, { useLayoutEffect, useState } from "react";
-import { Text, View,ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import styled from "styled-components";
 import NavIcon from "../components/NavIcon";
 import Post from "../components/Post"; 
@@ -182,17 +182,17 @@ export default ({navigation,route}) =>{
 
           <Grid>
             {list&&list.getLikes&&list.getLikes.map((e,i)=>(
-              <Post fromMainScreenNormalList={true}  setList={setList} editting={editting} {...e.post} index={i} fromLike={true} key={e.id} />
+              <Post fromMainScreenNormalList={true}  setList={setList} editting={editting} post={e.post} index={i} fromLike={true} key={e.id} />
             ))}
             {list&&list.RecentlyViewedPost&&list.RecentlyViewedPost.map((e,i)=>(
-              <Post fromMainScreenNormalList={true} fromRecentlyViewed={true} setList={setList} editting={editting}  {...e} index={i} fromRecentlyViewed={true} key={e.id} />
+              <Post fromMainScreenNormalList={true} fromRecentlyViewed={true} setList={setList} editting={editting}  post={e} index={i} fromRecentlyViewed={true} key={e.id} />
             ))}
 
             {list&&list.MyUploadedPosts&&list.MyUploadedPosts.map((e,i)=>(
-                <Post fromMainScreenNormalList={true} fromMyUploaded={true} setList={setList} editting={editting} {...e} index={i} fromMyUploaded={true} key={e.id} />
+                <Post fromMainScreenNormalList={true} fromMyUploaded={true} setList={setList} editting={editting} post={e} index={i} fromMyUploaded={true} key={e.id} />
             ))}
             {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
-              <Review setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />
+              <Review setList={setList} editting={editting}  post={e} index={i} key={e.id} fromNormal={true} />
             ))}
           </Grid>
       </ScrollView>

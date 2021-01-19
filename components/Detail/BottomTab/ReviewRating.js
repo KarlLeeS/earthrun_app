@@ -107,7 +107,7 @@ const ReviewRating =({
     reviews,
 })=>{   
     console.log("rendering detail/subtab/review");
-
+    console.log({reviews});
     return(
         <Container>
             <UploadReview>

@@ -13,8 +13,6 @@ export const AuthContext = createContext();
 
 const post = []; 
 
-
-
 const initialMainTabPostsLoading= {
     "식품":
     {
@@ -55,7 +53,6 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     
     const [isLoggedIn,setIsLoggedIn] = useState(isLoggedInProp); 
 
-
     const [user,setUser]= useState({});
     const [ME_Loading,setMe_Loading] =useState(true); 
 
@@ -88,6 +85,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         orderingoption="BYRATING",
         search = searchInput
     )=>{
+        console.log("검색합니다잇");
         searchInput.setValue(search);
         const {data:{MainSearchBar}} =  await MAIN_SEARCH_BAR(
             {
@@ -142,46 +140,38 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     }
 
     const [materials,setMaterials] = useState(undefined);
+    const [materialLoading,setmaterialLoading] = useState(true);
     const [RAWMATERIAL_FRAGMENT] = useMutation(GET_MATERIAL_SEARCH);
     const settingMaterials = async (jaum,keyword="")=>{
-        // console.log("jaum,keyword");
-        // console.log(jaum,keyword);
-        // return;
+        setmaterialLoading(true);
         const {data:{MaterialSearch}} = await RAWMATERIAL_FRAGMENT({
             variables:{
                 jaum,keyword
             }
         });
         setMaterials(MaterialSearch);
+        setmaterialLoading(false);
         MaterialSearch.map(e=>console.log(e.name));
-        // console.log("done");
     }
-
-    
-
-
 
     const [currentPost,setCurrentPost] =useState([]); 
     const [avatar,setAvatar] = useState("");
     const [photoDisplay,setphotoDisplay] = useState([]);
     const [photomaterial,setphotoMaterial] = useState("");
 
-
-
     const setMainPostsLoadingWrapper=(type)=>{
         switch (type) {
             case "대체육":
-                setMainPostLoadings0(prev=>false);
+                setMainPostLoadings0(prev=>!prev);
             case "빵":
-                setMainPostLoadings1(prev=>false);
-        
+                setMainPostLoadings1(prev=>!prev);
             case "간편식·면류·통조림":
-                setMainPostLoadings2(prev=>false);
+                setMainPostLoadings2(prev=>!prev);
             case "음료":
-                setMainPostLoadings3(prev=>false);
+                setMainPostLoadings3(prev=>!prev);
     
             case "간식":
-                setMainPostLoadings4(prev=>false);
+                setMainPostLoadings4(prev=>!prev);
         }
     }
 
@@ -208,7 +198,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     };
     return (
     <AuthContext.Provider value={{
-        materials,
+        materials,materialLoading,
         settingMaterials,
         SearchPost,
         SearchBarSubmit,
@@ -232,9 +222,16 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     )
 };
 
+
 export const usematerials=()=>{
     const {materials} = useContext(AuthContext);
     return materials;
+}
+
+
+export const usematerialLoading=()=>{
+    const {materialLoading} = useContext(AuthContext);
+    return materialLoading;
 }
 
 

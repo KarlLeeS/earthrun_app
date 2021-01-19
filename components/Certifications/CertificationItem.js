@@ -43,9 +43,8 @@ const certifiPack = [
     },
     {
         type:"영국 비건 협회",
-        description:"\
-        영국 비건 협회(The Vegan Society)는 세계에서 가장 오래된 독창적인 VEGAN조직으로써 70여년이 지난 지금까지도 전세계 그 어떤 비건 단체보다 활발한 활동으로 비건 개념과 필요성을 널리 확산시키고 있습니다.\n\n\
-        1. 동물성 원료 & 동물 유래 성분\
+        description:"\영국 비건 협회(The Vegan Society)는 세계에서 가장 오래된 독창적인 VEGAN조직으로써 70여년이 지난 지금까지도 전세계 그 어떤 비건 단체보다 활발한 활동으로 비건 개념과 필요성을 널리 확산시키고 있습니다.\
+        \n\n1. 동물성 원료 & 동물 유래 성분\
         \n원료 선택부터 제품의 제조 및/또는 전체 생산 단계에 걸쳐 그 어떠한 동물성 원료 및 생산품, 부산품, 부산물 혹은 파생물의 사용을 포함하거나 관련되어서는 안됩니다.\
         \n\n2. 동물 실험\
         \n제품의 제조 및/또는 개발, 그리고 제품 성분에 대해 회사의 주도로 혹은 회사를 대신하여 혹은 회사가 통제할 수 있는 관계자에 의해 어떠한 종류의 동물에게도 실험을 하거나 실험을 했던 적이 없어야 합니다.\
@@ -99,7 +98,7 @@ const CertificationItem = ({
     index
 })=>{   
     console.log(typeof path);
-    const [toggle,setToggle] =useState(false)
+    const [toggle,setToggle] =useState(true)
     return (
         <CertifiItem>
             <CertifiItemHeader onPress={()=>setToggle(prev=>!prev)}>

@@ -28,7 +28,8 @@ const Posts = styled.View`
 const FilteringTools = styled.View`
   flex-direction:row;
   justify-content:space-between;
-  margin: 15px 20px 10px 20px;
+  margin: 20px 20px 20px 20px;
+
 `;
 
 const LeftFilterIcon = styled.TouchableOpacity`
@@ -85,8 +86,8 @@ const MainScreen = ({navigation})=>{
   const [orderingoption,setOrderingoption] = useState("BYRATING");
 
   const {data,loading:loadingQ}= useQuery(GET_MAIN_TOP_TAB,{ 
-    // fetchPolicy:"no-cache",
-    fetchPolicy:"network-only",
+    fetchPolicy:"no-cache",
+    // fetchPolicy:"network-only",
     variables:{
       certification,foodtypes,orderingoption,categories:childrenTab
     },

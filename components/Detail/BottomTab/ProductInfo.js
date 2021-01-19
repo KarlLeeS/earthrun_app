@@ -1,5 +1,5 @@
 import React from "react"; 
-import { Image, View } from "react-native";
+import { Image, View,StyleSheet, Text } from "react-native";
 import styled from "styled-components"; 
 import constants from "../../../constants";
 import Certification from "./Certification";
@@ -48,10 +48,12 @@ const FoodtypeWrapper= styled.View`
     align-items:center;
     /* width:${constants.width/2}; */
     padding:20px 0;
-    margin-left:10px;
+    margin-left:0px;
     border-top-color: #f0f0f0;
     border-top-width:1px;
 `;
+
+
 const MeterialList= styled.View`
     display:flex;
     flex-direction:row;
@@ -61,16 +63,31 @@ const MeterialList= styled.View`
     /* margin-top:10px; */
 `;
 
+
 const Meterial= styled.View`
+
+
+/* 
+
     padding:10px;
     border-color:black;
     border-width:1px;
     border-radius:10px;
     margin-right:7px;
     margin-top:15px;
-  background-color:red;
+    background-color:red;
+    elevation:5; 
+    shadowOpacity: 0.25;
+    shadowRadius: 3.84;
+    shadowColor: "#000";
+    shadowColor: "#000",
+shadowOffset: {
+	width: 0,
+	height: 2,
+},
 
-    box-shadow: 0px 1px 2px #A0A0A0;
+elevation: 5,
+    box-shadow: 0px 1px 2px #A0A0A0; */
 `;
 
 const MeterialText = styled.Text`
@@ -80,11 +97,12 @@ const MeterialText = styled.Text`
 
 const FoodType= styled.View`
     align-self:flex-start;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-right:20px;
-  width:${constants.width/7};
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-right:25px;
+    margin-left:15px;
+    width:${constants.width/7};
   /* background-color:red; */
 `
 const FoodTypeText= styled.Text`
@@ -176,9 +194,11 @@ const ProductInfo=({
                                 <MeterialList>
                                     {
                                         leaf.map(e=>(
-                                            <Meterial>
-                                                <MeterialText>{e.name}</MeterialText>
-                                            </Meterial>
+                                            <View style={styles.cardShadow}>
+                                                <View style={styles.cardContainer}>
+                                                    <MeterialText>{e.name}</MeterialText>
+                                                </View>
+                                            </View>
                                         ))
                                     }
                                 </MeterialList>
@@ -209,9 +229,11 @@ const ProductInfo=({
                                 <MeterialList>
                                     {
                                         milk.map(e=>(
-                                            <Meterial>
-                                                <MeterialText>{e.name}</MeterialText>
-                                            </Meterial>
+                                            <View style={styles.cardShadow}>
+                                                <View style={styles.cardContainer}>
+                                                    <MeterialText>{e.name}</MeterialText>
+                                                </View>
+                                            </View>
                                         ))
                                     }
                                 </MeterialList>
@@ -242,9 +264,11 @@ const ProductInfo=({
                                 <MeterialList>
                                     {
                                         egg.map(e=>(
-                                            <Meterial>
-                                                <MeterialText>{e.name}</MeterialText>
-                                            </Meterial>
+                                            <View style={styles.cardShadow}>
+                                                <View style={styles.cardContainer}>
+                                                    <MeterialText>{e.name}</MeterialText>
+                                                </View>
+                                            </View>
                                         ))
                                     }
                                 </MeterialList>
@@ -275,9 +299,11 @@ const ProductInfo=({
                                 <MeterialList>
                                     {
                                         fish.map(e=>(
-                                            <Meterial>
-                                                <MeterialText>{e.name}</MeterialText>
-                                            </Meterial>
+                                            <View style={styles.cardShadow}>
+                                                <View style={styles.cardContainer}>
+                                                    <MeterialText>{e.name}</MeterialText>
+                                                </View>
+                                            </View>
                                         ))
                                     }
                                 </MeterialList>
@@ -307,9 +333,11 @@ const ProductInfo=({
                                 <MeterialList>
                                     {
                                         chicken.map(e=>(
-                                            <Meterial>
+                                            <View style={styles.cardShadow}>
+                                            <View style={styles.cardContainer}>
                                                 <MeterialText>{e.name}</MeterialText>
-                                            </Meterial>
+                                            </View>
+                                        </View>
                                         ))
                                     }
                                 </MeterialList>
@@ -339,9 +367,11 @@ const ProductInfo=({
                                 <MeterialList>
                                     {
                                         chemical.map(e=>(
-                                            <Meterial>
-                                                <MeterialText>{e.name}</MeterialText>
-                                            </Meterial>
+                                            <View style={styles.cardShadow}>
+                                                <View style={styles.cardContainer}>
+                                                    <MeterialText>{e.name}</MeterialText>
+                                                </View>
+                                            </View>
                                         ))
                                     }
                                 </MeterialList>
@@ -350,7 +380,12 @@ const ProductInfo=({
                     :<></>
                 }
             </RawMaterialWrap>
+                  
+            
+
+
             <RawMaterialImageWrap>
+                
                 <Title>성분표</Title>
                 <Image 
                 style={{
@@ -364,5 +399,38 @@ const ProductInfo=({
         </Container>
     )
 }
+
+const styles = StyleSheet.create({
+    cardShadow: {
+        marginRight:10,
+        borderRadius: 16,
+        // paddingLeft:10,
+        // paddingRight:10,
+        maxWidth:120,
+        backgroundColor: 'transparent',
+        marginBottom:10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 4.65,
+
+        elevation: 8,
+   },
+   cardContainer: {
+        maxWidth:120,
+        paddingLeft:15,
+        paddingRight:15,
+        paddingTop:10,
+        paddingBottom:10,
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
+   },
+  });
 
 export default ProductInfo;

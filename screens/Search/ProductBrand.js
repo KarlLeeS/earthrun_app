@@ -182,34 +182,36 @@ const ProductBrand = ({
     const SearchBarSubmit = useSearchBarSubmit();
     const searchInput = usesearchInput();
     const posts = useSearchPost();
+
+
+    
     const [LeftToggle,setLeftToggle] = useState(false); 
     const [certification,setCertification] = useState([]); 
-    console.log(user?.foodtypes.map(e=>e.name));
     const [foodtypes,setFoodtypes] = useState(user?.foodtypes.map(e=>e.name)); 
     const [orderingoption,setOrderingoption] = useState("BYRATING");
 
     const color = "#fff";
     const backgroundColor = "#00cf85";
     const onSubmit= (FoodtypesResult,certificationResult,orderingType)=>{
-        console.log({FoodtypesResult});
-        console.log({certificationResult});
+    console.log({FoodtypesResult});
+    console.log({certificationResult});
     console.log({orderingType});
-        console.log({searchInput});
-        let orderingForSubmit,foodtypeForSubmit,certiForSubmit; 
-        if(FoodtypesResult.length===0){
-            foodtypeForSubmit = foodtypes;
-        }
-        if(certificationResult.length===0){
-            certiForSubmit =certification;
-        }
-        if(orderingType===undefined) {
-            orderingForSubmit = orderingoption; 
-        }
-        SearchBarSubmit(foodtypeForSubmit,certiForSubmit,orderingForSubmit);
-        // TODO submit 로직 짜기
-        // const foodtypeForSubmit = 
-        // const certiForSubmit = 
-        // console.log("이 키워드로 검색");
+    console.log({searchInput});
+    let orderingForSubmit,foodtypeForSubmit,certiForSubmit; 
+    if(FoodtypesResult.length===0){
+        foodtypeForSubmit = foodtypes;
+    }
+    if(certificationResult.length===0){
+        certiForSubmit =certification;
+    }
+    if(orderingType===undefined) {
+        orderingForSubmit = orderingoption; 
+    }
+    SearchBarSubmit(foodtypeForSubmit,certiForSubmit,orderingForSubmit);
+    // TODO submit 로직 짜기
+    // const foodtypeForSubmit = 
+    // const certiForSubmit = 
+    // console.log("이 키워드로 검색");
     }
 
     
@@ -259,7 +261,7 @@ const ProductBrand = ({
 //   });
 
     // const beforeSearch= true;
-    const beforeSearch= false;
+    // const beforeSearch= false;
     return (
         <Container>
         <ScrollView>

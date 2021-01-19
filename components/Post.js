@@ -259,9 +259,13 @@ const Post = ({
             <BottomWrapper>
                 <MetaInfo data={styles.MetaInfo} 
                  >
-                    <TextBrand data={styles.TextBrand}>{brand.name}</TextBrand>
+                    <TextBrand data={styles.TextBrand}>{brand}</TextBrand>
                     <TextProductName  data={styles.TextProductName}>
-                        {name.length < 10
+                        {
+                        fromRecommendBottom?
+                        `${name}`
+                        :
+                        name.length < 10 
                         ? `${name}`
                         : `${name.substring(0, 10)}...`}
                         </TextProductName>

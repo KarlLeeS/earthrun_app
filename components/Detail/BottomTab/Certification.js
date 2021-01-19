@@ -1,14 +1,15 @@
 import React from "react";
 import {Image, TouchableOpacity} from "react-native"; 
 import styled from "styled-components"; 
+import { withNavigation } from "@react-navigation/compat";
 import constants from "../../../constants";
 const Touchable = styled.TouchableOpacity`
 `; 
 
-const Certification = ({name})=>{
+const Certification = ({name,navigation})=>{
     console.log({name});
     return (
-        <Touchable>
+        <Touchable onPress={()=>navigation.navigate("CertificationInfo")}>
             <Image
                 style={{
                     width: constants.width/7,
@@ -57,4 +58,4 @@ const Certification = ({name})=>{
     );
 }
 
-export default Certification;
+export default withNavigation(Certification);

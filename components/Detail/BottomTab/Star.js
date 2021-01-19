@@ -119,17 +119,14 @@ const renderStar=(rating,size=24)=>{
 
 const renderOneStar=(rating,size=24)=>{
     console.log(rating);
-    if(rating>4.5){
-        return(
-            <NavIcon name={"md-star"} color={"#0069ca"} size={size}/>
-        )
-    }else if(rating>2.5){
-        return(
-            <NavIcon name={"md-star-half"} color={"#0069ca"} size={size}/>
-        )
-    }else if(rating>=0){
+    
+    if(rating===0){
         return(
             <NavIcon name={"md-star-outline"} color={"#0069ca"} size={size}/>
+        )
+    }else{
+        return(
+            <NavIcon name={"md-star"} color={"#0069ca"} size={size}/>
         )
     }
 }

@@ -187,7 +187,7 @@ export default {
             "fontWeight":"bold",
             "color":"#3d3d3d",
             "letterSpacing":"0px",
-            "paddingTop":" 0px",
+            "paddingTop":"10px",
         },
         "TextProductName":{
             "color": "#000000",
@@ -236,9 +236,9 @@ export default {
             "TextBrand":{
                 "fontSize" :"12px",
                 "letterSpacing":"-1px",
-                "paddingTop":" 5px",
+                "paddingTop":"10px",
                 "fontWeight":"bold",
-                "color":" #a0a0a0"
+                "color":" #3d3d3d"
             },
             "TextProductName":{
                 "color":"#333333",

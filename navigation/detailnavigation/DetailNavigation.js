@@ -69,11 +69,14 @@ const DetailNavigation =({navigation,route:{params:{
 }}
 })=>{
     console.log("rendering/DetailPage");
-    
+    const setPost = useSetCurrentPost();
+    setPost(post);
+    console.log({post});
+    console.log("post 세팅완료")
     // const MainPosts =useMainPosts(childrenTab);
         
     // return MainPosts&&MainPosts?.posts[Postindex]&&
-    return (
+    return (post&&
         <Container>
             <ScrollView>
                 <HeaderWrapper>
@@ -85,7 +88,7 @@ const DetailNavigation =({navigation,route:{params:{
                     </Header>
                 </HeaderWrapper>
 
-                <Sliders files={post.files} />
+                <Sliders files={post.files} variants={"detail"}/>
                 <Metainfo 
                     brand={post.brand.name}
                     name={post.name}

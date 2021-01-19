@@ -6,9 +6,8 @@ import tabInfo from "../tabInfo.json"
 import MainScreen from "../../../screens/home/MainScreen";
 import { ScrollView } from "react-native-swiper";
 import constants from "../../../constants";
+import { floor } from "react-native-reanimated";
 const Tab = createMaterialTopTabNavigator();
-
-import styled from "styled-components";
 
 const SubTabFood = ({subTabs}) =>{
     return (      
@@ -22,14 +21,27 @@ const SubTabFood = ({subTabs}) =>{
                 backgroundColor: 'transparent'
             },
             activeTintColor: "#000",
+            inactiveTintColor:"#a0a0a0",
             labelStyle:{
-                width:120,
-                fontSize:13,
+                // height:constants.height/40,
+                width:constants.width/3.5,
+                top:-3,
+                fontSize:14,
+                backgroundColor: 'transparent',
                 fontWeight:"bold",
+                letterSpacing:-1,
                 textAlign:"center",
+            },
+            tabStyle:{
+                height:constants.height/20,
+                width:constants.width/3.5,
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center"
             },
             style:{
                 elevation:0,
+                backgroundColor: '#f8f8f8',
                 borderBottomWidth:1,
                 borderBottomColor:"#dbdbdb",
             }

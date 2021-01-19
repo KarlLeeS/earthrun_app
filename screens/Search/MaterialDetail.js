@@ -67,7 +67,6 @@ const MaterialDetail = ({
     {params:{
         material
 }}})=>{   
-    console.log(material);
     const {
         name,
         text,
@@ -75,14 +74,12 @@ const MaterialDetail = ({
         isChemical,
         nameEng
     } = material;
-    console.log({material});
 
     const foodtypesArr = initFoodtypes(foodtypes.map(e=>e.name));
-    console.log({foodtypesArr});
     return (
         <Container>
             <Header>    
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.goBack()}>
                     <NavIcon name={"md-arrow-back"} color={"#000"} size={24} />
                 </TouchableOpacity>
             </Header>

@@ -15,7 +15,6 @@ const Tab = createMaterialTopTabNavigator();
 const SearchTabNavigation=()=>{
     return(
         <Tab.Navigator
-            lazy="true"
             tabBarOptions={{
                 indicatorStyle:{
                     position:"absolute",

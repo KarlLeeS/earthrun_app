@@ -121,7 +121,7 @@ const Review = ({
     const [deleteReviewMutation] = useMutation(DELETE_REVIEW,{
         variables:{
             id,
-            user:userId
+            user:userId,
         }
     }); 
 
@@ -134,7 +134,7 @@ const Review = ({
                     ...e,
                     seeReviews :  e.seeReviews.filter(i=>i.id!==id)
                 }
-            )) ;
+            ));
             setUser(user=>(
                 {
                     ...user,
@@ -142,6 +142,7 @@ const Review = ({
                     reviewCount: user?.reviewCount-1
                 }
             ));
+
             const result = await deleteReviewMutation();
             console.log(result);
         }catch(e){

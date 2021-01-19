@@ -21,14 +21,20 @@ export default () =>{
       lazy="true"
       initialRouteName="추천"
       tabBarOptions={{
+        activeTintColor:"#00cf85",
+        inactiveTintColor:"#3d3d3d",
+        allowFontScaling:true,
         scrollEnabled :true,
         indicatorStyle:{
+          position:"relative",
+          top:constants.width/8,
           backgroundColor: "#00cf84",
+          height:5
         },
-        inactiveTintColor:"#000",
-        activeTintColor: "#00cf84",
         labelStyle:{
-          width:100
+          width:100,
+          fontSize:14,
+          fontWeight:"bold"
         },
         tabStyle:{
           width:constants.width/5
@@ -38,7 +44,7 @@ export default () =>{
           borderBottomWidth:1,
           borderBottomColor:"#dbdbdb",
           paddingTop:5,
-          height: 50
+          // height: 50
         }
       }}
     >

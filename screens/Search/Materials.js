@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import styled from "styled-components"; 
-import { usematerials, usesettingMaterials } from '../../AuthContext';
+import { usematerials, usesettingMaterials,usematerialLoading } from '../../AuthContext';
 import constants from '../../constants';
 import { withNavigation } from "@react-navigation/compat";
 import { useState } from 'react/cjs/react.development';
+import Loader from '../../components/Loader';
 
 const Container = styled.View``;
 const SelectList = styled.View`
@@ -42,13 +43,10 @@ const Wrapper=  styled.TouchableOpacity`
     width:${constants.width}; 
     border-bottom-color:#f8f8f8; 
     border-bottom-width:2px;
-    /* border-bottom-color:black;  */
-    /* border-bottom-width:10px; */
 `; 
 
-const ItemLink = styled.TouchableOpacity`
+const ItemLink = styled.View`
     width:${constants.width-40};
-    /* background-color:red; */
     flex-direction:row;
     justify-content:space-between;
     margin:20px;
@@ -66,10 +64,10 @@ const Link = styled.Text`
 
 const Materials = ({navigation}) => {
     console.log({navigation});
-    // 처음 컴포넌트 마운트 될ㄸ ㅐ usemutation으로 ㄱ에 해당하는 놈으로 호출해서 posts에 세팅하기 
-    // 그 후에는 검색과 클릭이벤트에 해당하는 내용 매핑해서 호출하기.
     const materials= usematerials();
     const settingMaterials= usesettingMaterials();
+    const materialLoading = usematerialLoading()
+
     useEffect(()=>{
         settingMaterials("ㄱ","");
     },[]
@@ -163,18 +161,23 @@ const Materials = ({navigation}) => {
             </SelectList>
             <ScrollView >
                 <ItemLinkWrapper>
-                    {materials?.map(e=>(
-                        <Wrapper key={e.id} onPress={()=>{
-                            console.log(111);
-                            navigation.navigate("MaterialDetail",{
-                            material:e
-                        })}}>
-                        <ItemLink >
-                            <ItemText>{e.name}</ItemText>
-                            <Link>이동</Link>
-                        </ItemLink>
-                        </Wrapper>
-                    ))}
+                    {materialLoading
+                    ?
+                        <Loader />
+                    :
+                        <>
+                        {materials.map(e=>(
+                            <Wrapper key={e.id} onPress={()=>{
+                                navigation.navigate("MaterialDetail",{material:e})
+                            }}>
+                                <ItemLink>
+                                    <ItemText>{e.name}</ItemText>
+                                    <Link>이동</Link>
+                                </ItemLink>
+                            </Wrapper>
+                        ))}
+                        </>
+                }
                 </ItemLinkWrapper>
             </ScrollView>
             

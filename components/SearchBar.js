@@ -34,13 +34,13 @@ const SearchBar = ({  fake ,navigation}) => {
       (
           <Touchable onPress={()=>navigation.navigate("Search",{})}>
             <Ionicons style={{position:"absolute",zIndex:10,paddingLeft:15}}
-            name={'md-search'} color={"#717171"} size={30} />
+            name={'md-search'} color={"#a0a0a0"} size={30} />
               <TextInput
                 style={{
                   width: constants.width - 40,
                   height: constants.height/20,
                   backgroundColor: "#fff",
-                  borderRadius: 5,
+                  borderRadius: 100,
                   textAlign: "left",
                   borderColor:"#DBDBDB",
                   borderWidth:1,
@@ -50,12 +50,11 @@ const SearchBar = ({  fake ,navigation}) => {
                 editable={false}
                 // onTouchStart={()=>{navigation.navigate("Search",{})}}
                 // onPress={()=>Keyboard.dismiss()}
-                
                 showSoftInputOnFocus={false}
                 // onPress={()=>console.log(2)}
                 returnKeyType="search"
                 placeholder={"상품,브랜드,원재료,성분"}
-                placeholderTextColor={"#000"}
+                placeholderTextColor={"#a0a0a0"}
                 />
           </Touchable>
 
@@ -83,10 +82,17 @@ const SearchBar = ({  fake ,navigation}) => {
             onChangeText={searchInput.onChange}
             // onEndEditing={SearchBarSubmit}
             onEndEditing={()=>{
+
+              console.log(11);
               Keyboard.dismiss();
+              // console.log(searchInput.value)
+              if(searchInput.value===""){
+                return;
+              }else{
+                SearchBarSubmit(undefined,undefined,undefined,searchInput.value)
+              }
             }}
             onSubmit={()=>{
-              SearchBarSubmit(undefined,undefined,undefined,searchInput.value)
              }}
             value={searchInput.value}
             placeholder={"상품,브랜드,원재료,성분"}

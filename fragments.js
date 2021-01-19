@@ -258,6 +258,12 @@ export const GET_HOTEST = gql`
     ${FULL_POST}
 `; 
 
+export const GET_ADS = gql`
+  query getads{
+    getads
+  }
+`;
+
 
 export const GET_MAIN_TOP_TAB= gql`
   query MainTopTab(
