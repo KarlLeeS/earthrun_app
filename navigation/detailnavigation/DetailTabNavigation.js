@@ -31,12 +31,17 @@ const DetailTabNavigation=({data:{
                 labelStyle:{
                     fontSize:14,
                     fontWeight:"bold",
+
+                    // border-bottom-color:#f0f0f0,
+                    // border-bottom-width:1px
                 },
                 tabStyle:{
                     width:constants.width/3,
                     height:constants.height/20
                 },
                 style:{
+                    borderTopColor:"#f0f0f0",
+                    borderTopWidth:4,
                     elevation:0,
                 },
                 inactiveTintColor:"#717171",

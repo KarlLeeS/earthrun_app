@@ -1,7 +1,7 @@
 import React, { useState } from "react"; 
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import styled from "styled-components";
-import { useUser } from "../AuthContext";
+import { usesetMainposts, usesetMainPostsLoading, useUser } from "../AuthContext";
 import RightFilterButton from "../components/Detail/BottomTab/RightFilterButton";
 import NavIcon from "../components/NavIcon";
 import constants from "../constants";
@@ -152,9 +152,9 @@ const initCertiS=(certification)=>{
 const DetailFilter = ({
     navigation,
     route:{params:{
-        onSubmit,
+        
         certification,setCertification,
-        foodtypes,setFoodtypes
+        foodtypes,setFoodtypes,OnSubmitFiliter
     }}
 })=>{   
     const user = useUser();
@@ -163,7 +163,10 @@ const DetailFilter = ({
     const arr_Foodtype = initFoodtypes(foodtypes);
 
     const arr_Certification = initCertiS(certification);
-    
+     
+    const setMainposts =usesetMainposts(); 
+    const setLoading =usesetMainPostsLoading(); 
+
     // [채식,유제품,달걀,어류,조류]
     const [foodtypeLeaf,setfoodtypeLeaf] = useState(arr_Foodtype[0]); 
     const [foodtypeMilk,setfoodtypeMilk] = useState(arr_Foodtype[1]); 
@@ -188,7 +191,19 @@ const DetailFilter = ({
         console.log(certificationResult);
         setFoodtypes(FoodtypesResult);
         setCertification(certificationResult);
-        onSubmit(FoodtypesResult,certificationResult);
+        OnSubmitFiliter(FoodtypesResult,certificationResult);
+
+        // setLoaded(false);
+        // await refetch({
+        //   certification:certificationResult,
+        //   foodtypes:preferenceResult,
+        //   orderingoption:orderResult,
+        //   categories:category
+        // });
+        // setLoaded(true);
+
+
+
     }
 
     const setInit=()=>{

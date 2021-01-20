@@ -403,7 +403,7 @@ const ProductInfo=({
 const styles = StyleSheet.create({
     cardShadow: {
         marginRight:10,
-        borderRadius: 16,
+        borderRadius: 10,
         // paddingLeft:10,
         // paddingRight:10,
         maxWidth:120,
@@ -412,12 +412,12 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 4,
+            height: 2,
         },
-        shadowOpacity: 0.30,
-        shadowRadius: 4.65,
-
-        elevation: 8,
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        
+        elevation: 5,
    },
    cardContainer: {
         maxWidth:120,
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
         paddingTop:10,
         paddingBottom:10,
         backgroundColor: '#fff',
-        borderRadius: 16,
+        borderRadius: 10,
         display:"flex",
         justifyContent:"center",
         alignItems:"center"

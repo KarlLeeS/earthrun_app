@@ -66,11 +66,11 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     const [MainPost3,setMainPosts3]= useState({type:"음료",posts:[ ]})
     const [MainPost4,setMainPosts4]= useState({type:"간식",posts:[ ]})
     
-    const [MainPostLoading0,setMainPostLoadings0]= useState(true)
-    const [MainPostLoading1,setMainPostLoadings1]= useState(true)
-    const [MainPostLoading2,setMainPostLoadings2]= useState(true)
-    const [MainPostLoading3,setMainPostLoadings3]= useState(true)
-    const [MainPostLoading4,setMainPostLoadings4]= useState(true)
+    const [MainPostLoading0,setMainPostLoadings0]= useState(false)
+    const [MainPostLoading1,setMainPostLoadings1]= useState(false)
+    const [MainPostLoading2,setMainPostLoadings2]= useState(false)
+    const [MainPostLoading3,setMainPostLoadings3]= useState(false)
+    const [MainPostLoading4,setMainPostLoadings4]= useState(false)
     
     const searchInput=useInput("");
 
@@ -95,8 +95,9 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
             }
         );
         setSearchPost(MainSearchBar);
-        
     }
+
+
    
     const setMainpostsWrapper=(type,posts,check)=>{
         if(check) return ; 
@@ -169,7 +170,6 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
                 setMainPostLoadings2(prev=>!prev);
             case "음료":
                 setMainPostLoadings3(prev=>!prev);
-    
             case "간식":
                 setMainPostLoadings4(prev=>!prev);
         }

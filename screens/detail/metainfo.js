@@ -8,10 +8,11 @@ import constants from "../../constants";
 
 const Container = styled.View`  
   background-color:white;
-  padding: 10px;
+  padding: 15px;
 `;
 const Brand= styled.Text`
-  color: #a0a0a0;
+  margin-top:10;
+  color: #3d3d3d;
   font-weight:bold;
 `;
 const Name= styled.Text`
@@ -21,17 +22,25 @@ const Name= styled.Text`
   font-weight:bold;
 `;
 const WeightPrice = styled.Text`
-  color: #a0a0a0;
+  color: #000;
   font-size:16px;
+  padding-bottom:10px;
 `;
 
 const TypeInfo= styled.View`
   display:flex;
   flex-direction:row;
   align-items:center;
-  height:${constants.height/14};
-  width:${constants.width/5};
+  /* height:${constants.height/14}; */
+  width:${constants.width-30};
   margin-top:10px;
+  padding-top:10px;
+  border-top-color:#f0f0f0;
+  border-top-width:1px;
+  /* padding-bottom:20px;  
+  border-bottom-color:#ececec;
+  border-bottom-width:1px; */
+  
 `
 const Preference= styled.View`
   display:flex;
@@ -47,7 +56,6 @@ const Preference= styled.View`
 const PreferenceText= styled.Text`
   color:#fff;
   font-weight:bold;
-  /* text-align:center; */
 `
 
 const FoodTypes= styled.View`

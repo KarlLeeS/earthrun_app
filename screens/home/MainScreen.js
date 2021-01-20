@@ -11,6 +11,7 @@ import LeftFilter from "../../components/LeftFilter";
 import { withNavigation } from "@react-navigation/compat";
 import {useRoute} from '@react-navigation/native';
 import styles from "../../styles";
+import Loader from "../../components/Loader";
 
 const Container = styled.View`
   background-color : #fff;
@@ -79,154 +80,116 @@ const MainScreen = ({navigation})=>{
   const setMainposts =usesetMainposts(); 
   const setLoading =usesetMainPostsLoading(); 
 
-
   const [LeftToggle,setLeftToggle] = useState(false); 
   const [certification,setCertification] = useState([]); 
   const [foodtypes,setFoodtypes] = useState(user?.foodtypes.map(e=>e.name)); 
   const [orderingoption,setOrderingoption] = useState("BYRATING");
 
-  const {data,loading:loadingQ}= useQuery(GET_MAIN_TOP_TAB,{ 
+  const [loaded,setloaded] = useState(false);
+
+  const {data,loading:loadingQ,refetch}= useQuery(GET_MAIN_TOP_TAB,{ 
     fetchPolicy:"no-cache",
     // fetchPolicy:"network-only",
     variables:{
       certification,foodtypes,orderingoption,categories:childrenTab
     },
     onCompleted:()=>{
+      console.log(loading);
       console.log(`${childrenTab}의 api 호출이 완료되었습니다.`);
       if(data.length!==0){
         setMainposts(childrenTab,data.MainTopTab,false);
-      }else{
-        // setMainposts(childrenTab,[],true);
       }
-      setLoading(childrenTab);
+      setloaded(true);
+      console.log(loading);
 
-      
-      // let index ; 
-      // let realElement ; 
-      // switch(orderingoption){
-      //   case "BYRATING":
-      //     index= data.MainTopTab.findIndex(e=>e.rating>0);
-      //     realElement = data.MainTopTab.splice(index); 
-      //     setPosts([...realElement,...data.MainTopTab])
-      //     break;
-      //   case "BYCLICK":
-      //     index= data.MainTopTab.findIndex(e=>e.totalHits>0);
-      //     realElement = data.MainTopTab.splice(index); 
-      //     setPosts([...realElement,...data.MainTopTab])
-
-      //     break;  
-      //   case "BYREVIEWCOUNT":
-      //     index= data.MainTopTab.findIndex(e=>e.reviewCount>0);
-      //     realElement = data.MainTopTab.splice(index); 
-      //     setPosts([...realElement,...data.MainTopTab])
-      //     break;  
-      //   case "BYLOWPRICE":
-      //   case "BYHIGHPRICE":
-      //   case "BYLATEST":
-      //     setPosts([...data.MainTopTab]);
-      //     break;  
-      // }
-      
     }
   });
-  // console.log(MainPosts);
 
-  const OnSubmit = async (preferenceList=[],certificationList=[],order=undefined)=>{
-    // let preferenceResult, certificationResult,orderResult ;
-    // if(preferenceList===undefined || preferenceList.length===0){
-    //   preferenceResult = user.preference.name;
-    // }else{
-    //   preferenceResult=preferenceList
-    // }
-    // // TODO 이 컴포넌트도 조금 의심스럽네. 굳이 필요한가? 그냥 userContext로 다 받아서 해결해도 되는 부분아닌가?
-    // if(certificationList===undefined || certificationList.length===0){
-    //   certificationResult = certification;
-    // }else{
-    //   certificationResult = certificationList;
-    // }
+  const OnSubmitFiliter = async (foodtypeList=[],certificationList=[],order=undefined)=>{
+      let foodtypeResult, certificationResult,orderResult ;
+    if(foodtypeList===undefined || foodtypeList.length===0){
+      foodtypeResult = foodtypes;
+    }else{
+      foodtypeResult=foodtypeList
+    }
+    // TODO 이 컴포넌트도 조금 의심스럽네. 굳이 필요한가? 그냥 userContext로 다 받아서 해결해도 되는 부분아닌가?
+    if(certificationList===undefined || certificationList.length===0){
+      certificationResult = certification;
+    }else{
+      certificationResult = certificationList;
+    }
     
-    // if(order===undefined){
-    //   orderResult = orderingoption;
-    // }else{
-    //   orderResult = order;
-    // }
-    
-    // console.log({preferenceResult});
-    // console.log({certificationResult});
-    // console.log({orderResult});
-    // setLoaded(false);
-    // await refetch({
-    //   certification:certificationResult,
-    //   foodtypes:preferenceResult,
-    //   orderingoption:orderResult,
-    //   categories:category
-    // });
-    // setLoaded(true);
-
+    if(order===undefined){
+      orderResult = orderingoption;
+    }else{
+      orderResult = order;
+    }
+    console.log({foodtypeResult});
+    console.log({certificationResult});
+    console.log({orderResult});
+    setloaded(false);
+    await refetch({
+      certification:certificationResult,
+      foodtypes:foodtypeResult,
+      orderingoption:orderResult,
+      categories:childrenTab
+    });
+    setloaded(true);
   }
-
-  // console.log(MainPosts["식품"]["간식"]===undefined);
 
   return (
     <>
       <Container>
-        { 
-          loading?
-          (
-            <Loading>
-              <ActivityIndicator color={styles.blackColor}/>
-            </Loading>
-          ):
-          (
-            <>
-              <FilteringTools>
-                  <LeftFilterIcon onPress={()=>setLeftToggle(prev=>!prev)} >
-                    <Image 
-                      resizeMode="contain"
-                      style={{  
-                        width: constants.width/20, 
-                        height: constants.height /40 
-                      }}
-                      source={ require("../../assets/sort.png") }
-                    />
-                    <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
-                  </LeftFilterIcon>
-                  {
-                    LeftToggle
-                      ?
-                        (
-                          <LeftFilterWrapper  >
-                            <LeftFilter OnSubmit={OnSubmit} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
-                          </LeftFilterWrapper>
-                        )
-                      :
-                        (
-                          <></>
-                        )
-                  }
-                  <RightFilterIcon onPress={()=> navigation.navigate("DetailFilter",{
-                    OnSubmit,certification,foodtypes,setFoodtypes,setCertification
-                    })}>
-                    <Image 
-                      resizeMode="contain"
-                      style={{  
-                        width: constants.width/20, 
-                        height: constants.height /40 
-                      }}
-                      source={ require("../../assets/filter.png") }
-                    />
-                  </RightFilterIcon>
-                </FilteringTools>
-              
-                <Posts>
-                    {MainPosts&&
-                    MainPosts.posts?.map((e,i)=>(<Post key={e.id} fromMainScreenNormalList={true} post={e} />))}
-                </Posts>
-                
-            </> 
-          )
-        }
-        
+          <FilteringTools>
+              <LeftFilterIcon onPress={()=>setLeftToggle(prev=>!prev)} >
+                <Image 
+                  resizeMode="contain"
+                  style={{  
+                    width: constants.width/20, 
+                    height: constants.height /40 
+                  }}
+                  source={ require("../../assets/sort.png") }
+                />
+                <LeftFilterText>{OrderMapper[orderingoption]}</LeftFilterText>
+              </LeftFilterIcon>
+              {
+                LeftToggle
+                  ?
+                    (
+                      <LeftFilterWrapper  >
+                        <LeftFilter OnSubmit={OnSubmitFiliter} setLeftToggle={setLeftToggle} orderingoption={orderingoption} setOrderingoption={setOrderingoption}  />
+                      </LeftFilterWrapper>
+                    )
+                  :
+                    (
+                      <></>
+                    )
+              }
+              {/* 네비게이션을 통해서 전달하는 값은 복사된 값만을 가진다. 그래서 따로 객체를 주는 방식으로 
+              전달하면 안된다. */}
+              <RightFilterIcon onPress={()=> navigation.navigate("DetailFilter",{
+                OnSubmitFiliter,certification,foodtypes,setFoodtypes,setCertification
+                })}>
+                <Image 
+                  resizeMode="contain"
+                  style={{  
+                    width: constants.width/20, 
+                    height: constants.height /40 
+                  }}
+                  source={ require("../../assets/filter.png") }
+                />
+              </RightFilterIcon>
+            </FilteringTools>
+            <Posts>
+              {loaded
+                ?
+                  <Loader />
+                :
+                  <>
+                    {MainPosts&&MainPosts.posts?.map((e,i)=>(<Post key={e.id} fromMainScreenNormalList={true} post={e} />))}
+                  </>
+              }
+            </Posts>
       </Container>
     </>
   )
