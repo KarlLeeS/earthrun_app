@@ -96,6 +96,16 @@ const MainScreen = ({navigation})=>{
     onCompleted:()=>{
       console.log(loading);
       console.log(`${childrenTab}의 api 호출이 완료되었습니다.`);
+
+      if(
+          orderingoption===OrderMapper.BYRATING||
+          orderingoption===OrderMapper.BYCLICK||
+          orderingoption===OrderMapper.BYREVIEWCOUNT
+      ){
+        
+      }else{
+
+      }
       if(data.length!==0){
         setMainposts(childrenTab,data.MainTopTab,false);
       }
@@ -124,16 +134,18 @@ const MainScreen = ({navigation})=>{
     }else{
       orderResult = order;
     }
-    console.log({foodtypeResult});
-    console.log({certificationResult});
-    console.log({orderResult});
+    // console.log({foodtypeResult});
+    // console.log({certificationResult});
+    // console.log({orderResult});
     setloaded(false);
+    console.log("해해해해햏");
     await refetch({
       certification:certificationResult,
       foodtypes:foodtypeResult,
       orderingoption:orderResult,
       categories:childrenTab
     });
+    console.log("받아왔다.");
     setloaded(true);
   }
 
@@ -183,11 +195,11 @@ const MainScreen = ({navigation})=>{
             <Posts>
               {loaded
                 ?
-                  <Loader />
-                :
                   <>
-                    {MainPosts&&MainPosts.posts?.map((e,i)=>(<Post key={e.id} fromMainScreenNormalList={true} post={e} />))}
+                  {MainPosts&&MainPosts.posts?.map((e,i)=>(<Post key={e.id} fromMainScreenNormalList={true} post={e} />))}
                   </>
+                :
+                  <Loader />
               }
             </Posts>
       </Container>

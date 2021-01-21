@@ -1,12 +1,13 @@
 import React,{useState} from 'react';
-import { ScrollView ,Image} from 'react-native';
+import { ScrollView ,Image, View} from 'react-native';
 import styled from "styled-components"; 
 import constants from '../../constants';
 import Post from "../../components/Post"
-import { useSearchBarSubmit, usesearchInput, useSearchPost, useUser } from '../../AuthContext';
+import { useSearchBarSubmit, usesearchInput, useSearchPost, useSearchPostLoading, useUser } from '../../AuthContext';
 import LeftFilter from '../../components/LeftFilter';
 import { withNavigation } from "@react-navigation/compat";
 import { GET_MAIN_SEARCH_BAR } from '../../fragments';
+import Loader from '../../components/Loader';
 
 const Container = styled.View`
     width:${constants.width};
@@ -182,7 +183,7 @@ const ProductBrand = ({
     const SearchBarSubmit = useSearchBarSubmit();
     const searchInput = usesearchInput();
     const posts = useSearchPost();
-
+    const loading = useSearchPostLoading();
 
     
     const [LeftToggle,setLeftToggle] = useState(false); 
@@ -192,26 +193,27 @@ const ProductBrand = ({
 
     const color = "#fff";
     const backgroundColor = "#00cf85";
+
     const onSubmit= (FoodtypesResult,certificationResult,orderingType)=>{
-    console.log({FoodtypesResult});
-    console.log({certificationResult});
-    console.log({orderingType});
-    console.log({searchInput});
-    let orderingForSubmit,foodtypeForSubmit,certiForSubmit; 
-    if(FoodtypesResult.length===0){
-        foodtypeForSubmit = foodtypes;
-    }
-    if(certificationResult.length===0){
-        certiForSubmit =certification;
-    }
-    if(orderingType===undefined) {
-        orderingForSubmit = orderingoption; 
-    }
-    SearchBarSubmit(foodtypeForSubmit,certiForSubmit,orderingForSubmit);
-    // TODO submit 로직 짜기
-    // const foodtypeForSubmit = 
-    // const certiForSubmit = 
-    // console.log("이 키워드로 검색");
+        console.log({FoodtypesResult});
+        console.log({certificationResult});
+        console.log({orderingType});
+        console.log({searchInput});
+        let orderingForSubmit,foodtypeForSubmit,certiForSubmit; 
+        if(FoodtypesResult.length===0){
+            foodtypeForSubmit = foodtypes;
+        }
+        if(certificationResult.length===0){
+            certiForSubmit =certification;
+        }
+        if(orderingType===undefined) {
+            orderingForSubmit = orderingoption; 
+        }
+        SearchBarSubmit(foodtypeForSubmit,certiForSubmit,orderingForSubmit);
+        // TODO submit 로직 짜기
+        // const foodtypeForSubmit = 
+        // const certiForSubmit = 
+        // console.log("이 키워드로 검색");
     }
 
     
@@ -266,7 +268,8 @@ const ProductBrand = ({
         <Container>
         <ScrollView>
             {
-                posts===undefined
+                
+                posts===undefined&&loading===false
                 ?
                     (
                         <>
@@ -329,6 +332,14 @@ const ProductBrand = ({
                         </>
                     )
                 :
+                loading===true 
+                ?
+                    <View style={{flex:1,justifyContent:'center',alignItems:'center',height:constants.height}}>
+                        <Loader />
+                    </View>
+                :
+                posts
+                ?
                     (
                         <>
                             <SectionFirst>
@@ -408,6 +419,7 @@ const ProductBrand = ({
                                 <Posts>
                                     {posts.map((e,i)=>(
                                         <Post 
+                                            key={e.id}
                                             post={e}
                                             index={i}
                                             fromSearchScreen={true}
@@ -419,6 +431,7 @@ const ProductBrand = ({
                             
                         </>
                     )
+                :<></>
             }
             </ScrollView>   
         </Container>

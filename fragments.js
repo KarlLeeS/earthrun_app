@@ -26,7 +26,7 @@ export const POST_FRAGMENT = gql`
         url
     }
     rating
-    # weeklyHits
+    weeklyHits
     # totalHits
     # createdAt
   }

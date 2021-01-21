@@ -56,11 +56,8 @@ export const GET_FULL_POST=gql`
     ){
         seeFullPost(
             id:$id
-        ){
-            ...PostParts
-        }
+        )
     }
-    ${FULL_POST}
 `;
 
 
@@ -73,6 +70,8 @@ const DetailNavigation =({navigation,route:{params:{
     setPost(post);
     console.log({post});
     console.log("post 세팅완료")
+    useQuery(GET_FULL_POST,{variables:{id:post.id}});
+    // 
     // const MainPosts =useMainPosts(childrenTab);
         
     // return MainPosts&&MainPosts?.posts[Postindex]&&

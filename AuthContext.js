@@ -76,7 +76,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
 
 
     const [SearchPost,setSearchPost] = useState();
-    
+    const [SearchPostLoading,setSearchPostLoading]= useState(false);
     const [MAIN_SEARCH_BAR] = useMutation(GET_MAIN_SEARCH_BAR);
 
     const SearchBarSubmit= async (
@@ -85,6 +85,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         orderingoption="BYRATING",
         search = searchInput
     )=>{
+        setSearchPostLoading(true);
         console.log("검색합니다잇");
         searchInput.setValue(search);
         const {data:{MainSearchBar}} =  await MAIN_SEARCH_BAR(
@@ -95,6 +96,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
             }
         );
         setSearchPost(MainSearchBar);
+        setSearchPostLoading(false);
     }
 
 
@@ -200,7 +202,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
     <AuthContext.Provider value={{
         materials,materialLoading,
         settingMaterials,
-        SearchPost,
+        SearchPost,SearchPostLoading,
         SearchBarSubmit,
         searchInput,
         MainPost0,MainPost1,MainPost2,MainPost3,MainPost4,setMainpostsWrapper,
@@ -238,6 +240,11 @@ export const usematerialLoading=()=>{
 export const usesettingMaterials=()=>{
     const {settingMaterials} = useContext(AuthContext);
     return settingMaterials;
+}
+
+export const useSearchPostLoading=()=>{
+    const {SearchPostLoading} = useContext(AuthContext);
+    return SearchPostLoading;
 }
 
 

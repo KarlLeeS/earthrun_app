@@ -192,6 +192,7 @@ const DetailFilter = ({
         setFoodtypes(FoodtypesResult);
         setCertification(certificationResult);
         OnSubmitFiliter(FoodtypesResult,certificationResult);
+        navigation.goBack();
 
         // setLoaded(false);
         // await refetch({
