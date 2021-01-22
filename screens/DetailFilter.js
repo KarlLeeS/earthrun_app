@@ -187,8 +187,8 @@ const DetailFilter = ({
         const FoodtypesResult=ConvertFoodtypes([foodtypeLeaf,foodtypeMilk,foodtypeEgg,foodtypeFish,foodtypeChicken,]);
         const certificationResult=ConvertCertification([certi0,certi1,certi2,certi3,certi4,certi5]);
         
-        console.log(FoodtypesResult);
-        console.log(certificationResult);
+        // console.log(FoodtypesResult);
+        // console.log(certificationResult);
         setFoodtypes(FoodtypesResult);
         setCertification(certificationResult);
         OnSubmitFiliter(FoodtypesResult,certificationResult);

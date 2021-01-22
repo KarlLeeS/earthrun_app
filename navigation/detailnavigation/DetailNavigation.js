@@ -62,14 +62,16 @@ export const GET_FULL_POST=gql`
 
 
 const DetailNavigation =({navigation,route:{params:{
-    post
+    post,
+    childrenTab,
+Postindex
 }}
 })=>{
     console.log("rendering/DetailPage");
     const setPost = useSetCurrentPost();
-    setPost(post);
-    console.log({post});
-    console.log("post 세팅완료")
+    setPost(post);``
+    // console.log({post});
+    // console.log("post 세팅완료")
     useQuery(GET_FULL_POST,{variables:{id:post.id}});
     // 
     // const MainPosts =useMainPosts(childrenTab);
@@ -96,7 +98,12 @@ const DetailNavigation =({navigation,route:{params:{
                     preference={post.preference.name}
                     foodtypes={post.foodtypes}
                 />
-                <DetailTabNavigation data={post}/>
+                <DetailTabNavigation data={post} 
+                
+                childrenTab={childrenTab}
+                Postindex={Postindex}
+
+                />
             </ScrollView>
         </Container>
     )

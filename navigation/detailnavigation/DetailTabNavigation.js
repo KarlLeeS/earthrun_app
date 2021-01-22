@@ -8,14 +8,18 @@ import constants from "../../constants";
 
 const Tab = createMaterialTopTabNavigator();
 
-const DetailTabNavigation=({data:{
-    rawMaterials,
-    
-    description,certification,
-    rawMaterialURL,
-    reviewCount,rating,reviews=[],
-    offline,online
-}})=>{
+const DetailTabNavigation=({
+    childrenTab,
+    Postindex,
+    data:{
+        id,
+        rawMaterials,
+        description,certification,
+        rawMaterialURL,
+        reviewCount,rating,reviews=[],
+        offline,online
+    }
+})=>{
     
 
     return(
@@ -58,6 +62,9 @@ const DetailTabNavigation=({data:{
                 rawMaterialURL={rawMaterialURL}
             />}/>
             <Tab.Screen name="리뷰 및 별점" children={()=><ReviewRating 
+                postId={id}
+                childrenTab={childrenTab}
+                Postindex={Postindex}
                 reviewCount={reviewCount}
                 rating={rating}
                 reviews={reviews}/>} 

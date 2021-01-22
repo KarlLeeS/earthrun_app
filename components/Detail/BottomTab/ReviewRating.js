@@ -101,10 +101,13 @@ const ReviewList = styled.View`
 `; 
 
 const ReviewRating =({
+    postId,
     navigation,
     reviewCount,
     rating,
     reviews,
+    childrenTab,
+    Postindex
 })=>{   
     console.log("rendering detail/subtab/review");
     console.log({reviews});
@@ -112,7 +115,9 @@ const ReviewRating =({
         <Container>
             <UploadReview>
                 <TouchableOpacity onPress={()=>{navigation.navigate("UploadReview",{
-                        type:"리뷰 올리기"
+                        type:"리뷰 올리기",
+                        childrenTab,Postindex,postId,
+                        reviewCount,rating,
                     })}} >
                     <UploadButton>
                         리뷰 쓰기
@@ -142,6 +147,8 @@ const ReviewRating =({
                     {
                         reviews.map(e=>(
                             <Review key={e.id}
+                                childrenTab={childrenTab}
+                                Postindex={Postindex}
                                 {...e}
                             />
                         ))

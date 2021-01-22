@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components"; 
-import { useCurrentPost, useSetCurrentPost, useSetUser, useUser } from "../AuthContext";
+import { useCurrentPost, useSetCurrentPost, usesetMainPostOne, useSetUser, useUser } from "../AuthContext";
 import NavIcon from "../components/NavIcon";
 import Star from "../components/Detail/BottomTab/Star";
 import constants from "../constants";
@@ -91,34 +91,37 @@ export const EDIT_REVIEW= gql`
 const UploadReview=({
         route:{
             params:{
-
-                reviewId,
                 postId,
+                rating,
+                reviewCount,
+                childrenTab,
+                Postindex,
+                reviewId,
                 type,
                 AvgRating,
-                rating,
                 text,
-                reviewCount
         }},
-        navigation
+        navigation,
     })=>{
 
 
-    const post = useCurrentPost(); 
-    const user = useUser();
-    console.log(user);
+    // const post = useCurrentPost(); 
+    // const user = useUser();
+    // console.log(user);
     const setUser = useSetUser();
-    const setPost = useSetCurrentPost();
+    // const setPost = useSetCurrentPost();
+    const setMainPostOne =usesetMainPostOne(); 
+
     const [rate,setRate] = useState(rating?rating:0); 
     const reviewInput = useInput(text?text:"");
     const [loading,setLoading] =useState(false);
     const [ADD_REVIEW_MUTATION] = useMutation(ADD_REVIEW,{
         variables:{
-            post:post.id,
+            post:postId,
             rating:rate,
             text:reviewInput.value, 
-            prevAvgRating:post.rating, 
-            reviewCount:post.reviewCount
+            prevAvgRating:rating, 
+            reviewCount:reviewCount
         },
 
     });
@@ -147,40 +150,38 @@ const UploadReview=({
                 const {data:{addReview:review}} =  await ADD_REVIEW_MUTATION();
                 result=review;
             }
-            let tempPost ;
-            setPost(e=>{
-                tempPost = {
-                    ...e,
-                    reviewCount:result.post.reviewCount,
-                    reviews:[
-                        result,
-                        ...e.reviews
-                    ],
-                    rating:result.post.rating
-                }
-                return tempPost; 
-            })
-            
-            setUser(e=>(
-                {
-                    ...e,
-                    reviews:[
-                        result,
-                        ...e.reviews
-                    ],
-                    recentlyPost:[
-                        ...e.recentlyPost.filter(item=>item.id!==result.post.id),
-                        tempPost
 
-                    ]
-                }
-            ))
+            // let tempPost ;
+            // setPost(e=>{
+            //     tempPost = {
+            //         ...e,
+            //         reviewCount:result.post.reviewCount,
+            //         reviews:[
+            //             result,
+            //             ...e.reviews
+            //         ],
+            //         rating:result.post.rating
+            //     }
+            //     return tempPost; 
+            // })
+
+            // setUser(e=>(
+            //     {
+            //         ...e,
+            //         reviews:[
+            //             result,
+            //             ...e.reviews
+            //         ]
+            //     }
+            // ))
+            setMainPostOne(childrenTab,Postindex,result.id,true,result);
+
         }catch(e){
             console.log(e);
             throw Error(e);
         }
         setLoading(false);
-        navigation.goBack();
+        // navigation.goBack();
     }
     
     return(

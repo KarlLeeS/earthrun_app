@@ -212,7 +212,7 @@ const MainProfile = ({navigation}) => {
                 <HorizontalGrid>
                 {
                     user?.recentlyPost?.map((e,i)=>(
-                      <Post fromRecommendMyprofile={true} key={e.id}  {...e} />
+                      <Post fromRecommendMyprofile={true} key={e.id} post={e} />
                     )).reverse()
                   }
                 </HorizontalGrid>

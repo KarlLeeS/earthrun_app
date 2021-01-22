@@ -99,7 +99,105 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         setSearchPostLoading(false);
     }
 
+    const setMainPostOne=(childreTab,postIndex,reviewID,isAdd=false,review)=>{
+        console.group("setMainPostOne")
+        console.log(childreTab,postIndex,reviewID);
+        console.groupEnd();
+        switch (childreTab) {
+            case "대체육":
+                if(isAdd){
+                    setMainPosts0(prev=>{
+                        return produce(prev,draft=>{
+                            draft.posts[postIndex].reviews.push(review)
+                        })
+                    })
+                    break;
+                }
+                setMainPosts0(prev=>{
+                    return produce(prev,draft=>{
+                        draft.posts[postIndex].reviews=draft.posts[postIndex].reviews.filter(e=>e.id!==reviewID)
+                    })
+                })
+                break;
+            case "빵":
+                if(isAdd){
+                    setMainPosts1(prev=>{
+                        return produce(prev,draft=>{
+                            draft.posts[postIndex].reviews.push(review)
+                        })
+                    })
+                    break;
+                }
+                setMainPosts1(prev=>{
+                    return produce(prev,draft=>{
+                        draft.posts[postIndex].reviews=draft.posts[postIndex].reviews.filter(e=>e.id!==reviewID)
+                    })
+                })
+                break;
+            case "간편식·면류·통조림":
+                if(isAdd){
+                    setMainPosts2(prev=>{
+                        return produce(prev,draft=>{
+                            draft.posts[postIndex].reviews.push(review)
+                        })
+                    })
+                    break;
+                }
+                setMainPosts2(prev=>{
+                    return produce(prev,draft=>{
+                        draft.posts[postIndex].reviews=draft.posts[postIndex].reviews.filter(e=>e.id!==reviewID)
+                    })
+                })
+                break;
+            case "음료":
+                if(isAdd){
+                    setMainPosts3(prev=>{
+                        return produce(prev,draft=>{
+                            draft.posts[postIndex].reviews.push(review)
+                        })
+                    }) 
+                    break;
+                }
+                setMainPosts3(prev=>{
+                    return produce(prev,draft=>{
+                        draft.posts[postIndex].reviews=draft.posts[postIndex].reviews.filter(e=>e.id!==reviewID)
+                    })
+                })
+                break;
+            case "간식":
+                if(isAdd){
+                    console.log("맞잖아~~~~~~~~~~~~~~~")
+                    console.log("리뷰온거는 맞니?",review.text);
+                    setMainPosts4(produce(draft=>{
+                            draft.posts[postIndex].reviews.push(review);
+                    }));
 
+                    // setMainPosts4(prev=>{
+                    //     console.log("좀 제발...");
+                    //     return {
+                    //         ...prev
+                    //     }
+                    // });
+                    // setMainPosts4(prev=>{
+                    //     console.log("좀 제발...");
+                    //     return {
+                    //         ...prev
+                    //     }
+                    // });
+                    console.log("before",MainPost4.posts[postIndex].reviews.map(e=>e.text));
+                    setTimeout(() => {
+                        console.log("after",MainPost4.posts[postIndex].reviews.map(e=>e.text));
+                    }, 4000);
+                    break;
+                }else{
+                    setMainPosts4(
+                        produce(draft=>{
+                            draft.posts[postIndex].reviews=draft.posts[postIndex].reviews.filter(e=>e.id!==reviewID)
+                        }))
+                    break;
+                }
+        }
+    }
    
     const setMainpostsWrapper=(type,posts,check)=>{
         if(check) return ; 
@@ -207,7 +305,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         searchInput,
         MainPost0,MainPost1,MainPost2,MainPost3,MainPost4,setMainpostsWrapper,
         MainPostLoading0,MainPostLoading1,MainPostLoading2,MainPostLoading3,MainPostLoading4
-        ,setMainPostsLoadingWrapper,
+        ,setMainPostsLoadingWrapper,setMainPostOne,
         MainTabPosts,setMainTabPosts,
         MainTabPostsLoading,setMainTabPostsLoading,
         ME_Loading,setMe_Loading,
@@ -276,10 +374,14 @@ export const useMainPosts=(type)=>{
             return MainPost2;
         case "음료":
             return MainPost3;
-
         case "간식":
             return MainPost4;
     }
+}
+
+export const usesetMainPostOne=()=>{
+    const {setMainPostOne} = useContext(AuthContext);
+    return setMainPostOne;
 }
 
 export const usesetMainposts=()=>{

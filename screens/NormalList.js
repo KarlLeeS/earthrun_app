@@ -192,7 +192,7 @@ export default ({navigation,route}) =>{
                 <Post fromMainScreenNormalList={true} fromMyUploaded={true} setList={setList} editting={editting} post={e} index={i} fromMyUploaded={true} key={e.id} />
             ))}
             {list&&list.seeReviews&&list.seeReviews.map((e,i)=>(
-              <Review setList={setList} editting={editting}  post={e} index={i} key={e.id} fromNormal={true} />
+              <Review setList={setList} editting={editting}  {...e} index={i} key={e.id} fromNormal={true} />
             ))}
           </Grid>
       </ScrollView>

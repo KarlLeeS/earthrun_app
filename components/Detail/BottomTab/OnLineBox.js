@@ -54,12 +54,12 @@ const OnLineBox = ()=>{
                 source={require('./../../../assets/post.png')}
                 />
                 <Info>
-                    <Brand>독수리 팩토리</Brand>
-                    <Name>독수리 카레</Name>
+                    <Brand>오픈예정</Brand>
+                    <Name>오픈예정</Name>
                 </Info>
             </Left>
             <Right>
-                <Price>30</Price>
+                <Price>0000</Price>
                 <Won>원</Won>
             </Right>
         </Container>        

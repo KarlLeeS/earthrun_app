@@ -7,7 +7,7 @@ import { ConvertToKorean } from "../../../utils";
 import Star from "./Star";
 import {gql} from "apollo-boost";
 import { withNavigation } from "@react-navigation/compat";
-import { useCurrentPost, useSetUser } from "../../../AuthContext";
+import { useCurrentPost, useSetCurrentPost, usesetMainPostOne, usesetMainposts, usesetMainPostsLoading, useSetUser, useUser } from "../../../AuthContext";
 
     // /* padding:${props=>props.fromNormal?"":} */
 
@@ -112,11 +112,17 @@ const Review = ({
     fromNormal,
     editting,
     setList,
-    navigation
-    })=>{
+    navigation,
+    childrenTab,
+    Postindex
 
+    })=>{
+    const setPost =useSetCurrentPost();
+    const setMainPostOne =usesetMainPostOne(); 
+  
     // console.log(id, rating,text, updatedAt,avatar,userId,username);
     const [fastClose,setfastClose] =useState(false);
+    const user = useUser();
     const setUser = useSetUser();
     const [deleteReviewMutation] = useMutation(DELETE_REVIEW,{
         variables:{
@@ -142,9 +148,14 @@ const Review = ({
                     reviewCount: user?.reviewCount-1
                 }
             ));
-
+            setMainPostOne(childrenTab,Postindex,id);
+            // setPost(post=>({
+            //     ...post,
+            //     reviews: (user?.reviews.filter(e=>e.id!==id)),
+            //     reviewCount: user?.reviewCount-1
+            // }));
             const result = await deleteReviewMutation();
-            console.log(result);
+            // console.log(result);
         }catch(e){
             console.log(e);
             throw Error();

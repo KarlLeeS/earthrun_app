@@ -75,7 +75,7 @@ const MainScreen = ({navigation})=>{
   const {name:childrenTab} = useRoute();
   console.log(`Rendering HomeNavigation/TabNavigation/${childrenTab}`);
 
-  const MainPosts =useMainPosts(childrenTab)  ;
+  const MainPosts =useMainPosts(childrenTab);
   const loading =useMainPostsLoading(childrenTab); 
   const setMainposts =usesetMainposts(); 
   const setLoading =usesetMainPostsLoading(); 
@@ -94,7 +94,7 @@ const MainScreen = ({navigation})=>{
       certification,foodtypes,orderingoption,categories:childrenTab
     },
     onCompleted:()=>{
-      console.log(loading);
+      // console.log(loading);
       console.log(`${childrenTab}의 api 호출이 완료되었습니다.`);
 
       if(
@@ -110,7 +110,7 @@ const MainScreen = ({navigation})=>{
         setMainposts(childrenTab,data.MainTopTab,false);
       }
       setloaded(true);
-      console.log(loading);
+      // console.log(loading);
 
     }
   });
@@ -196,7 +196,7 @@ const MainScreen = ({navigation})=>{
               {loaded
                 ?
                   <>
-                  {MainPosts&&MainPosts.posts?.map((e,i)=>(<Post key={e.id} fromMainScreenNormalList={true} post={e} />))}
+                  {MainPosts&&MainPosts.posts?.map((e,i)=>(<Post key={e.id} childrenTab={childrenTab} Postindex={i} fromMainScreenNormalList={true} post={e} />))}
                   </>
                 :
                   <Loader />

@@ -242,8 +242,8 @@ const Post = ({
 
     return (styles&&user&&(
         <Touchable onPress={()=>{navigation.navigate("DetailNavigation",{
-            // childrenTab,
-            // Postindex,
+            childrenTab,
+            Postindex,
             post})}}
         data={styles.Touchable}
          >
