@@ -85,8 +85,9 @@ const SearchBar = ({  fake ,navigation}) => {
 
               console.log(11);
               Keyboard.dismiss();
-              // console.log(searchInput.value)
-              if(searchInput.value===""){
+              console.log("searchInput.value",searchInput.value)
+              if(searchInput.value==null){
+                console.log('공백아닌가');
                 return;
               }else{
                 SearchBarSubmit(undefined,undefined,undefined,searchInput.value)

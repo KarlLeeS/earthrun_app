@@ -6,8 +6,9 @@ import OffLineBox from "./OffLineBox";
 import OnLineBox from "./OnLineBox";
 
 const Container= styled.View`
+    flex:1;
     background-color:white;
-    height:${constants.height};
+    /* min-height:${constants.height}; */
     padding: 0 20px;
 `; 
 

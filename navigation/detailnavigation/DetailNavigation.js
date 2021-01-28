@@ -17,7 +17,7 @@ import NavIcon from "../../components/NavIcon";
 import Like from "../../components/Like";
 
 const Container = styled.View`
-  background-color:white;
+  /* background-color:red; */
   /* height:${constants.height}; */
 `; 
 
@@ -78,9 +78,9 @@ Postindex
         
     // return MainPosts&&MainPosts?.posts[Postindex]&&
     return (post&&
-        <Container>
-            <ScrollView>
-                <HeaderWrapper>
+        <Container >
+            <ScrollView >
+                <HeaderWrapper >
                     <Header>
                         <Touchable onPress={()=>navigation.goBack()}>
                             <NavIcon name={"md-arrow-back"} size={24} color={"#000"}/>
@@ -98,11 +98,10 @@ Postindex
                     preference={post.preference.name}
                     foodtypes={post.foodtypes}
                 />
-                <DetailTabNavigation data={post} 
-                
-                childrenTab={childrenTab}
-                Postindex={Postindex}
-
+                <DetailTabNavigation 
+                    data={post} 
+                    childrenTab={childrenTab}
+                    Postindex={Postindex}
                 />
             </ScrollView>
         </Container>

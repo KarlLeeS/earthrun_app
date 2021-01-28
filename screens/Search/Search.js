@@ -128,20 +128,8 @@ const OrderMapper= {
 
 const Search=({routes,navigation})=>{
   console.log("rendering Search ")
-  // const searchInput = usesearchInput();
   const user = useUser();
   const searchInput= useInput("");
-
-  // const {loading,data,refetch}= useQuery(GET_SEARCH_KEYWORDS,{
-  //   variables:{
-  //     certification:[],
-  //     preferences:[],
-  //     orderingoption:"",
-  //     keyword:"FQ"
-  //   },
-  //   fetchPolicy:"cache-and-network"
-  // });
-  
 
   const onSubmit = async(_,preferenceList=[],certificationList=[],order=undefined)=>{
     

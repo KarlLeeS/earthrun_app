@@ -9,6 +9,9 @@ const Container = styled.View`
     background-color:white;
     flex-direction:column;
     padding-top:15;
+    background-color:white;
+    min-height:${constants.height};
+    
 `;
 
 const DescriptionWrap = styled.View`
@@ -66,28 +69,6 @@ const MeterialList= styled.View`
 
 const Meterial= styled.View`
 
-
-/* 
-
-    padding:10px;
-    border-color:black;
-    border-width:1px;
-    border-radius:10px;
-    margin-right:7px;
-    margin-top:15px;
-    background-color:red;
-    elevation:5; 
-    shadowOpacity: 0.25;
-    shadowRadius: 3.84;
-    shadowColor: "#000";
-    shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-
-elevation: 5,
-    box-shadow: 0px 1px 2px #A0A0A0; */
 `;
 
 const MeterialText = styled.Text`

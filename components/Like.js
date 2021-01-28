@@ -53,7 +53,7 @@ const Like =({
         :
             (
                 <Touchable onPress={()=>toggleLike()} >
-                    <NavIcon name={"md-radio-button-off"} size={40} color={"#fff"} />
+                    <NavIcon name={"md-heart-empty"} size={40} color={"#fff"} />
                 </Touchable>
             )
     ); 

@@ -19,6 +19,7 @@ import SelectPhoto from "../screens/SelectPhoto";
 import DetailFilter from "../screens/DetailFilter";
 import CertificationInfo from "../screens/CertificationInfo";
 import MaterialDetail from "../screens/Search/MaterialDetail";
+import TakePhoto from "../screens/TakePhoto";
 
 
 const Stack = createStackNavigator();
@@ -47,19 +48,22 @@ const MainNavigation =  () => {
     <Loader />
   : 
     <>
-      <NavigationContainer>
+      <NavigationContainer style={{backgroundColor : "white"}}>
         <Stack.Navigator
           lazy="true"
           backBehavior="order"
           screenOptions={{
+            cardStyle:{
+              backgroundColor:"white",
+              height:10
+            },
             headerStyle:{
               backgroundColor: "white"
             },
-            backgroundColor:"#fff",
+            backgroundColor:"white",
             gestureEnabled: true,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
-          mode="modal"
           initialRouteName="HomeNavigation"
         >
           <Stack.Screen options={{ headerShown: false }} name="HomeNavigation" component={HomeNavigation} />
@@ -73,6 +77,7 @@ const MainNavigation =  () => {
           <Stack.Screen options={{ headerShown: true }} name="UploadReview" component={UploadReview} />
           <Stack.Screen options={{ headerShown: false}}  name="UploadPost" component={UploadPost} />
           <Stack.Screen options={{ headerShown: false}}  name="SelectPhoto" component={SelectPhoto} />
+          <Stack.Screen options={{ headerShown: false}}  name="TakePhoto" component={TakePhoto} />
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
