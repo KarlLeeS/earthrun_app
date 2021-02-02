@@ -64,7 +64,7 @@ const MainNavigation =  () => {
             gestureEnabled: true,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
-          initialRouteName="HomeNavigation"
+          initialRouteName="TakePhoto"
         >
           <Stack.Screen options={{ headerShown: false }} name="HomeNavigation" component={HomeNavigation} />
           <Stack.Screen options={{ headerShown: false }} name="DetailFilter" component={DetailFilter} />
