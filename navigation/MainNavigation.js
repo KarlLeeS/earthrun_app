@@ -64,13 +64,13 @@ const MainNavigation =  () => {
             gestureEnabled: true,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
-          initialRouteName="TakePhoto"
+          initialRouteName="HomeNavigation"
         >
           <Stack.Screen options={{ headerShown: false }} name="HomeNavigation" component={HomeNavigation} />
           <Stack.Screen options={{ headerShown: false }} name="DetailFilter" component={DetailFilter} />
           <Stack.Screen options={{ headerShown: false }} name="CertificationInfo" component={CertificationInfo} />
           <Stack.Screen options={{ headerShown: false }} name="DetailNavigation" component={DetailNavigation} />
-          <Stack.Screen options={{ headerShown: false }} name="ProfileNavigation" component={ProfileNavigation} />
+          <Stack.Screen options={{ headerShown: false }} name="ProfileNavigsation" component={ProfileNavigation} />
           <Stack.Screen options={{ headerShown: false }} name="NormalList" component={NormalList} />
           <Stack.Screen options={{ headerShown: false }}  name="Search" component={Search} />
           <Stack.Screen options={{ headerShown: false }}  name="MaterialDetail" component={MaterialDetail} />

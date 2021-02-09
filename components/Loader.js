@@ -9,9 +9,7 @@ const Container = styled.View`
     align-items:center;
 `;
 
-const Loader =()=>(
-    <Container>
-        <ActivityIndicator color={styles.blackColor}/>
-    </Container>
+const Loader =({size,color})=>(
+        <ActivityIndicator  size={size}  color={color||styles.blackColor}/>
 );
 export default Loader;

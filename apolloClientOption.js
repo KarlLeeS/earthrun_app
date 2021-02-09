@@ -1,7 +1,7 @@
 const apolloClientOptions = {
     uri: 
         process.env.NODE_ENV==="development"
-        ?"https://3785230b06ab.ngrok.io"
+        ?"https://88b5a12f7021.ngrok.io"
         :"https://earthrunnew.herokuapp.com"
 };
 export default apolloClientOptions; 

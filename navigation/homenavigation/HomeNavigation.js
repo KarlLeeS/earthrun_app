@@ -6,6 +6,8 @@ import {ScrollView,RefreshControl, View, Text, Dimensions, StatusBar} from "reac
 import UserProfile from "../../components/UserProfile"
 import Notification from "../../components/Notification"
 import SearchBar from "../../components/SearchBar"
+import FloatingButton from "../../components/FloatingButton";
+
 
 const Container = styled.View`
   background-color: white;
@@ -27,19 +29,23 @@ const Search = styled.View`
 const HomeNavigation=()=>{
   console.log("Rendering HomeNavigation");
   return (
-      <ScrollView>
-          <Container>
-              <Header>
-                <UserProfile />
-                <Notification />
-              </Header>
-              <Search>
-                <SearchBar fake={true} />
-              </Search>
-              <TabNavigation />
-          </Container>
-        </ScrollView>  
-      )
+    <View>
+    <ScrollView >
+        <Container>
+            <Header>
+              <UserProfile />
+              <Notification />
+            </Header>
+            <Search>
+              <SearchBar fake={true} />
+            </Search>
+            <TabNavigation />
+        </Container>
+    </ScrollView>  
+    <FloatingButton label="이거 비건이야?" />
+    </View>
+
+  )
 }
 
 export default HomeNavigation;
