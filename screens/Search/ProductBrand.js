@@ -202,12 +202,18 @@ const ProductBrand = ({
         let orderingForSubmit,foodtypeForSubmit,certiForSubmit; 
         if(FoodtypesResult.length===0){
             foodtypeForSubmit = foodtypes;
+        }else{
+            foodtypeForSubmit=FoodtypesResult;
         }
         if(certificationResult.length===0){
             certiForSubmit =certification;
+        }else{
+            certiForSubmit= certificationResult;
         }
         if(orderingType===undefined) {
             orderingForSubmit = orderingoption; 
+        }else{
+            orderingForSubmit= orderingType;
         }
         SearchBarSubmit(foodtypeForSubmit,certiForSubmit,orderingForSubmit);
         // TODO submit 로직 짜기
@@ -402,7 +408,7 @@ const ProductBrand = ({
                                             )
                                     }
                                     <RightFilterIcon onPress={()=> navigation.navigate("DetailFilter",{
-                                        onSubmit,certification,foodtypes,setFoodtypes,setCertification
+                                        OnSubmitFiliter:onSubmit,certification,foodtypes,setFoodtypes,setCertification
                                         })}>
                                         <Image 
                                         resizeMode="contain"

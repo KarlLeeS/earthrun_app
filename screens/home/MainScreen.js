@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import constants from "../../constants";
-import { ActivityIndicator, Image } from "react-native";
+import { ActivityIndicator, Image, View } from "react-native";
 import {GET_MAIN_TOP_TAB} from "../../fragments";
 import { useMainPosts, useMainPostsLoading, usesetMainposts, usesetMainPostsLoading, useUser } from "../../AuthContext";
 import Post from "../../components/Post";
@@ -199,7 +199,9 @@ const MainScreen = ({navigation})=>{
                   {MainPosts&&MainPosts.posts?.map((e,i)=>(<Post key={e.id} childrenTab={childrenTab} Postindex={i} fromMainScreenNormalList={true} post={e} />))}
                   </>
                 :
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                   <Loader />
+                </View>
               }
             </Posts>
       </Container>

@@ -83,7 +83,7 @@ export const AuthProvider = ({isLoggedIn:isLoggedInProp, children})=>{
         foodtypes=[...user?.foodtypes.map(e=>e.name)],
         certification=[],
         orderingoption="BYRATING",
-        search = searchInput
+        search = searchInput.value
     )=>{
         setSearchPostLoading(true);
         console.log("검색합니다잇");
