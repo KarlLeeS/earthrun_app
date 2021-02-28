@@ -1,4 +1,5 @@
 export default {
+    fontFamily:'Noto Sans KR',
     blackColor: "#262626",
     greyColor: "#FAFAFA",
     darkGreyColor: "#999",
